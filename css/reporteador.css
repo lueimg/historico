@@ -1,0 +1,166 @@
+.divBusqueda {
+	margin-right: auto;
+	margin-left: auto;
+	width: 300px;
+	display: table;
+}
+
+.tablaBusqueda {
+	font: 100% Verdana, Arial, Helvetica, sans-serif;
+	color: #FFFFFF;
+	text-align: left;
+	border-collapse: collapse;
+	border: 1px solid #000000;	
+	/*background: #6E9CC8;*/
+	background: #6E9CC8;
+	width: 80%;
+	
+}
+
+.divResMain {
+	margin-right: auto;
+	margin-left: auto;
+	width: 450px;
+
+
+}
+
+.divResMain1 {
+	display: table;
+	width: 100%;
+
+}
+
+.divResMain2 {
+	display: table;
+	width: 100%;
+}
+
+.divResMain3 {
+	display: table;
+	width: 680px;
+
+}
+
+
+.divResInternoLeft {
+	float: left; 
+	/*margin-right: 0px; 
+	margin-top:0; 
+	*/
+	width: 33%; 	
+
+}
+
+
+.divResInternoMedio{
+
+	float:left;
+	width: 33%; 	
+	/*margin-right: 0px; 
+	margin-top:0; 
+	*/	
+	padding: 2px;
+
+}
+
+.divResInternoRight {
+
+	/*position:relative; */
+	float:left;
+	width:33%; 
+	padding: 2px;
+}
+
+
+
+
+.table { 
+	width: 70%;
+	font: 70% Verdana, Arial, Helvetica, sans-serif;
+	color: #000;
+	text-align: left;
+	border-collapse:collapse;
+	border: 1px solid #000000;	
+	/*background: #BEEEFA;*/
+	background: #FFFFFF;
+}
+
+
+thead th {
+	font-size: 11px;
+	color: #FFFFFF;
+	background: #17688B;
+	height: 22px;
+}
+
+.thDetalle {
+	background: #A60000;	
+	border: 1px solid #000000;	
+}
+
+tr {
+	vertical-align: middle;
+}
+/*
+tr,th,td {
+
+	border-right: 1px solid #000000;	
+	border-bottom: 1px solid #000000;	
+	font: normal 12px Arial, Helvetica, sans-serif;
+}
+*/
+
+tfoot tr {
+	color: #CAA11A;
+	background: #17688B;
+}
+
+tfoot td, tfoot th{
+	color: #CAA11A;
+	border: 0px;
+}
+
+span{
+	font-family: Verdana;
+	font-size: 12px;
+}
+
+
+.celdaTitulo { 
+  font: normal 11px Arial, Helvetica, sans-serif;
+  color: #FFFFFF  ;
+  background: #6E9CC8 ;
+  height:22px;
+  /*font-weight: bold;*/
+  width: 10%;
+  padding: 2px;
+	border-right: 1px solid #000000;	
+	border-bottom: 1px solid #000000;	  
+
+}
+
+.celdaRes { 
+	font: normal 10px Arial, Helvetica, sans-serif;
+	color: #000000  ;
+	background: #FFFFFF ;
+	height:20px;
+	/*font-weight: bold;*/
+	width: auto;
+	padding: 1px;
+	border-right: 1px solid #000000;	
+	border-bottom: 1px solid #000000;	
+	text-align: center;
+}
+
+.mapa {
+	width: 500px; 
+	height: 510px;
+}
+
+.thDetalleActuacion {
+	background: #A60000;	
+	border: 1px solid #000000;
+	color: #ffffff;	
+	text-align: center;
+}

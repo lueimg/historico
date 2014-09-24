@@ -1,0 +1,191 @@
+.div_main {
+	margin-right: auto;
+	margin-left: auto;
+	width: 550px;
+}
+
+.div_busqueda {
+	margin-right: auto;
+	margin-left: auto;
+	width: 550px;
+}
+
+.tr_busqueda {
+	height: 30px;
+}
+
+.td_busqueda {
+	width: 100%;
+}
+
+
+.div_resultado {
+	margin-right: auto;
+	margin-left: auto;
+	width: 550px;
+}
+
+.tabla {
+	font: 100% Verdana, Arial, Helvetica, sans-serif;
+	color: #FFFFFF;
+	text-align: left;
+	border-collapse: collapse;
+	border: 1px solid #000000;	
+	/*background: #6E9CC8;*/
+	background: #6E9CC8;
+	width: 100%;
+	
+}
+
+.table { 
+	width: 100%;
+	font: 70% Verdana, Arial, Helvetica, sans-serif;
+	color: #000;
+	text-align: left;
+	border-collapse:collapse;
+	border: 1px solid #000000;	
+	/*background: #BEEEFA;*/
+	background: #FFFFFF;
+}
+
+
+.table1{ 
+	font: 60% Verdana, Arial, Helvetica, sans-serif;
+	color: #000;
+	text-align: left;
+	border-collapse:collapse;
+	border: 1px solid #000000;	
+	/*background: #BEEEFA;*/
+	background: #FFFFFF;
+	text-align: center;	
+}
+
+.table2{ 
+	font: 70% Verdana, Arial, Helvetica, sans-serif;
+	color: #000;
+	text-align: left;
+	border-collapse:collapse;
+	border: 1px solid #000000;	
+	/*background: #BEEEFA;*/
+	background: #FFFFFF;
+	text-align: center;	
+}
+
+thead th {
+	font-size: 100%;
+	color: #CAA11A;
+	background: #17688B;
+	height: 33px;
+}
+
+tr {
+	vertical-align: middle;
+}
+
+tr,th,td {
+	/*padding: .75em;*/
+	/* border-right: 1px solid #000000;	
+	border-bottom: 1px solid #000000;	*/
+	font: normal 12px Arial, Helvetica, sans-serif;
+}
+
+tfoot tr {
+	color: #CAA11A;
+	background: #17688B;
+}
+
+tfoot td, tfoot th{
+	color: #CAA11A;
+	border: 0px;
+}
+
+span{
+	font-family: Verdana;
+	font-size: 12px;
+}
+
+.celda_ok { 
+  font: normal 12px Arial, Helvetica, sans-serif;
+  color: #000099       ;
+  background: #FFECC0       ;
+  height:28px;
+  width: 50%;
+  padding: 10px;
+
+}
+
+.celda_titulo { 
+  font: normal 12px Arial, Helvetica, sans-serif;
+  color: #FFFFFF  ;
+  background: #6E9CC8 ;
+  height:28px;
+  /*font-weight: bold;*/
+  width: 50px;
+  padding: 10px;
+
+}
+
+.celda_res { 
+  font: normal 12px Arial, Helvetica, sans-serif;
+  color: #000000  ;
+  background: #FFFFFF ;
+  height:28px;
+  /*font-weight: bold;*/
+  width: 80px;
+  padding: 10px;
+
+}
+
+.div_listado {
+	position: relative;
+	border: 1px solid blue; 
+	float : left; 
+	width : 49%;
+}
+
+.div_detalle {
+	position: relative;
+	border: 1px solid white; 
+	float : right; 
+	width : 49%; 
+}
+
+.resultado_historico {
+	display: block;
+}
+
+fieldset {
+	border: 1px solid #E2E2E2;
+	padding-bottom: 5px;
+}
+
+#etiqueta{
+	background-color: #1B5790;
+	color: #FFFFFF;
+	padding: 3px;
+	border: 1px solid #F4F4F4;
+}
+
+#campo{
+	background-color: #FFFFFF;
+	padding: 3px;
+	border: 1px solid #F4F4F4;
+}
+
+.limpiar {
+    background-image: url(../img/clear16.png) !important;
+    width: 16px;
+    height: 16px;
+}
+
+#critico {
+	color: white;
+	font-size: 200%;
+	background-color: red;
+}
+
+#nocritico {
+	color: white;
+	font-size: 200%;
+	background-color: green;
+}

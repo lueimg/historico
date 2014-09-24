@@ -1,0 +1,238 @@
+.div_main {
+	margin-right: auto;
+	margin-left: auto;
+	width: 550px;
+}
+
+.div_busqueda {
+	margin-right: auto;
+	margin-left: auto;
+	width: 550px;
+}
+
+.tr_busqueda {
+	height: 30px;
+}
+
+.td_busqueda {
+	width: 100%;
+}
+
+
+.div_resultado {
+	margin-right: auto;
+	margin-left: auto;
+	width: 550px;
+}
+.generar_excel a:hover{text-decoration:none}
+.tabla {
+	font: 100% Verdana, Arial, Helvetica, sans-serif;
+	color: #FFFFFF;
+	text-align: left;
+	border-collapse: collapse;
+	border: 1px solid #000000;	
+	/*background: #6E9CC8;*/
+	background: #6E9CC8;
+	width: 100%;
+	
+}
+
+.table { 
+	width: 100%;
+	font: 70% Verdana, Arial, Helvetica, sans-serif;
+	color: #000;
+	text-align: left;
+	border-collapse:collapse;
+	border: 1px solid #000000;	
+	/*background: #BEEEFA;*/
+	background: #FFFFFF;
+}
+
+
+.table1{ 
+	font: 60% Verdana, Arial, Helvetica, sans-serif;
+	color: #000;
+	text-align: left;
+	border-collapse:collapse;
+	border: 1px solid #000000;	
+	/*background: #BEEEFA;*/
+	background: #FFFFFF;
+	text-align: center;	
+}
+
+.table2{ 
+	font: 70% Verdana, Arial, Helvetica, sans-serif;
+	color: #000;
+	text-align: left;
+	border-collapse:collapse;
+	border: 1px solid #000000;	
+	/*background: #BEEEFA;*/
+	background: #FFFFFF;
+	text-align: center;	
+}
+
+thead th {
+	font-size: 100%;
+	color: #CAA11A;
+	background: #17688B;
+	height: 33px;
+}
+
+tr {
+	vertical-align: middle;
+}
+
+tr,th,td {
+	/*padding: .75em;*/
+	/* border-right: 1px solid #000000;	
+	border-bottom: 1px solid #000000;	*/
+	font: normal 12px Arial, Helvetica, sans-serif;
+}
+
+tfoot tr {
+	color: #CAA11A;
+	background: #17688B;
+}
+
+tfoot td, tfoot th{
+	color: #CAA11A;
+	border: 0px;
+}
+
+span{
+	font-family: Verdana;
+	font-size: 12px;
+}
+
+.celda_ok { 
+  font: normal 12px Arial, Helvetica, sans-serif;
+  color: #000099       ;
+  background: #FFECC0       ;
+  height:28px;
+  width: 50%;
+  padding: 10px;
+
+}
+
+.celda_titulo { 
+  font: normal 12px Arial, Helvetica, sans-serif;
+  color: #FFFFFF  ;
+  background: #6E9CC8 ;
+  height:28px;
+  /*font-weight: bold;*/
+  width: 50px;
+  padding: 10px;
+
+}
+
+.celda_res { 
+  font: normal 12px Arial, Helvetica, sans-serif;
+  color: #000000  ;
+  background: #FFFFFF ;
+  height:28px;
+  /*font-weight: bold;*/
+  width: 80px;
+  padding: 10px;
+
+}
+
+.div_listado {
+	position: relative;
+	border: 1px solid blue; 
+	float : left; 
+	width : 49%;
+}
+
+.div_detalle {
+	position: relative;
+	border: 1px solid white; 
+	float : right; 
+	width : 49%; 
+}
+
+.resultado_historico {
+	display: block;
+}
+
+fieldset {
+	border: 1px solid #E2E2E2;
+	padding-bottom: 5px;
+}
+
+#etiqueta{
+	background-color: #1B5790;
+	color: #FFFFFF;
+	padding: 3px;
+	border: 1px solid #F4F4F4;
+}
+
+#campo{
+	background-color: #FFFFFF;
+	padding: 3px;
+	border: 1px solid #F4F4F4;
+}
+
+.limpiar {
+    background-image: url(../img/clear16.png) !important;
+    width: 16px;
+    height: 16px;
+}
+
+#critico {
+	color: white;
+	font-size: 200%;
+	background-color: red;
+}
+
+#nocritico {
+	color: white;
+	font-size: 200%;
+	background-color: green;
+}
+
+#critico2 {
+	color: white;
+	font-size: 200%;
+	background-color: red;
+}
+
+
+/*Listado criticos*/
+.reporte{width: 100%}
+.reporte #reporte_excel{display:block;margin: 0 auto !important;}
+.filtro_criticos{background:#00658D;color:#fff;margin:20px auto;width:1090px;padding: 5px}
+.filtro_clientes{padding: 2px}
+.filtro_tan{border-bottom:1px solid #fff;padding: 0;/*padding: 3px 5px 5px 5px*/}
+.filtro_tan .btn_buscar,.filtro_clientes .btn_buscar{background: #fff;border-radius: 6px;color:#000;cursor:pointer;font-weight:bold;padding: 3px 3px 3px 20px;position: relative;}
+.filtro_clientes .asignar .btn_buscar{margin-left:5px;padding: 3px 5px;}
+.filtro_tan .btn_buscar img,.filtro_clientes .btn_buscar img{border:0;height: 12px;left:5px;position: absolute;top:5px;width:12px;}
+.filtro_clientes .title{font-weight:bold;padding: 4px}
+.filtro_clientes .filtroxcampo{display:inline-block;margin:2px 10px 6px 10px;}
+
+/*combos multiselect*/
+.ui-multiselect-checkboxes span{margin-left: 5px}
+
+/*Asignar Empresas*/
+.asignacion_clientes .filtro_clientes .asignar{width: 100%}
+.asignacion_clientes .filtro_clientes .btn_buscar{background:#00658D;margin:0 auto;padding: 3px 5px;
+	text-align:center;width: 30%}
+.filtro_clientes fieldset{padding-bottom: 0}
+.buscarFecha{width: 80px;margin-left: 5px}
+.ui-datepicker-trigger{position:relative;top:2px;left:2px}
+#ui-datepicker-div{position: absolute;display: none}
+.mostrar_mov span{font-size: 9px !important}
+.modalPop {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 0, 0, 0, .5 ) 
+                url(../img/load.gif) 
+                50% 50% 
+                no-repeat;
+}
+/*ui-datepicker-trigger*/
+

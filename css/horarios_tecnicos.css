@@ -1,0 +1,112 @@
+/***BOOTSTRAT***/
+.f-gris{background:$fondo13;}
+.input-mini {width: 60px;}
+.input-small {width: 90px;}
+.input-medium {width: 150px;}
+.input-large {width: 210px;}
+.input-xlarge {width: 270px;}
+.input-xxlarge {width: 530px;}
+input[disabled],
+select[disabled],
+textarea[disabled],
+input[readonly],
+select[readonly],
+textarea[readonly] {
+  cursor: not-allowed;
+  background-color: #eeeeee;
+}
+input[type="radio"][disabled],
+input[type="checkbox"][disabled],
+input[type="radio"][readonly],
+input[type="checkbox"][readonly] {
+  background-color: transparent;
+}
+/*********************************************************/
+
+.ocultar{display: none !important}
+
+#btn_buscar_gestion_horarios{background: #ccc;border: 1px solid #666;left:5px;}
+/*#loading{position: absolute;left: 50%;top:50%;width:100%;background: #969090}*/
+.modalPop {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 0, 0, 0, .5 ) 
+                url(../img/load.gif) 
+                50% 50% 
+                no-repeat;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading {
+    overflow: hidden;   
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modalPop {
+    display: block;
+}
+
+
+
+table { 
+color: #333 !important;
+font-family: Helvetica, Arial, sans-serif;
+border-collapse:collapse; 
+border-spacing: 0; 
+}
+
+td, th { 
+border: 2px solid #b2a7a7; /* No more visible border */
+height: 30px; 
+transition: all 0.3s;  /* Simple transition for hover effect */
+}
+
+th {
+background: #1b5790 !important;  /* Darken header a bit */
+color: #fff !important;
+font-size: 0.9em !important;
+font-weight: bold;
+padding: 3px 3px;
+}
+
+.tit{
+    height: 30px;
+}
+.titulo {
+    border: 2px solid #a1a1a1;
+    padding: 3px 15px; 
+    background: #1b5790;
+    color: #fff !important;
+    border-radius: 25px;
+    display: inline-block;
+    width:100px;
+    text-align: left;
+    font-weight: bold;
+}
+
+td {
+background: #FAFAFA;
+font-size: 0.9em;
+}
+
+.td {
+text-align: center;
+}
+
+/* Cells in even rows (2,4,6...) are one color */ 
+tr:nth-child(even) td { background: #F1F1F1; } 
+
+/* Cells in odd rows (1,3,5...) are another (excludes header cells)   */
+tr:nth-child(odd) td { background: #FEFEFE; }  
+
+tr td:hover { background: #666; color: #FFF; } /* Hover cell effect! */
+.ui-datepicker-calendar td,.ui-datepicker-calendar th{height: auto}
+.fecha_liquidacion{width: 75px}
+.ocultar{display: none !important}

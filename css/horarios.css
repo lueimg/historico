@@ -1,0 +1,133 @@
+
+/*Clientes Criticos*/
+.bandeja_clientes{margin: 10px auto;width:800px !important;}
+.bandeja_clientes .dataTables_length,.bandeja_clientes .dataTables_filter{display: inline-block;margin:10px 0 10px 10px;width: 45%}
+.listado_clientes{width:800px !important;}
+/*Registro Criticos*/
+.registro_clientes{margin: 0px auto;width:98%;}
+.registro_clientes form{margin-bottom: 45px}
+.registro_clientes .datos{display: inline-block;width: 100%}
+.registro_clientes .datos .titulo{display: block;width: 100%}
+.registro_clientes .datos .titulo h2{display:inline-block;margin:0 !important;padding: 3px 0;font-size:1.2em;}
+.registro_clientes .datos .content_datos{float:left;padding-bottom:2px;width: 100%}
+.registro_clientes .datos .caja,.registro_clientes .datos .caja_medium,
+.registro_clientes .datos .caja_large,.registro_clientes .datos .caja_text{float:left;margin:0px;padding: 0px}
+.registro_clientes .datos .caja label,.registro_clientes .datos .caja_medium label,
+.registro_clientes .datos .caja_large label,.registro_clientes .datos .caja_text label{
+    background: #1B5790;color:#fff;font-size:10px;padding: 3px;}
+.registro_clientes .datos .caja input,.registro_clientes .datos .caja_medium input,
+.registro_clientes .datos .caja_large input{background:#fff;border: 1px solid #f4f4f4;padding: 2px;width: 80px}
+.registro_clientes .datos .caja_medium input{width: 190px}
+.registro_clientes .datos .caja_medium2 input{width: 300px}
+.registro_clientes .datos .caja_medium select{margin:2px;}/*cambio*/
+.registro_clientes .datos .caja_medium  .checkbox input{width: 20px !important}
+.registro_clientes .datos .caja_large input{font-size:10px;width: 430px;}
+.registro_clientes .datos .caja_large .nombre{position: absolute;}
+.registro_clientes .datos .caja_large textarea{height:19px;margin-left:110px;width: 450px;padding-top: 3px}
+.registro_clientes .datos .caja_text{margin-top: 3px;}
+
+.registro_clientes .datos .caja_text textarea{height:50px !important;margin:-3px 0 0 5px;width: 330px}
+.registro_clientes .registrar{margin-top:5px;padding: 8px;}
+.registro_clientes .registrar_pendientes{background:#00658d;color:#fff;cursor:pointer;margin-left:5px;margin-top:5px;padding: 4px;text-align:center;width: 150px;}
+.registro_clientes form.pendientes{margin-bottom: 5px}
+.registro_clientes #horario{margin:-8px 5px;}
+.registro_clientes .horario{position: relative;}
+.registro_clientes .horario #horario{width: 630px !important}
+
+.registro_clientes .liquidado{display: none !important}
+.ocultar{display: none !important}
+
+#btn_registro{background: #ccc;border: 1px solid #666;bottom:-30px;left:5px;position: absolute;}
+/*#loading{position: absolute;left: 50%;top:50%;width:100%;background: #969090}*/
+.modalPop {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 0, 0, 0, .5 ) 
+                url(../img/load.gif) 
+                50% 50% 
+                no-repeat;
+}
+
+.averias_listado{margin:2% 0 0 1% !important;width: 100% !important;}
+.averias_listado .datos,.averias_listado .datos_large{margin-top:2px !important;padding-top:0 !important;width: 100% !important;}
+.averias_listado .datos .caja_mini{display:inline-block !important;width: 24.3% !important;}
+.averias_listado .datos .caja_mini label{background:#1B5790 !important;color:#fff !important;float:left !important;font-size:0.85em !important;padding: 2px !important;text-align:right !important;width:100px;/*width:40% !important;*/}
+.averias_listado .datos .caja_mini input[type=text]{font-size:0.85em !important;margin-left:1% !important;padding: 1px 0 1px 1% !important;width: 55% !important;background: #fff}
+
+.averias_listado .datos_large .caja_medium{display:inline-block !important;width: 32.3% !important;}
+.averias_listado .datos_large .caja_medium label{background:#1B5790 !important;color:#fff !important;float:left !important;font-size:0.85em !important;padding: 2px !important;text-align:right !important;width:35% !important;}
+.averias_listado .datos_large .caja_medium textarea{background: #fff;font-size:0.85em !important;height:60px !important;margin-left:1% !important;width: 61% !important;}
+
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading {
+    overflow: hidden;   
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modalPop {
+    display: block;
+}
+
+ /*Clases General*/
+ .border{border:1px solid gray !important;}
+ .red{background:red;color:red;}
+
+ /*Gestion criticos*/
+ .registro_clientes #movimientos{margin-top: 8px}
+ .tabla_horarios{position: relative;}
+ .tabla_horarios .horarios{position: absolute;margin-top:0px}
+ .tabla_horarios .horarios #horario{margin-top: 10px}
+ 
+ .tmovimientos{height: 180px !important;overflow: auto;width:810px;}
+ .movimientos #btn_gestion_critico{background: #ccc;border: 1px solid #666;margin-top: 10px;}
+ .movimientos .moverxhorario{margin-top: 260px !important;position: absolute;}
+ .movimientos .btn_mover_critico{margin-top: 230px !important;position: absolute;}
+ .fecha_error{margin-left:5px;margin-top:5px;display:none}
+ .horario .help-inline{padding: 8px 0 5px 0}
+ /*.registro_clientes .datos .content_datos .caja_text{margin-right: 3px !important}*/
+
+ table { 
+color: #333 !important;
+font-family: Helvetica, Arial, sans-serif;
+width: 810px; 
+border-collapse: 
+collapse; border-spacing: 0; 
+}
+
+td, th { 
+border: 1px solid #b2a7a7; /* No more visible border */
+height: 30px; 
+transition: all 0.3s;  /* Simple transition for hover effect */
+}
+
+th {
+background: #1b5790 !important;  /* Darken header a bit */
+color: #fff !important;
+font-size: 0.9em !important;
+font-weight: bold;
+}
+
+td {
+background: #FAFAFA;
+font-size: 0.9em;
+text-align: center;
+}
+
+/* Cells in even rows (2,4,6...) are one color */ 
+tr:nth-child(even) td { background: #F1F1F1; } 
+
+/* Cells in odd rows (1,3,5...) are another (excludes header cells)   */
+tr:nth-child(odd) td { background: #FEFEFE; }  
+
+tr td:hover { background: #666; color: #FFF; } /* Hover cell effect! */
+.ui-datepicker-calendar td,.ui-datepicker-calendar th{height: auto}
+.fecha_liquidacion{width: 75px}
+.ocultar{display: none !important}
