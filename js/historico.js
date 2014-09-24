@@ -254,7 +254,7 @@ $(document).ready(function(){
                                     event.preventDefault();
                                     rm_averia = $(this).attr("href");
                                     var tipo = $(this).attr("title");
-                                    var url = "registro_manual_criticos.php?prio=" 
+                                    var url = "registro_manual_criticos_agenda.php?prio=" 
                                         + tipo 
                                         + '&rm_telefono=' + rm_telefono
                                         + '&rm_inscripcion=' + rm_inscripcion
