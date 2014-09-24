@@ -9,6 +9,9 @@ require_once('clases/motivos.php');
 require_once('clases/zonales.php');
 require_once './clases/ubigeo.php';
 
+
+
+
 /**
  * Registro de ordenes manuales
  * desde bandeja de gestion historico.
