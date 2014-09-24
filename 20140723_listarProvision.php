@@ -1,8 +1,6 @@
 <?php
 ini_set("display_errors", "On");
 error_reporting(E_ALL ^ E_NOTICE);
-
-
 //echo date("Y-m-d H:i:s");
 
 include ("../../clases/class.HistoricoCliente.php");

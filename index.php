@@ -2,8 +2,6 @@
 require_once("../../cabecera.php");
 set_time_limit(0);
 
-
-
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -102,9 +100,7 @@ set_time_limit(0);
 	</script>
 
 </head>
-
 <body>
-
 <input type="hidden" value="<?php echo $IDUSUARIO ?>" name="txt_idusuario" id="txt_idusuario"/>
 
 <?php echo pintar_cabecera(); ?>
