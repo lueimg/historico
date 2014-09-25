@@ -285,23 +285,30 @@ class capacidadHorarios {
     }
     
     /**
+     * getAgendaLibre: 
      * Retorna los cupos tomados y libres para una zonal y eecc
      * 
      * @param type $db Objeto conexion a DB
-     * @param type $zonal_id ID de la zonal
-     * @param type $eecc_id ID de la EECC
-     * @param type $inicio Fecha de inicio
-     * @param type $fin Fecha de fin
+     * @param type $zonal id de la zonal
+     * @param type $eecc id de la EECC
+     * @param type $inicio fecha inicial de la semana
+     * @param type $fin fecha final de la semana
+     * @param type $dia Dia de la semana (Lunes=1, martes=2, ...)
      * @return type
      */
-    public function getAgendaLibre($db, $zonal_id, $eecc_id, $inicio, $fin){
+    public function getAgendaLibre($db, $zonal, $eecc, $inicio, $fin, $dia){
         try {
             //Iniciar transaccion
             $db->beginTransaction();
             
             $sql = "SELECT 
-                        b.fecha_agenda, a.*, b.ocupado, 
-                        (a.capacidad - b.ocupado) libre
+                        IF(b.fecha_agenda IS NULL, 
+                            DATE_ADD(?, 
+                                INTERVAL IF(a.dia < ?, ?-1+a.dia, a.dia-?) 
+                                DAY), 
+                            b.fecha_agenda) fecha, 
+                        a.*, 
+                        b.ocupado, (a.capacidad - b.ocupado) libre
                     FROM
 
                         (SELECT 
@@ -311,7 +318,13 @@ class capacidadHorarios {
                             webpsi_criticos.capacidad_horarios c,
                             webpsi_criticos.horarios h, webpsi_criticos.dias d
                         WHERE 
-                            d.id=c.dia AND d.id=c.dia AND h.id=c.horario) a,
+                            d.id=c.dia 
+                            AND d.id=c.dia 
+                            AND h.id=c.horario 
+                            AND empresa=? 
+                            AND zona=?) a
+
+                        LEFT JOIN
 
                         (SELECT 
                             gm.id_gestion, gm.id_empresa, gm.id_zonal, 
@@ -349,32 +362,30 @@ class capacidadHorarios {
                                 )
                             AND gm.tecnico!=''
                             AND gm.id_estado=1
+                            AND gm.fecha_agenda BETWEEN ? AND ?
+                            AND gm.id_empresa=? 
+                            AND gm.id_zonal=?
                             GROUP BY 2,3,4,5
                             ORDER BY 2,3,6,4) b
 
-                WHERE 
+                        ON
                         a.empresa=b.id_empresa 
                         AND a.zona=b.id_zonal 
                         AND a.dia=b.id_dia 
                         AND a.horario=b.id_horario
-                        AND b.fecha_agenda BETWEEN ? AND ?";
+                ORDER BY 1, 3";
             
             $this->_data[] = $inicio;
+            $this->_data[] = $dia;
+            $this->_data[] = $dia;
+            $this->_data[] = $dia;
+            $this->_data[] = $eecc;
+            $this->_data[] = $zonal;
+            $this->_data[] = $inicio;
             $this->_data[] = $fin;
-            
-            if ($eecc_id !== "")
-            {
-                $sql .= " AND a.empresa=?";
-                $this->_data[] = $eecc_id;
-            }
-            
-            if ($zonal_id !== "")
-            {
-                $sql .= " AND a.zona=?";
-                $this->_data[] = $zonal_id;
-            }
-
-            $sql .= " ORDER BY 1, 3";            
+            $this->_data[] = $eecc;
+            $this->_data[] = $zonal;
+               
             
             $bind = $db->prepare($sql);
             $bind->execute($this->_data);
