@@ -82,7 +82,9 @@ class gestionCriticos{
 					fecha_data_fuente,a.telefono_codclientecms,a.rango_dias,a.sms1,a.sms2,
 					a.area2,c.fecha_creacion AS 'fecha_creacion',a.microzona,mov.tecnico, c.nmov,
 					IFNULL((select tmp.DATA17 FROM schedulle_sistemas.tmp_gaudi_total tmp where tmp.DATA17=a.codigo_req limit 1 ),'') 'existe',
-					a.tipo_actuacion AS 'actuacion', '' as 'fecha_cambio','' as 'horas_cambio'
+					a.tipo_actuacion AS 'actuacion'
+					,(SELECT fecha_cambio FROM webpsi_coc.tmp_provision_historico WHERE codigo_req=a.codigo_req) fecha_cambio
+					,(SELECT ROUND((TIMESTAMPDIFF(SECOND,(SELECT fecha_cambio FROM webpsi_coc.`tmp_provision_historico` WHERE codigo_req=a.codigo_req),NOW()) / 3600),2)) AS `horas_cambio`
 					,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=a.codigo_req),IF(IFNULL(a.wu_nagendas,'')='',0,a.wu_nagendas)) wu_nagendas ,c.n_evento
 					,(select paso from webpsi_officetrack.tareas where task_id=c.id order by fecha_recepcion desc limit 1) estado_evento
 								FROM webpsi_criticos.gestion_criticos c INNER JOIN webpsi_criticos.gestion_movimientos mov ON c.id=mov.id_gestion INNER JOIN
@@ -129,7 +131,9 @@ class gestionCriticos{
 					tot_aver_cob AS 'total_averias_cobre',tot_averias AS total_averias,fftt,llave,dir_terminal,fonos_contacto,contrata,zonal,
 					quiebre,lejano,des_distrito AS 'distrito',eecc_final,zona_movuno AS 'zona_movistar_uno',paquete,data_multip AS 'data_multiproducto',aver_m1 AS 'averia_m1',
 					fecha_data_fuente,telefono_codclientecms,rango_dias,sms1,
-					sms2,area2,'' AS 'fecha_creacion',microzona,'' as 'tecnico', 0 nmov,'' as 'existe',tipo_actuacion as 'actuacion', '' as 'fecha_cambio','' as 'horas_cambio'
+					sms2,area2,'' AS 'fecha_creacion',microzona,'' as 'tecnico', 0 nmov,'' as 'existe',tipo_actuacion as 'actuacion'
+					,(SELECT fecha_cambio FROM webpsi_coc.tmp_provision_historico WHERE codigo_req=tp.codigo_req) fecha_cambio
+					,(SELECT ROUND((TIMESTAMPDIFF(SECOND,(SELECT fecha_cambio FROM webpsi_coc.`tmp_provision_historico` WHERE codigo_req=tp.codigo_req),NOW()) / 3600),2)) AS `horas_cambio`
 					,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=tp.codigo_req),IF(IFNULL(tp.wu_nagendas,'')='',0,tp.wu_nagendas)) wu_nagendas ,'' n_evento
 					,null estado_evento
 					FROM webpsi_coc.tmp_provision tp
@@ -543,8 +547,9 @@ class gestionCriticos{
 					fecha_data_fuente,a.telefono_codclientecms,a.rango_dias,a.sms1,a.sms2,
 					a.area2,c.fecha_creacion AS 'fecha_creacion',a.microzona,mov.tecnico, c.nmov,
 					IFNULL((select tmp.DATA17 FROM schedulle_sistemas.tmp_gaudi_total tmp where tmp.DATA17=a.codigo_req limit 1 ),'') 'existe',
-					a.tipo_actuacion AS 'actuacion',
-					'' as 'fecha_cambio','' as 'horas_cambio'
+					a.tipo_actuacion AS 'actuacion'
+					,(SELECT fecha_cambio FROM webpsi_coc.tmp_provision_historico WHERE codigo_req=a.codigo_req) fecha_cambio
+					,(SELECT ROUND((TIMESTAMPDIFF(SECOND,(SELECT fecha_cambio FROM webpsi_coc.`tmp_provision_historico` WHERE codigo_req=a.codigo_req),NOW()) / 3600),2)) AS `horas_cambio`
 					,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=a.codigo_req),IF(IFNULL(a.wu_nagendas,'')='',0,a.wu_nagendas)) wu_nagendas ,c.n_evento
 					,(select paso from webpsi_officetrack.tareas where task_id=c.id order by fecha_recepcion desc limit 1) estado_evento
 								FROM webpsi_criticos.gestion_criticos c INNER JOIN webpsi_criticos.gestion_movimientos mov ON c.id=mov.id_gestion INNER JOIN
@@ -589,8 +594,9 @@ class gestionCriticos{
 					tot_aver_cob AS 'total_averias_cobre',tot_averias AS total_averias,fftt,llave,dir_terminal,fonos_contacto,contrata,zonal,
 					quiebre,lejano,des_distrito AS 'distrito',eecc_final,zona_movuno AS 'zona_movistar_uno',paquete,data_multip AS 'data_multiproducto',aver_m1 AS 'averia_m1',
 					fecha_data_fuente,telefono_codclientecms,rango_dias,sms1,
-					sms2,area2,'' AS 'fecha_creacion',microzona,'' as 'tecnico', 0 nmov,'' as 'existe',tipo_actuacion as 'actuacion',
-					'' as 'fecha_cambio','' as 'horas_cambio'
+					sms2,area2,'' AS 'fecha_creacion',microzona,'' as 'tecnico', 0 nmov,'' as 'existe',tipo_actuacion as 'actuacion'
+					,(SELECT fecha_cambio FROM webpsi_coc.tmp_provision_historico WHERE codigo_req=tp.codigo_req) fecha_cambio
+					,(SELECT ROUND((TIMESTAMPDIFF(SECOND,(SELECT fecha_cambio FROM webpsi_coc.`tmp_provision_historico` WHERE codigo_req=tp.codigo_req),NOW()) / 3600),2)) AS `horas_cambio`
 					,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=tp.codigo_req),IF(IFNULL(tp.wu_nagendas,'')='',0,tp.wu_nagendas)) wu_nagendas ,'' n_evento
 					,null	estado_evento					
 											FROM webpsi_coc.tmp_provision tp
