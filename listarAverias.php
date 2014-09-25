@@ -106,7 +106,7 @@ tr {
 
 <div id="resultado_historico2" class="resultado_historico" style="display: table; border: 0px solid green; width: 45%; float: left">
 
-<div id="resListadoPend" name="resListado" class="div_listado1" style="border: 0px solid white; width: 90%;">
+<div id="resListadoPend" name="resListado" class="div_listado1" style="border: 0px solid white; width: 100%;">
 
 
 <table class='tabla_resultados'>
@@ -141,6 +141,14 @@ if (count($arrTba)>0) {
                         echo "<a href=\"" . trim($filaTba["averia"]) . "\" class=\"rmanual\" title=\"rutina-bas-lima\" >";
 						echo "<span style='font-family: Tahoma, Verdana, Segoe, sans-serif; font-weight: bold; color:#FF0000; font-size: 12px'>";
 						echo "Registro manual</span></a>";
+                    }else
+                    {
+                    ?>
+                        <div id='agendarVisita' name='agendarVisita' >
+                            <button type="button" id="btn_cliente_critico"
+                                    style="margin-top:5px;background:red;border:0;border-radius:4px;color:#fff;padding:3px">Agendar Visita</button>
+                        </div>
+                    <?php
                     }
                     ?>
                 </td>

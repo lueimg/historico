@@ -177,6 +177,7 @@ $(document).ready(function(){
 					$("#r_tasa").html(obj[0].tasa);
 					$("#r_tecno").html(obj[0].tecnologia);
 
+                    //RESUELVE SI MOSTRAR AGENDAR O NO
 					if(obj[0].c1!=null || obj[0].c2!=null){
 						//$("#mensaje").html(obj[0].c1);
 						 //alert("Critico");
@@ -238,6 +239,7 @@ $(document).ready(function(){
 	}
 
 	function listarAverias(telefono,codservcms,codclicms){
+
 		$.ajax({
 			url : 'listarAverias.php',
 			type : 'POST',
@@ -245,10 +247,13 @@ $(document).ready(function(){
 				telefonoCliente : telefono,
 				codigoServicioCMS : codservcms,
 				codigoClienteCMS : codclicms,
-                                esCritico: esCritico
+                esCritico: esCritico
 			},
 			success : function(response){
 				$("#tabs-averias").html(response);
+                //Agregamos el evento click al boton de agendar averia
+                AgendarAveriaEventoClick();
+
                                 //Registro manual
                                 $(".rmanual").click(function (event){
                                     event.preventDefault();
@@ -354,23 +359,26 @@ $(document).ready(function(){
 	
 	
 	//Para agregar clientes críticos
-	$("#btn_cliente_critico").click(function(){
-		//alert("HOLA");
-		var fonoBus = $("#telefonoCliente").val();
-		alert(fonoBus)
-		var url = "registro_clientes_criticos.php?fonoBus="+fonoBus;
-		var pagina = '<iframe style="border: 0px; " src="' + url + '" width="100%" height="100%"></iframe>'
-		$("#dialog-criticos").html(pagina);
-		$("#dialog-criticos").dialog({
-			 autoOpen: false,
-             modal: true,
-             height: 600,
-             width: 700,
-		});
+	AgendarAveriaEventoClick = function(){
+        $("#btn_cliente_critico").click(function(){
 
-		$("#dialog-criticos").dialog( "open" );
+            var idAveria = $(this).parent().parent().parent().find("a").text();
 
-	});
+            //var fonoBus = $("#telefonoCliente").val();
+            var url = "registro_clientes_criticos.php?averia_ini="+idAveria;
+            var pagina = '<iframe style="border: 0px; " src="' + url + '" width="100%" height="100%"></iframe>'
+            $("#dialog-criticos").html(pagina);
+            $("#dialog-criticos").dialog({
+                autoOpen: false,
+                modal: true,
+                height: 600,
+                width: 700,
+            });
+
+            $("#dialog-criticos").dialog( "open" );
+
+        });
+    }
 
 
 

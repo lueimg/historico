@@ -150,13 +150,13 @@ set_time_limit(0);
 	<td>
 	<input type="button" id="btn_historico" name="btn_historico" value="Consultar Historico" />
 	<button id="btn_limpiar" name="btn_limpiar">&nbsp;</button>
-	
+	<!--
 	<div id='agendarVisita' name='agendarVisita' style="display: none">
-	<button type="button" id="btn_cliente_critico" 
-	style="margin-top:5px;background:red;border:0;border-radius:4px;color:#fff;padding:3px">Agendar Visita</button> 
+	<button type="button" id="btn_cliente_critico"
+	style="margin-top:5px;background:red;border:0;border-radius:4px;color:#fff;padding:3px">Agendar Visita</button>
 	</div>
         
-	
+	-->
 	</td>
 	</tr>
 	</table>
