@@ -24,6 +24,13 @@ class gestionCriticos{
 			$filtro_sql = "where nombre like '%$filtro%'";
 		}else if($tipo=="atc" && $filtro!=""){
 			$filtro_sql = "where id_atc='$filtro'";
+		}else if($tipo=="id_gestion" && $filtro!=""){
+
+			$buscar=array("'",'"');
+			$reemplazar=array("","");
+			$filtro=str_replace($buscar,$reemplazar,$filtro);
+			$filtro=str_replace(",","','",$filtro);
+			$filtro_sql = "where  id in ('$filtro')";
 		}else{
 			$filtro_sql = "";
 		}
@@ -344,7 +351,7 @@ class gestionCriticos{
 
 		if($data["quiebre"]!=""){
 			if($filtro_sql!=""){
-				$filtro_sql .= " and quiebres in(".$data["quiebre"].")";
+				$filtro_sql .= " and (quiebres in(".$data["quiebre"].") or (quiebres='F_PL' AND id_atc!='' ) )";
 			}else{
 				$filtro_sql .= "where quiebres in(".$data["quiebre"].")";
 			}

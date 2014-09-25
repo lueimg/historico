@@ -172,6 +172,7 @@ echo "-->";
 				<option value="averia">Averia</option>
 				<option value="nombre">Nombre de Cliente</option>
 				<option value="atc">ATC/RTC</option>
+				<option value="id_gestion">ID GESTION</option>
 			</select>
 			<input class="border" type="text" value="" name="txt_tan" id="txt_tan">
 			<span class="btn_buscar" id="filtro_personalizado"><img src="img/lupa.png" title="Buscar">Busqueda Personalizada</span>
@@ -446,6 +447,7 @@ echo "-->";
 					<th>Tipo Actividad</th>
 					<th>Fecha Registro</th>
 					<th>Quiebre</th>
+					<th>M1</th>
 					<th>Empresa</th>
 					<th>Telefono</th>
 					<th>Fecha Agenda</th>
@@ -799,7 +801,7 @@ echo "-->";
         bottom     : 0px;
         overflow   : auto;
         background-color: #ffffff;
-        width: 600px;
+        width: 450px;
         border-style: solid;
         border-color: #000000;
         border-width: thin;

@@ -56,9 +56,13 @@ $(document).ready(function(){
 	$(".actividades").multiselect("checkAll");
 	$(".quiebre").multiselect();
 	$(".quiebre").multiselect("checkAll");
+	$(".quiebre option[value='F_PL']").removeAttr("selected");
+	$(".quiebre").multiselect('refresh');
+
 	
 	$(".filtro_tecnico").multiselect();
 	$(".filtro_tecnico").multiselect("checkAll");
+
 	
 	//Para agregar clientes críticos
 	$("td.registro_criticos").click(function(){
@@ -258,6 +262,8 @@ $("#btn_limpiar_filtros").click(function(){
 		$(".distrito").multiselect("checkAll");
 		$(".esttransmision").multiselect("checkAll");		
 		$(".quiebre").multiselect("checkAll");
+		$(".quiebre option[value='F_PL']").removeAttr("selected");
+		$(".quiebre").multiselect('refresh');
 
 		$(".lejano").multiselect("uncheckAll");
 		$('.lejano option').each(function(index, value) {

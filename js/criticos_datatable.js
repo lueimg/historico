@@ -162,7 +162,7 @@ $("#filtro_personalizado").click(function(){
 					rtn = oTable.fnAddData(['<input type="checkbox" name="seleccion_criticos" id="seleccion_criticos'+i+'" value="si">',info.averia,info.id_atc,
 						info.tipo_actividad,
 						'<span style="display: none;">' + info.fecha_reg + '</span>'+fecha_reg
-						,info.quiebres,info.empresa,info.telefono_cliente_critico,
+						,info.quiebres,$.trim(info.averia_m1).replace("MOVISTAR UNO","M1"),info.empresa,info.telefono_cliente_critico,
 						fecha_horario,info.estado,info.tecnico,info.mdf,info.microzona,info.distrito,fecha_cambio,info.horas_cambio,
 						/*info.flag_tecnico,*/img_Averia+imgAgendamiento_wu,img_mov + '<span class="nmov'+info.id+'">(' + info.nmov + ')', '<span class="flag_tecnico'+info.id+'">'+imgTecnicoEstado+'</span>'+ img_gestion, imgn_evento,info.tipo_averia,info.horas_averia,info.fecha_registro,
 						info.ciudad,info.codigo_averia,info.inscripcion,info.fono1,info.telefono,info.mdf,info.observacion_102,info.segmento,
@@ -188,50 +188,50 @@ $("#filtro_personalizado").click(function(){
 
 					$('td', nTr)[1].className = 'faveria_ini'+i;
 					$('td', nTr)[3].className = 'factividad'+i;
-					//$('td', nTr)[4].className = 'fnombre'+info.id;
-					$('td', nTr)[6].className = 'fempresa'+info.id;
+					$('td', nTr)[6].className = 'fm1'+i;
+					$('td', nTr)[7].className = 'fempresa'+info.id;
 					
 					var ind = (info.id!='')? info.id:i;
-					$('td', nTr)[7].className = 'ftele'+ind;
-					$('td', nTr)[8].className = 'fagenda'+info.id;
-					$('td', nTr)[9].className = 'festado'+info.id;
-					$('td', nTr)[10].className = 'ftecnico'+info.id;
+					$('td', nTr)[8].className = 'ftele'+ind;
+					$('td', nTr)[9].className = 'fagenda'+info.id;
+					$('td', nTr)[10].className = 'festado'+info.id;
+					$('td', nTr)[11].className = 'ftecnico'+info.id;
 					
 						if(info.estado!="Temporal"){
-							$('td', nTr)[16].className = 'mostrar_averia';
+							$('td', nTr)[17].className = 'mostrar_averia';
 						}else{
-							$('td', nTr)[16].className = 'mostrar_averia_raiz';
-						}
-						$('td', nTr)[16].setAttribute('data-id', info.id );
-						$('td', nTr)[16].setAttribute('data-averia', info.codigo_averia );
-						$('td', nTr)[16].setAttribute('data-indice', i );
-						$('td', nTr)[16].setAttribute('data-actividad', info.tipo_actividad );
-
-						if(info.estado!="Temporal"){
-							$('td', nTr)[17].className = 'mostrar_mov';
+							$('td', nTr)[17].className = 'mostrar_averia_raiz';
 						}
 						$('td', nTr)[17].setAttribute('data-id', info.id );
+						$('td', nTr)[17].setAttribute('data-averia', info.codigo_averia );
 						$('td', nTr)[17].setAttribute('data-indice', i );
-						
-						$('td', nTr)[18].setAttribute( 'data-id', info.id );
+						$('td', nTr)[17].setAttribute('data-actividad', info.tipo_actividad );
+
+						if(info.estado!="Temporal"){
+							$('td', nTr)[18].className = 'mostrar_mov';
+						}
+						$('td', nTr)[18].setAttribute('data-id', info.id );
 						$('td', nTr)[18].setAttribute('data-indice', i );
-						$('td', nTr)[18].setAttribute('data-actividad', info.tipo_actividad );
+						
+						$('td', nTr)[19].setAttribute( 'data-id', info.id );
+						$('td', nTr)[19].setAttribute('data-indice', i );
+						$('td', nTr)[19].setAttribute('data-actividad', info.tipo_actividad );
 
 						if(info.estado!="Temporal" && info.codigo_estado!="21"){
-							$('td', nTr)[18].className = 'gestion quitar_gestion'+info.id;
+							$('td', nTr)[19].className = 'gestion quitar_gestion'+info.id;
 						}else if(info.estado=="Temporal" && info.codigo_estado!="21"){
-							$('td', nTr)[18].className = 'registro_criticos quitar_gestion'+i;
-							$('td', nTr)[18].setAttribute( 'data-telefono', info.telefono_cliente_critico );
+							$('td', nTr)[19].className = 'registro_criticos quitar_gestion'+i;
+							$('td', nTr)[19].setAttribute( 'data-telefono', info.telefono_cliente_critico );
 						}else if(info.estado!="Temporal" && info.codigo_estado=="21"){
 							//
 						}
 
 					//$('td', nTr)[18].style.display = 'none';
-					$('td', nTr)[19].className = 'transmision'+info.id+' transmision';
-					$('td', nTr)[19].setAttribute( 'data-id', info.id );
-					$('td', nTr)[19].setAttribute('data-actividad', info.tipo_actividad );
+					$('td', nTr)[20].className = 'transmision'+info.id+' transmision';
+					$('td', nTr)[20].setAttribute( 'data-id', info.id );
+					$('td', nTr)[20].setAttribute('data-actividad', info.tipo_actividad );
 
-					$('td', nTr)[20].style.display = 'none';
+
 					$('td', nTr)[21].style.display = 'none';
 					$('td', nTr)[22].style.display = 'none';
 					$('td', nTr)[23].style.display = 'none';
@@ -275,6 +275,7 @@ $("#filtro_personalizado").click(function(){
 					$('td', nTr)[61].style.display = 'none';
 					$('td', nTr)[62].style.display = 'none';
 					$('td', nTr)[63].style.display = 'none';
+					$('td', nTr)[64].style.display = 'none';
 
 					});
 					oTable.fnDraw();
@@ -670,7 +671,7 @@ $("#filtro_general").click(function(){
 					rtn = oTable.fnAddData(['<input type="checkbox" name="seleccion_criticos" id="seleccion_criticos'+i+'" value="si">',info.averia,info.id_atc,
 						info.tipo_actividad,
 						'<span style="display: none;">' + info.fecha_reg + '</span>'+fecha_reg
-						,info.quiebres,info.empresa,info.telefono_cliente_critico,
+						,info.quiebres,$.trim(info.averia_m1).replace("MOVISTAR UNO","M1"),info.empresa,info.telefono_cliente_critico,
 						fecha_horario,info.estado,info.tecnico,info.mdf,info.microzona,info.distrito,fecha_cambio,info.horas_cambio,
 						/*info.flag_tecnico,*/img_Averia+imgAgendamiento_wu,img_mov + '<span class="nmov'+info.id+'">(' + info.nmov + ')', '<span class="flag_tecnico'+info.id+'">'+imgTecnicoEstado+'</span>'+ img_gestion , imgn_evento,info.tipo_averia,info.horas_averia,info.fecha_registro,
 						info.ciudad,info.codigo_averia,info.inscripcion,info.fono1,info.telefono,info.mdf,info.observacion_102,info.segmento,
@@ -697,49 +698,50 @@ $("#filtro_general").click(function(){
 					$('td', nTr)[1].className = 'faveria_ini'+i;
 					$('td', nTr)[3].className = 'factividad'+i;
 					//$('td', nTr)[4].className = 'fnombre'+info.id;
-					$('td', nTr)[6].className = 'fempresa'+info.id;
+					$('td', nTr)[6].className = 'fm1'+i;
+					$('td', nTr)[7].className = 'fempresa'+info.id;
 					
 					var ind = (info.id!='')? info.id:i;
-					$('td', nTr)[7].className = 'ftele'+ind;
-					$('td', nTr)[8].className = 'fagenda'+info.id;
-					$('td', nTr)[9].className = 'festado'+info.id;
-					$('td', nTr)[10].className = 'ftecnico'+info.id;
+					$('td', nTr)[8].className = 'ftele'+ind;
+					$('td', nTr)[9].className = 'fagenda'+info.id;
+					$('td', nTr)[10].className = 'festado'+info.id;
+					$('td', nTr)[11].className = 'ftecnico'+info.id;
 					
 						if(info.estado!="Temporal"){
-							$('td', nTr)[16].className = 'mostrar_averia';
+							$('td', nTr)[17].className = 'mostrar_averia';
 						}else{
-							$('td', nTr)[16].className = 'mostrar_averia_raiz';
-						}
-						$('td', nTr)[16].setAttribute('data-id', info.id );
-						$('td', nTr)[16].setAttribute('data-averia', info.codigo_averia );
-						$('td', nTr)[16].setAttribute('data-indice', i );
-						$('td', nTr)[16].setAttribute('data-actividad', info.tipo_actividad );
-
-						if(info.estado!="Temporal"){
-							$('td', nTr)[17].className = 'mostrar_mov';
+							$('td', nTr)[17].className = 'mostrar_averia_raiz';
 						}
 						$('td', nTr)[17].setAttribute('data-id', info.id );
+						$('td', nTr)[17].setAttribute('data-averia', info.codigo_averia );
 						$('td', nTr)[17].setAttribute('data-indice', i );
-						
-						$('td', nTr)[18].setAttribute( 'data-id', info.id );
+						$('td', nTr)[17].setAttribute('data-actividad', info.tipo_actividad );
+
+						if(info.estado!="Temporal"){
+							$('td', nTr)[18].className = 'mostrar_mov';
+						}
+						$('td', nTr)[18].setAttribute('data-id', info.id );
 						$('td', nTr)[18].setAttribute('data-indice', i );
-						$('td', nTr)[18].setAttribute('data-actividad', info.tipo_actividad );
+						
+						$('td', nTr)[19].setAttribute( 'data-id', info.id );
+						$('td', nTr)[19].setAttribute('data-indice', i );
+						$('td', nTr)[19].setAttribute('data-actividad', info.tipo_actividad );
 
 						if(info.estado!="Temporal" && info.codigo_estado!="21"){
-							$('td', nTr)[18].className = 'gestion quitar_gestion'+info.id;
+							$('td', nTr)[19].className = 'gestion quitar_gestion'+info.id;
 						}else if(info.estado=="Temporal" && info.codigo_estado!="21"){
-							$('td', nTr)[18].className = 'registro_criticos quitar_gestion'+i;
-							$('td', nTr)[18].setAttribute( 'data-telefono', info.telefono_cliente_critico );
+							$('td', nTr)[19].className = 'registro_criticos quitar_gestion'+i;
+							$('td', nTr)[19].setAttribute( 'data-telefono', info.telefono_cliente_critico );
 						}else if(info.estado!="Temporal" && info.codigo_estado=="21"){
 							//
 						}
 
 					//$('td', nTr)[18].style.display = 'none';
-					$('td', nTr)[19].className = 'transmision'+info.id+' transmision';
-					$('td', nTr)[19].setAttribute( 'data-id', info.id );
-					$('td', nTr)[19].setAttribute('data-actividad', info.tipo_actividad );
+					$('td', nTr)[20].className = 'transmision'+info.id+' transmision';
+					$('td', nTr)[20].setAttribute( 'data-id', info.id );
+					$('td', nTr)[20].setAttribute('data-actividad', info.tipo_actividad );
 
-					$('td', nTr)[20].style.display = 'none';
+					//$('td', nTr)[20].style.display = 'none';
 					$('td', nTr)[21].style.display = 'none';
 					$('td', nTr)[22].style.display = 'none';
 					$('td', nTr)[23].style.display = 'none';
@@ -783,6 +785,7 @@ $("#filtro_general").click(function(){
 					$('td', nTr)[61].style.display = 'none';
 					$('td', nTr)[62].style.display = 'none';
 					$('td', nTr)[63].style.display = 'none';
+					$('td', nTr)[64].style.display = 'none';
 					});
 					oTable.fnDraw();
 				$("#seleccion_general").removeAttr('checked')
