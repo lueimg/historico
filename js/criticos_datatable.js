@@ -17,7 +17,7 @@ $(document).ready(function() {
 
 $("#filtro_personalizado").click(function(){
 
-	var tipo = $("#filtro_tan").val()
+	var tipo = $("#filtro_tan").val()	
 	var valor_filtro = $("#txt_tan").val()
 	var empresa = $("#empresa").val()
 	var empresa_raiz = $("#empresa_raiz").val()
@@ -1283,3 +1283,52 @@ $(".pendientes").click(function(){
 });
 
 });
+
+validarTexto=function(valor){
+	$("#txt_tan").val('');
+	if(valor=="telefono"){		
+		$("#txt_tan").attr("onKeyPress","return validaNumeros(event);");		
+	}
+	else if(valor=="averia" || valor=="atc"){
+		$("#txt_tan").attr("onKeyPress","return validaAlfanumerico(event);");
+	}
+	else if(valor=="nombre"){
+		$("#txt_tan").attr("onKeyPress","return validaLetras(event);");
+	}
+	else if(valor=='id_gestion'){
+		$("#txt_tan").attr("onKeyPress","return validaNumerosIn(event);");
+	}
+	$("#txt_tan").focus();
+}
+
+validaNumerosIn=function(e) { // 1
+        tecla = (document.all) ? e.keyCode : e.which; // 2
+        if (tecla==8 || tecla==0 || tecla==46 || tecla==44) return true;//8 barra, 0 flechas desplaz
+        patron = /\d/; // Solo acepta números
+        te = String.fromCharCode(tecla); // 5
+        return patron.test(te); // 6
+}
+
+validaNumeros=function(e) { // 1
+        tecla = (document.all) ? e.keyCode : e.which; // 2
+        if (tecla==8 || tecla==0 || tecla==46) return true;//8 barra, 0 flechas desplaz
+        patron = /\d/; // Solo acepta números
+        te = String.fromCharCode(tecla); // 5
+        return patron.test(te); // 6
+}
+
+validaLetras=function(e) { // 1
+        tecla = (document.all) ? e.keyCode : e.which; // 2
+        if (tecla==8 || tecla==0 || tecla==32) return true;//8 barra, 0 flechas desplaz
+        patron =/[A-Za-zñÑáéíóúÁÉÍÓÚ\s]/; // 4 ,\s espacio en blanco, patron = /\d/; // Solo acepta números, patron = /\w/; // Acepta números y letras, patron = /\D/; // No acepta números, patron =/[A-Za-z\s]/; //sin ñÑ
+        te = String.fromCharCode(tecla); // 5
+        return patron.test(te); // 6
+}
+
+validaAlfanumerico=function(e) { // 1
+        tecla = (document.all) ? e.keyCode : e.which; // 2
+        if (tecla==8 || tecla==0 || tecla==46 || tecla==45 || tecla==95) return true;//8 barra, 0 flechas desplaz
+        patron =/[A-Za-zñÑáéíóúÁÉÍÓÚ@.,_\-\s\d]/; // 4 ,\s espacio en blanco, patron = /\d/; // Solo acepta números, patron = /\w/; // Acepta números y letras, patron = /\D/; // No acepta números, patron =/[A-Za-z\s]/; //sin ñÑ
+        te = String.fromCharCode(tecla); // 5
+        return patron.test(te); // 6
+}

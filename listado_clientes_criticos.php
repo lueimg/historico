@@ -167,14 +167,14 @@ echo "-->";
 		<div class="filtro_clientes">
 		  <div class="filtro_tan">
 			<label>Buscar por:</label>
-			<select name="filtro_tan" id="filtro_tan">
-				<option value="telefono">Telefono</option>
+			<select name="filtro_tan" id="filtro_tan" onchange="validarTexto(this.value)">
+				<option value="telefono" selected>Telefono</option>
 				<option value="averia">Averia</option>
 				<option value="nombre">Nombre de Cliente</option>
 				<option value="atc">ATC/RTC</option>
 				<option value="id_gestion">ID GESTION</option>
 			</select>
-			<input class="border" type="text" value="" name="txt_tan" id="txt_tan">
+			<input class="border" type="text" value="" name="txt_tan" id="txt_tan" onkeypress="return validaNumeros(event);">
 			<span class="btn_buscar" id="filtro_personalizado"><img src="img/lupa.png" title="Buscar">Busqueda Personalizada</span>
 			<span class="filtroxcampo">
 			  	<label>Tipo de Actividad</label>

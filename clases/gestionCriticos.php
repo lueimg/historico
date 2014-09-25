@@ -25,12 +25,7 @@ class gestionCriticos{
 		}else if($tipo=="atc" && $filtro!=""){
 			$filtro_sql = "where id_atc='$filtro'";
 		}else if($tipo=="id_gestion" && $filtro!=""){
-
-			$buscar=array("'",'"');
-			$reemplazar=array("","");
-			$filtro=str_replace($buscar,$reemplazar,$filtro);
-			$filtro=str_replace(",","','",$filtro);
-			$filtro_sql = "where  id in ('$filtro')";
+			$filtro_sql = "where  id in ($filtro)";
 		}else{
 			$filtro_sql = "";
 		}
