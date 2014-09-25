@@ -903,19 +903,20 @@ $("#filtro_general").click(function(){
 		        $("#clienteCriticos tbody td.transmision").live('click', function(event) {
 		            id = $(this).attr("data-id")
 		            actividad = $(this).attr("data-actividad")
+		            if($(this).html()!=''){
 		            var url = "sergio.php?id="+id+"&actividad="+actividad;
 					var pagina = '<iframe style="border: 0px; " src="' + url + '" width="100%" height="100%"></iframe>'
-					$("#dialog-transmision").html(pagina);
-					$("#dialog-transmision").dialog({
-						 autoOpen: false,
-						 closeOnScape: true,
-			             modal: true,
-			             height: 700,
-			             width: 1100,
-					});
+						$("#dialog-transmision").html(pagina);
+						$("#dialog-transmision").dialog({
+							 autoOpen: false,
+							 closeOnScape: true,
+				             modal: true,
+				             height: 700,
+				             width: 600,
+						});
 
-					$("#dialog-transmision").dialog( "open" );
-		             
+						$("#dialog-transmision").dialog( "open" );
+		            }
 		        });
 
 //Asignacion de empresas
