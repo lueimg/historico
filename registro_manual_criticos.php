@@ -125,7 +125,8 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                 A:'A',
                 B:'B',
                 C:'C',
-                D:'D'
+                D:'D',
+                M:'M'
             };
             
             var prio = '<?php echo $prio;?>';
@@ -145,7 +146,9 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                         + "</option>");
 
                 //Zonal, primera opcion selected
-                $("#zonal option").first().attr("selected", "selected");
+                //$("#zonal option").first().attr("selected", "selected");
+                $("#zonal").val("LIM");
+                seleccionarZonal();
                 //Remover options from mdf
                 $("#mdf option").remove();
                 //Valor de eecc vacio
@@ -158,7 +161,10 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
 
                 if ( $("#tipo_averia").val()==='rutina-catv-pais' ) {
                     //Texto de la etiqueta
-                    $(".inscod").html("Cod. Cliente CMS");
+                   // $(".inscod").html("Cod. Cliente CMS");
+                   $(".telcod").html("Cod. Cliente CMS");
+                   $(".error_form .telcod").html("Ingrese Cod. Cliente CMS");
+                   $("#movistar_uno").val('');
                     for ( index in segmentoCatv ) {
                         var selOpt = '';
                         if ( segmentoCatv.hasOwnProperty(index) ) {
@@ -174,7 +180,10 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                     }
                 } else {
                     //Texto de la etiqueta
-                    $(".inscod").html("Inscripcion");
+                    //$(".inscod").html("Inscripcion");
+                    $(".telcod").html("Telefono");
+                    $(".error_form .telcod").html("Ingrese tel&eacute;fono");
+                    $("#movistar_uno").val('NO');
                     for ( index in segmentoNoCatv ) {
                         var selOpt = '';
                         if ( segmentoNoCatv.hasOwnProperty(index) ) {
@@ -279,6 +288,7 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                 
             $(document).ready(function (){
                 //MouseOver td
+
                 $("td").mouseover(function (){
                     $(this).css("color", "#000000");
                     $(this).css(
@@ -313,10 +323,10 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                         }
                     });
                 }
+                
                 //Envio y registro de datos
                 $("#frm_criticos").submit(function (event){
-                    event.preventDefault();
-                    var datos = $(this).serialize();
+                    event.preventDefault();                    
                     
                     //Validacion de campos
                     var formOk = true;
@@ -331,6 +341,12 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                     if ( !formOk ) {
                         return false;
                     }
+
+                    if($("#movistar_uno").val()=='NO'){
+                        $("#movistar_uno").val('');    
+                    }
+                    
+                    var datos = $(this).serialize();
                     
                     //Validacion OK, enviar datos.
                     $.ajax({
@@ -393,6 +409,17 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                 
                 <table style="width: 100%">
                     <tr>
+                        <td style="text-align: left; width: 105px">Tipo Actividad </td>
+                        <td style="text-align: left; width: 105px">
+                            <select class="motivo_registro" id="tipo_actividad" name="tipo_actividad" >
+                                <option value="">-Seleccione-</option>
+                                <option value="AVERIAS">AVERIAS</option>                                
+                                <option value="PROVISION">PROVISION</option>
+                                <option value="MANUAL">MANUAL</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
                         <td style="text-align: left; width: 105px">Tipo averia</td>
                         <td style="text-align: left; width: 105px">
                             <select class="motivo_registro" id="tipo_averia" name="tipo_averia" >
@@ -432,22 +459,26 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                         </td>
                     </tr>
                     <tr>
-                        <td style="text-align: left" class="inscod">Inscripci&oacute;n o Cod. Cliente CMS</td>
+                        <!--<td style="text-align: left" class="inscod">Inscripci&oacute;n o Cod. Cliente CMS</td>
                         <td style="text-align: left">
                             <input class="border" type="text" size="12" maxlength="255" value="<?php echo $rm_codcliente;?>" id="inscripcion" name="inscripcion" />
                             <span class="error_form" title="inscripcion">Ingrese inscripci&oacute;n</span>
+                        </td>-->
+                        <td style="text-align: left" class="averia">Averias /Peticion /Motivo Req.</td>
+                        <td style="text-align: left">
+                            <input class="border" type="text" size="12" maxlength="255" value="" id="averia" name="averia" />
+                            <span class="error_form averia" title="averia">Ingrese Averia</span>
                         </td>
-                        <td style="text-align: left">Telefono</td>
+                        <td style="text-align: left" class="telcod">Telefono</td>
                         <td style="text-align: left">
                             <input class="border" type="text" size="12" value="<?php echo $rm_telefono;?>" maxlength="11" name="telefono" id="telefono" />
-                            <span class="error_form" title="telefono">Ingrese tel&eacute;fono</span>
+                            <span class="error_form telcod" title="telefono">Ingrese tel&eacute;fono</span>
                         </td>
                     </tr>
                     <tr>
                         <td style="text-align: left">Direccion</td>
                         <td style="text-align: left" colspan="3">
-                            <input class="border" type="text" size="50" value="" maxlength="255" name="direccion" id="direccion" />
-                            <span class="error_form" title="direccion">Ingrese direcci&oacute;n</span>
+                            <input class="border" type="text" size="50" value="" maxlength="255" name="direccion" id="direccion" />                            
                         </td>
                     </tr>
                     <tr>
@@ -490,7 +521,11 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                                     $id = $val["id"];
                                     $abv = $val["abreviatura"];
                                     $zonal = $val["zonal"];
-                                    echo "<option value=\"$abv\">$zonal</option>";
+                                    $selected="";
+                                        if($zonal=="Lima"){
+                                            $selected="selected";
+                                        }
+                                    echo "<option value=\"$abv\" $selected >$zonal</option>";
                                 }
                                 ?>
                             </select>
@@ -508,6 +543,7 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                         <td style="text-align: left">Distrito</td>
                         <td style="text-align: left">
                             <select class="motivo_registro" id="distrito" name="distrito">
+                                <option value="" selected>-Seleccione-</option>
                                 <?php
                                 foreach ($distritos as $key=>$val) {
                                     $nombre = $val["nombre"];
@@ -522,9 +558,11 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                         <td style="text-align: left">Movistar Uno</td>
                         <td style="text-align: left">
                             <select class="motivo_registro" id="movistar_uno" name="movistar_uno">
-                                <option value="">NO</option>
+                                <option value="">-Seleccione-</option>
+                                <option value="NO" selected>NO</option>
                                 <option value="MOVISTAR UNO">SI</option>
                             </select>
+                            <span class="error_form" title="movistar_uno">Seleccione Movistar Uno</span>
                         </td>
                         <td style="text-align: left">EECC</td>
                         <td style="text-align: left">

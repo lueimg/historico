@@ -9,7 +9,7 @@ class GestionManual {
             $contrata, $zonal, $lejano, 
             $distrito, $eecc_zona, $zona_movistar_uno, 
             $codcliente, $eecc, $microzona, $celular,
-            $quiebre) {
+            $quiebre,$averia,$tipo_actividad) {
         
         try {
             //Iniciar transaccion
@@ -173,11 +173,11 @@ class GestionManual {
                     zona_movistar_uno, paquete, data_multiproducto,
                     averia_m1, fecha_data_fuente, telefono_codclientecms,
                     rango_dias, sms1, sms2,
-                    area2, eecc_final, microzona
+                    area2, eecc_final, microzona,tipo_actividad_rutina
                 ) VALUES (
                     NULL, '$id',
                     '$tipo_averia', '0', '',
-                    '$fecreg', '', '$atc_ave',
+                    '$fecreg', '', '$averia',
                     '$inscripcion', '$fono', '$fono',
                     '$mdf', '$observacion', '$segmento',
                     '', '$direccion', '',
@@ -193,7 +193,7 @@ class GestionManual {
                     '$zona_movistar_uno', '', '',
                     '', '$fecreg', '$codcliente',
                     '', '', '',
-                    'EN CAMPO', '$eecc', '$microzona'
+                    'EN CAMPO', '$eecc', '$microzona','$tipo_actividad'
                 )";
             $dbh->exec($sql);
 
