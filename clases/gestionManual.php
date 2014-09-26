@@ -252,14 +252,14 @@ class GestionManual {
             $contrata, $zonal, $lejano, 
             $distrito, $eecc_zona, $zona_movistar_uno, 
             $codcliente, $eecc, $microzona, $celular,
-            $quiebre) {
+            $quiebre, $fecha_agenda, $id_horario, $id_dia) {
         
         try {
             //Iniciar transaccion
             $dbh->beginTransaction();
             
             /**
-			 * 0. Verificar existencia de registro por Insc./Cod.Cli.
+             * 0. Verificar existencia de registro por Insc./Cod.Cli.
              * 1. Guardar en gestion_criticos
              * 2. Obtener ID y actualizar ATC
              * 3. Guardar en gestion movimientos
@@ -367,9 +367,9 @@ class GestionManual {
                         fecha_consolidacion
                     ) VALUES (
                         NULL, $id,
-                        '$idEmpresa', '$idZonal', '',
-                        '1', '1', '2',
-                        '2', '2',
+                        '$idEmpresa', '$idZonal', '$fecha_agenda',
+                        '$id_horario', '$id_dia', '1',
+                        '1', '8',
                         '',
                         '$observacion', '$id_usuario',
                         '$fecreg', '',

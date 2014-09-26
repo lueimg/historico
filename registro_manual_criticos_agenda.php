@@ -269,11 +269,35 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                     } else {
                         $("#microzona").val( '' );
                     }
+                    
+                    //Construye calendario de agendamiento
+                    construyeAgenda();
 
                 } else {
                     $("#eecc").val( "" );
                     $("#lejano").val( "" );
                     $("#microzona").val( "" );
+                }
+            }
+            
+            function construyeAgenda(){
+                try {
+                    $.ajax({
+                        url: "controladorHistorico/agendaController.php",
+                        type: 'POST',
+                        data: "action=getAgendaData&zonal=" 
+                                + $("#zonal").val() 
+                                + "&eecc=" 
+                                + $("#eecc").val(),
+                        error: function (error) {
+                            console.log(error);
+                        },
+                        success: function(datos) {
+                            $("#agenda_html").html(datos);
+                        }
+                    });
+                } catch(e){
+                    console.log(e);
                 }
             }
                 
@@ -332,11 +356,18 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                         return false;
                     }
                     
+                    //Validar fecha de agenda
+                    if ( $("#fecha_agenda").val() === "" )                    
+                    {
+                        alert("Seleccione fecha de agendamiento");
+                        return false;
+                    }
+                    
                     //Validacion OK, enviar datos.
                     $.ajax({
                         url: "casos_nuevos.php",
                         type: 'POST',
-                        data: "action=registraRutina&" + datos,
+                        data: "action=registraRutinaAgenda&" + datos,
                         dataType: "json",
                         success: function(datos) {
                             if ( datos.estado === true ) {
@@ -542,13 +573,17 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                         </td>
                     </tr>
                     <tr>
+                        <td colspan="4">
+                            <div id="agenda_html" style="margin: 5px"></div>
+                        </td>
+                    </tr>
+                    <tr>
                         <th colspan="4">
                             <input type="submit" name="guardar" id="guardar" value="Guardar cambios" />
                         </th>
                     </tr>
-                </table>
-                
-            </form>
-        </div>
+                </table>                
+            </form>            
+        </div>        
     </body>
 </html>
