@@ -413,9 +413,9 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                         <td style="text-align: left; width: 105px">
                             <select class="motivo_registro" id="tipo_actividad" name="tipo_actividad" >
                                 <option value="">-Seleccione-</option>
-                                <option value="Averias">Averias</option>                                
-                                <option value="Provision">Provision</option>
-                                <option value="Manual">Manual</option>
+                                <option value="AVERIAS">AVERIAS</option>                                
+                                <option value="PROVISION">PROVISION</option>
+                                <option value="MANUAL">MANUAL</option>
                             </select>
                         </td>
                     </tr>
