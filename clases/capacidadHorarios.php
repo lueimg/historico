@@ -314,7 +314,12 @@ class capacidadHorarios {
                                 DAY), 
                             b.fecha_agenda) fecha, 
                         a.*, 
-                        b.ocupado, (a.capacidad - b.ocupado) libre
+                        IF(b.ocupado IS NULL, 0, b.ocupado) ocupado, 
+                        IF(
+                            (a.capacidad - b.ocupado) IS NULL, 
+                            0, 
+                            (a.capacidad - b.ocupado)
+                        ) libre
                     FROM
 
                         (SELECT 
