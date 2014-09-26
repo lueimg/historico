@@ -1,7 +1,13 @@
 <?php
+if ( is_file('clases/empresa.php') )
+{
+    require_once('clases/empresa.php');
+}
+if ( is_file('clases/zonales.php') )
+{
+    require_once('clases/zonales.php');
+}
 
-require_once('clases/empresa.php');
-require_once('clases/zonales.php');
 
 class capacidadHorarios {
     
