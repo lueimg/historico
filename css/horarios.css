@@ -59,6 +59,7 @@
 .averias_listado .datos .caja_mini label{background:#1B5790 !important;color:#fff !important;float:left !important;font-size:0.85em !important;padding: 2px !important;text-align:right !important;width:100px;/*width:40% !important;*/}
 .averias_listado .datos .caja_mini input[type=text]{font-size:0.85em !important;margin-left:1% !important;padding: 1px 0 1px 1% !important;width: 55% !important;background: #fff}
 
+
 .averias_listado .datos_large .caja_medium{display:inline-block !important;width: 32.3% !important;}
 .averias_listado .datos_large .caja_medium label{background:#1B5790 !important;color:#fff !important;float:left !important;font-size:0.85em !important;padding: 2px !important;text-align:right !important;width:35% !important;}
 .averias_listado .datos_large .caja_medium textarea{background: #fff;font-size:0.85em !important;height:60px !important;margin-left:1% !important;width: 61% !important;}
