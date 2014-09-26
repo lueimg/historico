@@ -211,8 +211,8 @@ class agendaController extends capacidadHorarios{
 
         ob_start();
         $PATH =  $_SERVER['DOCUMENT_ROOT']."/webpsi/";
-        $deb = 1;
-        require('/var/www/webpsi/modulos/historico/agenda/agenga.tpl.php');
+
+        require($PATH.'modulos/historico/agenda/agenga.tpl.php');
 //        include_once "agenda.tpl.php";
         $tpl_content = ob_get_clean();
 
