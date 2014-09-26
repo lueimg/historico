@@ -3,7 +3,14 @@ include_once "../../clases/class.Conexion.php";
 require_once("../../cabecera.php");
 require_once('clases/averias.php');
 require_once('clases/gestionCriticos.php');
+
+//requeridos para agenda
+require_once('clases/empresa.php');
+require_once('clases/zonales.php');
 require_once('clases/capacidadHorarios.php');
+require_once('agenda/agendaController.php');
+
+
 require_once('clases/tecnicos.php');
 require_once('clases/cedula.php');
 require_once('clases/motivos.php');
@@ -21,6 +28,19 @@ $cnx = $db->conectarPDO();
 
 $ob_averia = new Averias($cnx);
 $averia = $ob_averia->getAverias($cnx, $averia_ini);
+
+//datos para imprimir el agendador
+$empresa = new Empresa();
+$id_empresa = $empresa->getIdEmpresa($cnx, $averia["eecc_final"]);
+$zonales = new Zonales();
+$id_zonal = $zonales->getIdZonal($cnx, $averia["zonal"]);
+
+$agenda = new agendaController();
+$agenda->setCnx($cnx);
+$agenda->setVempresa($id_empresa);
+$agenda->setVzona($id_zonal);
+
+$agendar_html = $agenda->AgendarAveriaShow();
 
 if($averia["eecc_final"]!=""){
 $ob_empresa = new Empresa();
@@ -257,12 +277,16 @@ $motivos = $ob_mot->getMotivos($cnx);
 							<div class="horario">
 							<?php
 								//Creando el horario
-								$ob_horario = new capacidadHorarios($cnx);
-								$ob_horario->getHorarios($cnx,$averia["eecc_final"],$averia["zonal"],$actividad);
+//								$ob_horario = new capacidadHorarios($cnx);
+//								$ob_horario->getHorarios($cnx,$averia["eecc_final"],$averia["zonal"],$actividad);
 							?>
+                            <?=$agendar_html; ?>
 							</div>
 							<input type="submit" value="Registrar" name="registrar" id="btn_registro"/>
 						</div>
+                <div>
+
+                </div>
 			</div>
 			<div class="content_datos">
 				<div class="caja_text">

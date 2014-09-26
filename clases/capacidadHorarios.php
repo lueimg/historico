@@ -373,8 +373,8 @@ class capacidadHorarios {
                         AND a.zona=b.id_zonal 
                         AND a.dia=b.id_dia 
                         AND a.horario=b.id_horario
-                ORDER BY 1, 3";
-            
+                ORDER BY horario,fecha";
+
             $this->_data[] = $inicio;
             $this->_data[] = $dia;
             $this->_data[] = $dia;
