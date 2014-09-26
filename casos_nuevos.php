@@ -46,9 +46,15 @@ require_once 'clases/gestionManual.php';
         
         $arrMdf = explode("___", $_POST['mdf']);
 
+        $tipo_actividad=trim( $_POST['tipo_actividad'] );
         $tipo_averia = trim( $_POST['tipo_averia'] );
-        $inscripcion = trim( $_POST['inscripcion'] );
-        $fono = trim( $_POST['telefono'] );
+        //$inscripcion = trim( $_POST['inscripcion'] ); // aqui deberia ser averias...
+        $averia= trim( $_POST['averia'] ); // reemplazando a inscripcion
+            
+        $inscripcion= trim( $_POST['telefono'] );
+        $fono = trim( $_POST['telefono'] );     
+        $codcliente = trim( $_POST['telefono'] );          
+
         $mdf = trim( $arrMdf[0] );
         $observacion = trim( $_POST['cr_observacion'] );
         $segmento = trim( $_POST['segmento'] );
@@ -60,8 +66,7 @@ require_once 'clases/gestionManual.php';
         $lejano = trim( $_POST['lejano'] );
         $distrito = trim( $_POST['distrito'] );
         $eecc_zona = trim( $_POST['eecc'] );
-        $zona_movistar_uno = trim( $_POST['movistar_uno'] );
-        $codcliente = trim( $_POST['inscripcion'] );
+        $zona_movistar_uno = trim( $_POST['movistar_uno'] );       
         $eecc = trim( $_POST['eecc'] );
         $microzona = trim( $_POST['microzona'] );
         $celular = trim( $_POST['cr_celular'] );
@@ -79,8 +84,8 @@ require_once 'clases/gestionManual.php';
                 $direccion, $nombre_cliente, $fonos_contacto, 
                 $contrata, $zonal, $lejano, 
                 $distrito, $eecc_zona, $zona_movistar_uno, 
-                $inscripcion, $eecc, $microzona, $celular,
-                $quiebre);
+                $codcliente, $eecc, $microzona, $celular,
+                $quiebre,$averia);
         echo json_encode($save);
      }
      
