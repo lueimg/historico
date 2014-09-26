@@ -9,6 +9,7 @@
 
 <script>
     $(function(){
+
         $("#horario td").click(function(){
 
             color = $(this).css("background-color")

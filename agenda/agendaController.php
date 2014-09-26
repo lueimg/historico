@@ -147,9 +147,13 @@ class agendaController extends capacidadHorarios{
                     $hoy = date("Y-m-d");
                     if ($estado == "" && $hoy == $fecha_res) {
                         $hora = date("H") + 2;
-                        if ($hora >= $data1["hora_fin"]) {
+                        if ($hora >= $data1["hora_fin"])
+                        {
                             $estado = "background:#ffff00;color:#000";
                         }
+                    }elseif($data1["ocupado"]>=$data1["capacidad"])
+                    {
+                        $estado = "background:#ffff00;color:#000";
                     }
 
                     //Imprimiendo estado del horario
@@ -192,13 +196,12 @@ class agendaController extends capacidadHorarios{
             $table .= '</tr>';
             $num_celda_hora+=8;
         }
+        $scripts = $this->agendarAveriaContentStatic();
 
 
 
 
-
-
-        return  $table;
+        return  $table . $scripts;
 
     }
 
@@ -207,7 +210,10 @@ class agendaController extends capacidadHorarios{
     {
 
         ob_start();
-        require "agenda.tpl.php";
+        $PATH =  $_SERVER['DOCUMENT_ROOT']."/webpsi/";
+        $deb = 1;
+        require('/var/www/webpsi/modulos/historico/agenda/agenga.tpl.php');
+//        include_once "agenda.tpl.php";
         $tpl_content = ob_get_clean();
 
         return $tpl_content;
