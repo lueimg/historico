@@ -13,7 +13,7 @@ include_once $PATH."modulos/historico/clases/liquidados.php";
 include_once $PATH."modulos/historico/clases/cedula.php";
 
 //La clase estados esta incluida en gestionCriticos.php
-
+$deb = 1;
  $db = new Conexion();
  $cnx = $db->conectarPDO();
 if(isset($_POST["registro_critico"]) && $_POST["registro_critico"]=="registro_critico"){

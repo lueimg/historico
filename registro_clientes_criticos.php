@@ -288,14 +288,7 @@ $motivos = $ob_mot->getMotivos($cnx);
 
                 </div>
 			</div>
-			<div class="content_datos">
-				<div class="caja_text">
-					<input type="hidden" value="" id="fecha_agenda" name="fecha_agenda">
-					<input type="hidden" value="" id="horario_agenda" name="horario_agenda">
-					<input type="hidden" value="" id="hora_agenda" name="hora_agenda">
-					<input type="hidden" value="" id="dia_agenda" name="dia_agenda">
-				</div>
-			</div>
+
 		</div>
 
 		<div class="registrar">
