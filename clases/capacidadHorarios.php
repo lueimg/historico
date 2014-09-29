@@ -306,7 +306,7 @@ class capacidadHorarios {
         try {
             //Iniciar transaccion
             $db->beginTransaction();
-            
+            /*
             $sql = "SELECT 
                         IF(b.fecha_agenda IS NULL, 
                             DATE_ADD(?, 
@@ -385,6 +385,57 @@ class capacidadHorarios {
                         AND a.dia=b.id_dia 
                         AND a.horario=b.id_horario
                 ORDER BY horario,fecha";
+             * 
+             */
+            $sql = "SELECT 
+                        IF(b.fecha_agenda IS NULL, 
+                            DATE_ADD(?, 
+                                INTERVAL IF(a.dia < ?, ?-1+a.dia, a.dia-?) 
+                                DAY), 
+                            b.fecha_agenda) fecha, 
+                        a.*, 
+                        IF(b.ocupado IS NULL, 0, b.ocupado) ocupado, 
+                        IF(
+                            (a.capacidad - b.ocupado) IS NULL, 
+                            0, 
+                            (a.capacidad - b.ocupado)
+                        ) libre
+                    FROM
+                        (SELECT 
+                            dia, c.horario, d.dias, h.horario 'hora', 
+                            h.hora_fin, capacidad, empresa, zona
+                        FROM 
+                            webpsi_criticos.capacidad_horarios c,
+                            webpsi_criticos.horarios h, webpsi_criticos.dias d
+                        WHERE 
+                            d.id=c.dia 
+                            AND d.id=c.dia 
+                            AND h.id=c.horario 
+                            AND empresa=? 
+                            AND zona=?) a
+
+                        LEFT JOIN
+
+                        (SELECT
+                            MAX(gm2.fecha_movimiento), g.id, 
+                            g.tipo_actividad, gm2.fecha_agenda,
+                            gm2.id_gestion, gm2.id_empresa, gm2.id_zonal, 
+                            gm2.id_horario, gm2.id_dia, COUNT(*) ocupado
+                        FROM 
+                            webpsi_criticos.gestion_movimientos gm2, 
+                            webpsi_criticos.gestion_criticos g 
+                        WHERE gm2.id_gestion=g.id
+                            AND gm2.id_estado IN (1, 8)
+                            AND gm2.fecha_agenda BETWEEN ? AND ?
+                            AND gm2.id_empresa=?
+                            AND gm2.id_zonal=?
+                        GROUP BY 6,7,8,9) b
+
+                        ON a.empresa=b.id_empresa 
+                        AND a.zona=b.id_zonal 
+                        AND a.dia=b.id_dia 
+                        AND a.horario=b.id_horario
+                    ORDER BY horario, fecha";
 
             $this->_data[] = $inicio;
             $this->_data[] = $dia;
