@@ -17,8 +17,20 @@ class Distrito{
 
     function getDistritoAll($cnx){
         $cnx->exec("set names utf8");
-        $sql = "select distrito
-                from webpsi_criticos.gestion_averia
+        $sql = "select *
+                from (
+                    select distrito distrito
+                    from webpsi_criticos.gestion_averia
+                    UNION ALL 
+                    select des_distrito distrito
+                    from webpsi_criticos.gestion_provision 
+                    UNION ALL
+                    select distrito distrito
+                    from webpsi_criticos.gestion_rutina_manual
+                    UNION ALL
+                    select des_distrito distrito
+                    from webpsi_criticos.gestion_rutina_manual_provision
+                ) d
                 GROUP BY distrito
                 order by 1;";
         
