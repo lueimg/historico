@@ -127,6 +127,7 @@ $arrTotal4 = array();
 $arrTba = $obj->getAveriasTbaPendientes("fono", $telefonoCliente);
 if (count($arrTba)>0) {
 	foreach ($arrTba as $filaTba) {
+        $deb = 1;
 		?>
 		<tr>
 		<td>TBA</td>
@@ -134,7 +135,19 @@ if (count($arrTba)>0) {
 			<a href="#" onclick="verDetalle('<?php echo $filaTba["averia"]?>');"><?php echo $filaTba["averia"]?></a>
 		</span</td>
 		<td><?php echo $filaTba["fecreg"]?></td>
-		<td>Pendiente</td>
+		<td>Pendiente
+        <?php
+        $accion = "Agendar Visita";
+         if($filaTba["id_atc"]){
+             print "<br>" . $filaTba["id_atc"];
+             print "<br>Agenda:<br> " . $filaTba["fecha_agenda"];
+             $accion = "Reagendar Visita";
+
+
+         }
+
+        ?>
+        </td>
                 <td>
                     <?php
                     if ( $_POST['esCritico']==='false' ) {
@@ -146,7 +159,7 @@ if (count($arrTba)>0) {
                     ?>
                         <div id='agendarVisita' name='agendarVisita' >
                             <button type="button" id="btn_cliente_critico"
-                                    style="margin-top:5px;background:red;border:0;border-radius:4px;color:#fff;padding:3px">Agendar Visita</button>
+                                    style="margin-top:5px;background:red;border:0;border-radius:4px;color:#fff;padding:5px"><?=$accion;?></button>
                         </div>
                     <?php
                     }

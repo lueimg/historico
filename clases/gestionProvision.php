@@ -125,6 +125,16 @@ class gestionProvision{
         
 	}
 
+    function getGestionProvisionbyAveria($cnx,$averia){
+
+        $cnx->exec("set names utf8");
+        $sql = "SELECT id_gestion FROM webpsi_criticos.gestion_provision where codigo_req='$averia'";
+        $res = $cnx->query($sql);
+        $row = $res->fetch(PDO::FETCH_ASSOC);
+        return $row["id_gestion"];
+
+    }
+
 }
 
 ?>

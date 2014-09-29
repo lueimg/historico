@@ -264,7 +264,7 @@ $motivos = $ob_mot->getMotivos($cnx);
 					<label>Tecnico:</label>
 					<input type="hidden" id="nombretecnico" name="nombretecnico">
 					<select class="tecnico" id="tecnico" name="tecnico" >
-						<option value=''>-- Seleccione --</option>
+						<option value="">-- Seleccione --</option>
 					</select>
 					<span class="checkbox">
 						<input type="checkbox" value="si" name="flag_tecnico" id="flag_tecnico">Tecnico Entregado
