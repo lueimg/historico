@@ -817,7 +817,7 @@ class gestionCriticos{
             	$gestAverias = new gestionAveria();
             	$res_gaveria = $gestAverias->existeGestionAveria($cnx,$_POST["averia"]);	
             }
-            
+            $deb = 1;
             if($res_gaveria==""){
 				//ya que pueden haber mas de dos estados a la vez para agendado entonces
 				if($motivo_registro==1){
@@ -957,6 +957,7 @@ class gestionCriticos{
 	            return $result;
 		    }else{
 		    	$result["estado"] = FALSE;
+		    	$result["averia"] = $_POST["averia"];
 		    	$result["msg"] = "La averia ya se encuentra registrada actualice su bandeja";
 		    	return $result;
 	        }
@@ -974,6 +975,299 @@ class gestionCriticos{
 	    }
 
 	}
+
+
+    public function ReAgendarAveria($cnx){
+
+        $result = array();
+
+        //Campos Tabla GestionCriticos
+        $cr_nombre = $_POST["cr_nombre"];
+        $cr_telefono = $_POST["cr_telefono"];
+        $cr_celular = $_POST["cr_celular"];
+        $id_horario = $_POST["horario_agenda"];
+        $id_dia = $_POST["dia_agenda"];
+
+        $observacion = htmlspecialchars($_POST["cr_observacion"]);
+        $tipo_averia = $_POST["tipo_averia"];
+        $horas_averia = $_POST["horas_averia"];
+        //$fecha_reporte = $_POST["fecha_reporte"];
+        $fecha_registro = $_POST["fecha_registro"];
+        $ciudad = $_POST["ciudad"];
+        $averia = $_POST["averia"];
+        $inscripcion = $_POST["inscripcion"];
+        $fono1 = $_POST["fono1"];
+        $telefono = $_POST["telefono"];
+        $mdf = $_POST["mdf"];
+        $observacion_102 = $_POST["observacion_102"];
+        $segmento = $_POST["segmento"];
+        $area_ = $_POST["area_"];
+        $direccion_instalacion = $_POST["direccion_instalacion"];
+        $codigo_distrito = $_POST["codigo_distrito"];
+        $nombre_cliente = $_POST["nombre_cliente"];
+        $orden_trabajo = $_POST["orden_trabajo"];
+        $veloc_adsl = $_POST["veloc_adsl"];
+        $clase_servicio_catv = $_POST["clase_servicio_catv"];
+        $codmotivo_req_catv = $_POST["codmotivo_req_catv"];
+        $total_averias_cable = $_POST["total_averias_cable"];
+        $total_averias_cobre = $_POST["total_averias_cobre"];
+        $total_averias = $_POST["total_averias"];
+        $fftt = $_POST["fftt"];
+        $llave = $_POST["llave"];
+        $zonal = $_POST["zonal"];
+
+        $wu_nagendas = $_POST["wu_nagendas"];
+        $wu_nmovimientos = $_POST["wu_nmovimientos"];
+        $wu_fecha_ult_agenda = $_POST["wu_fecha_ult_agenda"];
+        $total_llamadas_tecnicas = $_POST["total_llamadas_tecnicas"];
+        $total_llamadas_seguimiento = $_POST["total_llamadas_seguimiento"];
+        $llamadastec15dias = $_POST["llamadastec15dias"];
+        $llamadastec30dias = $_POST["llamadastec30dias"];
+
+        $dir_terminal = $_POST["dir_terminal"];
+        $fonos_contacto = $_POST["fonos_contacto"];
+        $contrata = $_POST["contrata"];
+        $quiebre = $_POST["quiebre"];
+        $lejano = $_POST["lejano"];
+        $distrito = $_POST["distrito"];
+        //$eecc_zona = $_POST["eecc_zona"];
+        $eecc_zona = $_POST["eecc_final"];
+        $microzona = $_POST["microzona"];
+        $zona_movistar_uno = $_POST["zona_movistar_uno"];
+        $paquete = $_POST["paquete"];
+        $data_multiproducto = $_POST["data_multiproducto"];
+        $averia_m1 = $_POST["averia_m1"];
+        $fecha_data_fuente = $_POST["fecha_data_fuente"];
+        $telefono_codclientecms = $_POST["telefono_codclientecms"];
+        $rango_dias = $_POST["rango_dias"];
+        $sms1 = $_POST["sms1"];
+        $sms2 = $_POST["sms2"];
+        $area2 = $_POST["area2"];
+        $eecc_final = $_POST["eecc_final"];
+        $tecnicos_asignados = 1;
+        $id_usuario = $_POST["txt_idusuario"];
+        $tecnico = $_POST["nombretecnico"];
+        $idtecnico = $_POST["tecnico"];
+        $flag_tecnico = $_POST["flag_tecnico"];
+        $tipo_actividad = $_POST["tipo_actividad"];
+        $motivo_registro = $_POST["motivo_registro"];
+        $tipo_actuacion = $_POST["tipo_actuacion"];
+        $tecnico = ($tecnico == "-- Seleccione --")?"":$tecnico;
+        $datosfinal=$_POST['datosfinal'];
+        $contadordatosfinal="0";
+
+        if($datosfinal=='OK'){
+            $contadordatosfinal="1";
+
+        }
+
+        $idcritico=$_GET['idcritico']; // verificar si veiene con id o no!
+        if($idcritico=='0' or $idcritico==''){
+            $idcritico='';
+        }
+
+
+        if($motivo_registro==1){
+            $id_motivo = "1";
+            $id_submotivo = "1";
+        }else{
+            $id_motivo = "2";
+            $id_submotivo = "2";
+        }
+
+        $fecha_agenda = $_POST["fecha_agenda"];//formato
+
+        //obteniendo fecha actual
+        $fecha=date("Y/m/d H:i:s");
+
+        try{
+
+            //Iniciar transaccion
+           // $cnx->beginTransaction();
+
+
+                $gestAverias = new gestionAveria();
+                //DEVUELVE EL ID_gestion
+                $res_gaveria = $gestAverias->getGestionAveriabyAveria($cnx,$_POST["averia"]);
+
+
+            if($res_gaveria!=""){
+                //ya que pueden haber mas de dos estados a la vez para agendado entonces
+                if($motivo_registro==1){
+                    if($tecnico!="" && $flag_tecnico=="si"){
+                        $flag_tecnico = "Tecnico Entregado";
+                        $id_estado = "1";
+                    }else if($tecnico!="" && $flag_tecnico==""){
+                        $flag_tecnico = "Tecnico Asignado";
+                        $id_estado = "1";
+                    }else{
+                        $flag_tecnico = "";
+                        $id_estado = "8";
+                    }
+                }else{
+                    if($tecnico!="" && $flag_tecnico=="si"){
+                        $flag_tecnico = "Tecnico Entregado";
+                        $id_estado = "2";
+                    }else if($tecnico!="" && $flag_tecnico==""){
+                        $flag_tecnico = "Tecnico Asignado";
+                        $id_estado = "2";
+                    }else{
+                        $flag_tecnico = "";
+                        $id_estado = "2";
+                    }
+                }
+
+                //Para tíldes y caracteres especiales
+                $cnx->exec("set names utf8");
+                if($motivo_registro==1){
+                    if($averia!="" && $cr_nombre!="" && $cr_telefono!="" && $fecha_agenda!="" && $id_horario!=""){
+//                        $sql = "INSERT INTO webpsi_criticos.`gestion_criticos`
+//				        		(
+//			                        id, id_atc, nombre_cliente_critico,
+//			                        telefono_cliente_critico, celular_cliente_critico,
+//			                        fecha_agenda, id_horario, id_motivo,
+//			                        id_submotivo, id_estado, observacion,
+//			                        fecha_creacion, flag_tecnico,
+//			                        tipo_actividad, nmov, n_evento
+//			                    )
+//				        		VALUES ('$idcritico','','$cr_nombre','$cr_telefono','$cr_celular','$fecha_agenda',
+//				        	$id_horario,$id_motivo,$id_submotivo,$id_estado,'$observacion','$fecha','$flag_tecnico','$tipo_actividad','0','$contadordatosfinal')";
+
+
+                        $sql = "UPDATE webpsi_criticos.`gestion_criticos`
+                        SET nombre_cliente_critico = '$cr_nombre' ,
+                        telefono_cliente_critico = '$cr_telefono',
+                        celular_cliente_critico = '$cr_celular',
+                        fecha_agenda = '$fecha_agenda',
+                        id_horario =   $id_horario,
+                        id_motivo =  $id_motivo ,
+                        id_submotivo =  $id_submotivo ,
+                        id_estado =   $id_estado,
+                        observacion =  '$observacion' ,
+
+                        flag_tecnico =  '$flag_tecnico' ,
+                        tipo_actividad = '$tipo_actividad'  ,
+                        nmov =  0 ,
+                        n_evento = $contadordatosfinal
+                        where id = $res_gaveria
+
+                        ";
+
+
+                        $cnx->exec($sql);
+                    }else{
+                        $result["estado"] = FALSE;
+                        $result["msg"] = "Ingrese el nombre de cliente,telefono,observacion y seleccione una fecha a agendar";
+                        return $result;
+                    }
+                }
+//                else{
+//                    if($averia!=""){
+//                        //el 2 es para id_horario cualquier numero ya que es foranea sino no inserta
+//                        $sql = "INSERT INTO webpsi_criticos.`gestion_criticos`
+//				    	 		(
+//			                        id, id_atc, nombre_cliente_critico,
+//			                        telefono_cliente_critico, celular_cliente_critico,
+//			                        fecha_agenda, id_horario, id_motivo,
+//			                        id_submotivo, id_estado, observacion,
+//			                        fecha_creacion, flag_tecnico,
+//			                        tipo_actividad, nmov, n_evento
+//			                    )
+//				    	 		VALUES ('$idcritico','','$cr_nombre','$cr_telefono','$cr_celular','$fecha_agenda',
+//					        	2,$id_motivo,$id_submotivo,$id_estado,'$observacion','$fecha','$flag_tecnico','$tipo_actividad','0','$contadordatosfinal')";
+//                        $cnx->exec($sql);
+//                    }else{
+//                        $result["estado"] = FALSE;
+//                        $result["msg"] = "No se ha proporcionado un código de avería";
+//                        return $result;
+//                    }
+//                }
+
+                $id_gestion = $res_gaveria;
+                //Obteniendo el ultimo codigo de gestio crítico
+
+
+
+                //Obteniendo el id de zonal y empresa para la tabla movimientos
+                $empresa = new Empresa();
+                $vempresa = $eecc_zona;
+                $id_empresa = $empresa->getIdEmpresa($cnx,$vempresa);
+                $zonales = new Zonales();
+                $id_zonal= $zonales->getIdZonal($cnx,$zonal);
+
+
+                //CUAL ES EL MOTIVO 2 ???
+                if($id_gestion!=""){
+                    if($motivo_registro==2){
+                        $id_horario=2;
+                        $id_dia=2;
+                    }
+
+                    $gestMovimiento = new gestionMovimientos();
+                    $gestMovimiento->addGestionMovimientos($cnx,$id_gestion,$id_empresa,$id_zonal,$fecha_agenda
+                        ,$id_horario,$id_dia,$id_motivo,$id_submotivo,$id_estado,$tecnicos_asignados,$observacion
+                        ,$id_usuario,$fecha,$tecnico,'',$idtecnico);
+                }else{
+                    $result["estado"] = FALSE;
+                    $result["msg"] = "No se ha proporcionado un código de avería";
+                    return $result;
+                }
+
+                //OBS: La contrata y zona no pueden ser vacios sino la busqueda de reserva no funcionara
+//                if($id_gestion!=""){
+//                    if($tipo_actividad=='Provision'){
+//                        $res_age =  $gestProvision->addGestionProvision($cnx,$id_gestion,$tipo_averia,$horas_averia,$fecha_registro,$ciudad,$averia,
+//                            $inscripcion,$fono1,$telefono,$mdf,addslashes($observacion_102),$segmento,$area_,addslashes($direccion_instalacion),
+//                            $codigo_distrito,addslashes($nombre_cliente),$orden_trabajo,$veloc_adsl,$clase_servicio_catv,$codmotivo_req_catv,
+//                            $total_averias_cable,$total_averias_cobre,$total_averias,addslashes($fftt),$llave,addslashes($dir_terminal),$fonos_contacto,
+//                            $contrata,$zonal,
+//                            $wu_nagendas,$wu_nmovimientos,$wu_fecha_ult_agenda,$total_llamadas_tecnicas,
+//                            $total_llamadas_seguimiento,$llamadastec15dias,$llamadastec30dias,
+//                            $quiebre,$lejano,$distrito,$eecc_zona,addslashes($zona_movistar_uno),addslashes($paquete),addslashes($data_multiproducto),
+//                            $averia_m1,$fecha_data_fuente,$telefono_codclientecms,$rango_dias,addslashes($sms1),addslashes($sms2),
+//                            $area2,$tipo_actuacion,$eecc_final,$microzona);
+//                    }else{
+//
+//
+////                        $res_age =  $gestAverias->addGestionAveria($cnx,$id_gestion,$tipo_averia,$horas_averia,'',$fecha_registro,$ciudad,$averia,
+////                            $inscripcion,$fono1,$telefono,$mdf,addslashes($observacion_102),$segmento,$area_,addslashes($direccion_instalacion),
+////                            $codigo_distrito,addslashes($nombre_cliente),$orden_trabajo,$veloc_adsl,$clase_servicio_catv,$codmotivo_req_catv,
+////                            $total_averias_cable,$total_averias_cobre,$total_averias,addslashes($fftt),$llave,addslashes($dir_terminal),$fonos_contacto,
+////                            $contrata,$zonal,
+////                            $wu_nagendas,$wu_nmovimientos,$wu_fecha_ult_agenda,$total_llamadas_tecnicas,
+////                            $total_llamadas_seguimiento,$llamadastec15dias,$llamadastec30dias,
+////                            $quiebre,$lejano,$distrito,$eecc_zona,addslashes($zona_movistar_uno),addslashes($paquete),addslashes($data_multiproducto),
+////                            $averia_m1,$fecha_data_fuente,$telefono_codclientecms,$rango_dias,addslashes($sms1),addslashes($sms2),
+////                            $area2,$eecc_final,$microzona);
+//                    }
+//                }
+
+                $cnx->commit();
+                $result["estado"] = TRUE;
+                $result["msg"] = "Se actualizo el Código de Atención: ".$id_gestion;
+                return $result;
+            }else{
+                $result["estado"] = FALSE;
+                $result["averia"] = $res_gaveria;
+                $result["msg"] = "No se encontro averia a actualizar";
+
+                return $result;
+            }
+
+
+
+        }catch (PDOException $error){
+            $deb = 1;
+            $cnx->rollback();
+            $result["estado"] = FALSE;
+            $result["msg"] = $error->getMessage();
+            //$result["msg"] = "No se registro la actuacion";
+            return $result;
+            exit();
+
+        }
+
+    }
 
 	function addClienteCriticoPendiente($cnx,$codigos,$actividad){
 

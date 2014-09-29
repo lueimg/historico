@@ -626,6 +626,7 @@ $(document).ready(function(){
 
   //Para el Registro de Clientes Críticos
   $("#btn_registro").click(function(){
+      debugger;
 
     motivo = $("#motivo_registro").val()
     if(motivo==1){
@@ -663,18 +664,18 @@ $(document).ready(function(){
           cr_observacion: "Ingrese una observaci&oacute;n",
         },
         submitHandler: function(form) {
-          if($("#slct_cedula").val()==''){
-            alert('Seleccione Cedula');
-            $("#slct_cedula").focus();
-          }
-          else if($("#tecnico").val()==''){
-            alert('Seleccione Tecnico');
-            $("#tecnico").focus();
-          }
-          else{
+          //if($("#slct_cedula").val()==''){
+          //  alert('Seleccione Cedula');
+          //  $("#slct_cedula").focus();
+          //}
+          //else if($("#tecnico").val()==''){
+          //  alert('Seleccione Tecnico');
+          //  $("#tecnico").focus();
+          //}
+          //else{
             registrarCriticos()
             return false  
-          }          
+          //}
         }
       });
     }else{
@@ -805,8 +806,14 @@ function horario_reservado(){
 }
 
 function registrarCriticos() {
+
   $("#nombretecnico").val($("#tecnico option:selected").text());
-  if($('#frm_criticos #motivo_registro').val()=="1" && tecnico!='' && $("#frm_criticos #flag_tecnico").attr("checked") && $("#frm_criticos #quiebre").val()=="R9-REIT-CATV"){
+
+
+  if($('#frm_criticos #motivo_registro').val()=="1"
+      && tecnico!=''
+      && $("#frm_criticos #flag_tecnico").attr("checked")
+      && $("#frm_criticos #quiebre").val()=="R9-REIT-CATV"){
       
       var parametros = $("#frm_criticos").serialize();
 
@@ -842,7 +849,7 @@ function registrarCriticos() {
 function finalizarRegistroCritico(d,idcritico){
     $('#frm_criticos #datosfinal').val(d);
     var parametros = $("#frm_criticos").serialize();
-    timestamp = new Date().getTime(); 
+    timestamp = new Date().getTime();
     $.ajax({
     type: "POST",
         url: "controladorHistorico/historicoController.php?timestamp="+timestamp+"&idcritico="+idcritico,
@@ -852,6 +859,7 @@ function finalizarRegistroCritico(d,idcritico){
             window.parent.jQuery("#filtro_general").click();
             alert(data);
             window.parent.jQuery('#dialog-criticos').dialog('close');
+            jQuery("#btn_historico").trigger("click");
         },
 
         error: function () {

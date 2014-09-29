@@ -185,14 +185,14 @@ $(document).ready(function(){
 						 $("#nocritico").html("");
 						 $("#agendarVisita").css("display","block");
                                                  
-                                                 esCritico = true;
+                         esCritico = true;
 						 
 					} else {
 						$("#nocritico").html("Cliente no cr&iacute;tico");
 						$("#critico").html("");
 						$("#agendarVisita").css("display","none");
                                                 
-                                                esCritico = false;
+                        esCritico = false;
 					}
 
 					if(obj[0].posibleCritico=="1"){

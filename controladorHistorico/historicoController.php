@@ -13,19 +13,28 @@ include_once $PATH."modulos/historico/clases/liquidados.php";
 include_once $PATH."modulos/historico/clases/cedula.php";
 
 //La clase estados esta incluida en gestionCriticos.php
-$deb = 1;
+
  $db = new Conexion();
  $cnx = $db->conectarPDO();
+$deb = 1;
+//SI SE HACE UN REGISTRO CRITICO
 if(isset($_POST["registro_critico"]) && $_POST["registro_critico"]=="registro_critico"){
 
 	$ob_critico = new gestionCriticos();
+    //PROCESO DE VALIDACION Y GUARDODO DE AVERIA CRITICO
 	$res = $ob_critico->addClienteCritico($cnx);
+    $deb = 1;
+    //SI ADD CLIENTE ES FALSO
+    //ENTONCES PASAMOS A ACTUALIZAR
+    if(!$res["estado"] && $res["averia"]== $_POST["averia"]) {
 
-	if($res["estado"]){
-    	echo $res["msg"];
-    }else{
-    	echo $res["msg"];
+        $res = $ob_critico->ReAgendarAveria($cnx);
+
     }
+
+
+    echo $res["msg"];
+
 
 }
 

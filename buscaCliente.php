@@ -9,7 +9,7 @@ $codsercms=$_POST["codigoServicioCMS"];
 $codclicms=$_POST["codigoClienteCMS"];
 $obj = new HistoricoCliente();
 $arrcliente = $obj->getCliente($telefono, $codcliatis, $codsercms, $codclicms);
-
+$deb = 1;
 if (!is_array($arrcliente))  {   // No hay clientes 
 	$arrcliente[0]["encontrado"] = 0;
 	echo json_encode($arrcliente);
