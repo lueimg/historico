@@ -417,25 +417,33 @@ class capacidadHorarios {
                         LEFT JOIN
 
                         (SELECT
-                            MAX(gm2.fecha_movimiento), g.id, 
-                            g.tipo_actividad, gm2.fecha_agenda,
-                            gm2.id_gestion, gm2.id_empresa, gm2.id_zonal, 
-                            gm2.id_horario, gm2.id_dia, COUNT(*) ocupado
+                            gc.id, gc.tipo_actividad,
+                            gm.fecha_agenda,
+                            gm.id_gestion, gm.id_empresa, gm.id_zonal, 
+                            gm.id_horario, gm.id_dia, COUNT(*) ocupado
                         FROM 
-                            webpsi_criticos.gestion_movimientos gm2, 
-                            webpsi_criticos.gestion_criticos g 
-                        WHERE gm2.id_gestion=g.id
-                            AND gm2.id_estado IN (1, 8)
-                            AND gm2.fecha_agenda BETWEEN ? AND ?
-                            AND gm2.id_empresa=?
-                            AND gm2.id_zonal=?
-                        GROUP BY 6,7,8,9) b
+                            webpsi_criticos.gestion_criticos gc
+                        JOIN
+                            webpsi_criticos.gestion_movimientos gm 
+                            ON gc.id=gm.id_gestion
+                        JOIN 
+                            (
+                                    SELECT MAX(id) id
+                                    FROM webpsi_criticos.gestion_movimientos 
+                                    GROUP BY id_gestion
+                            )  mx 
+                            WHERE gm.id=mx.id
+                            AND gm.id_estado IN (1, 8)
+                            AND gm.fecha_agenda BETWEEN ? AND ?
+                            AND gm.id_empresa=?
+                            AND gm.id_zonal=?
+                        GROUP BY 5,6,7,8) b
 
-                        ON a.empresa=b.id_empresa 
-                        AND a.zona=b.id_zonal 
-                        AND a.dia=b.id_dia 
-                        AND a.horario=b.id_horario
-                    ORDER BY horario, fecha";
+                    ON a.empresa=b.id_empresa 
+                    AND a.zona=b.id_zonal 
+                    AND a.dia=b.id_dia 
+                    AND a.horario=b.id_horario
+                ORDER BY horario, fecha";
 
             $this->_data[] = $inicio;
             $this->_data[] = $dia;
