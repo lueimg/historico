@@ -121,6 +121,10 @@ require_once 'clases/gestionManual.php';
         }
         $quiebre = trim( $_POST['quiebre'] );
         
+        $fecha_agenda = trim( $_POST['fecha_agenda'] );
+        $id_horario = trim( $_POST['horario_agenda'] );
+        $id_dia = trim( $_POST['dia_agenda'] );
+        
         $save = $GestionManual->addGestionManualAgenda(
                 $cnx, $id_usuario, $rm_averia,
                 $tipo_averia, $inscripcion, $fono, $direccion,
@@ -129,7 +133,7 @@ require_once 'clases/gestionManual.php';
                 $contrata, $zonal, $lejano, 
                 $distrito, $eecc_zona, $zona_movistar_uno, 
                 $inscripcion, $eecc, $microzona, $celular,
-                $quiebre);
+                $quiebre, $fecha_agenda, $id_horario, $id_dia);
         echo json_encode($save);
      }
      
