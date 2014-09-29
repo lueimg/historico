@@ -345,6 +345,12 @@ $(document).ready(function(){
 				<label>Tot_Llam_Seguimiento:</label>
 				<input class="border" type="text"  value="<?php echo trim($averias["total_llamadas_seguimiento"]);?>" name="total_llamadas_seguimiento" id="total_llamadas_seguimiento">
 			</div>
+				<?php if($averias['tipo_actividad_rutina']!=''){ ?>
+			<div class="caja_mini">
+				<label style="background:#000 !important;color:#fff !important">Tipo Actividad:</label>
+				<input class="border" type="text"  value="<?php echo trim($averias["tipo_actividad_rutina"]);?>" name="tipo_actividad_rutina" id="tipo_actividad_rutina">
+			</div>
+				<?php } ?>
 		</div>
 		<div class="datos_large">
 			<div class="caja_medium" >
