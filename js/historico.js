@@ -273,7 +273,8 @@ $(document).ready(function(){
                                         + '&rm_zonal=' + rm_zonal
                                         + '&rm_mdf=' + rm_mdf
                                         + '&rm_nombre=' + rm_nombre
-                                        + '&rm_averia=' + rm_averia;
+                                        + '&rm_averia=' + rm_averia
+                                        + '&tipo_actu=averia';
                                     var pagina = '<iframe style="border: 0px; " src="' + url + '" width="100%" height="100%"></iframe>'
                                     $("#dialog-registro-manual").html(pagina);
                                     $("#dialog-registro-manual").dialog({
