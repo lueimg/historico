@@ -817,7 +817,7 @@ class gestionCriticos{
             	$gestAverias = new gestionAveria();
             	$res_gaveria = $gestAverias->existeGestionAveria($cnx,$_POST["averia"]);	
             }
-            $deb = 1;
+
             if($res_gaveria==""){
 				//ya que pueden haber mas de dos estados a la vez para agendado entonces
 				if($motivo_registro==1){
@@ -1085,10 +1085,21 @@ class gestionCriticos{
             //Iniciar transaccion
            // $cnx->beginTransaction();
 
+            if($tipo_actividad=='Provision'){
+                $gestProvision = new gestionProvision();
+                $res_gprovision = $gestProvision->existeGestionProvision($cnx,$_POST["averia"]);
+                $id_gestion_provision = $gestProvision->getGestionProvisionbyAveria($cnx,$_POST["averia"]);
+                $id_gestion_update = $id_gestion_provision;
+            }else{
 
                 $gestAverias = new gestionAveria();
                 //DEVUELVE EL ID_gestion
                 $res_gaveria = $gestAverias->getGestionAveriabyAveria($cnx,$_POST["averia"]);
+                $id_gestion_update = $res_gaveria;
+
+            }
+
+
 
 
             if($res_gaveria!=""){
@@ -1149,7 +1160,7 @@ class gestionCriticos{
                         tipo_actividad = '$tipo_actividad'  ,
                         nmov =  0 ,
                         n_evento = $contadordatosfinal
-                        where id = $res_gaveria
+                        where id = $id_gestion_update
 
                         ";
 
@@ -1161,9 +1172,9 @@ class gestionCriticos{
                         return $result;
                     }
                 }
-//                else{
-//                    if($averia!=""){
-//                        //el 2 es para id_horario cualquier numero ya que es foranea sino no inserta
+                else{
+                    if($averia!=""){
+                        //el 2 es para id_horario cualquier numero ya que es foranea sino no inserta
 //                        $sql = "INSERT INTO webpsi_criticos.`gestion_criticos`
 //				    	 		(
 //			                        id, id_atc, nombre_cliente_critico,
@@ -1173,17 +1184,41 @@ class gestionCriticos{
 //			                        fecha_creacion, flag_tecnico,
 //			                        tipo_actividad, nmov, n_evento
 //			                    )
-//				    	 		VALUES ('$idcritico','','$cr_nombre','$cr_telefono','$cr_celular','$fecha_agenda',
-//					        	2,$id_motivo,$id_submotivo,$id_estado,'$observacion','$fecha','$flag_tecnico','$tipo_actividad','0','$contadordatosfinal')";
-//                        $cnx->exec($sql);
-//                    }else{
-//                        $result["estado"] = FALSE;
-//                        $result["msg"] = "No se ha proporcionado un código de avería";
-//                        return $result;
-//                    }
-//                }
+//				    	 		VALUES ('$idcritico','','$cr_nombre'
+//				    	 		,'$cr_telefono','$cr_celular',
+//				    	 		'$fecha_agenda',2,$id_motivo
+//				    	 		,$id_submotivo,$id_estado,'$observacion',
+//				    	 		'$fecha','$flag_tecnico'
+//				    	 		,'$tipo_actividad','0','$contadordatosfinal')";
 
-                $id_gestion = $res_gaveria;
+                        $sql = "
+                        update webpsi_criticos.`gestion_criticos` set
+
+                        ,nombre_cliente_critico = '$cr_nombre'
+                        ,telefono_cliente_critico = '$cr_telefono'
+                        ,celular_cliente_critico = '$cr_celular'
+                        ,fecha_agenda = '$fecha_agenda'
+                        ,id_horario = 2
+                        ,id_motivo = $id_motivo
+                        ,id_submotivo = $id_submotivo
+                        ,id_estado = $id_estado
+                        ,observacion = '$observacion'
+                        ,fecha_creacion = '$fecha'
+                        ,flag_tecnico = '$flag_tecnico'
+                        ,tipo_actividad = '$tipo_actividad'
+                        ,nmov = '0'
+                        ,n_evento = '$contadordatosfinal
+                         where id = $id_gestion_update";
+
+                        $cnx->exec($sql);
+                    }else{
+                        $result["estado"] = FALSE;
+                        $result["msg"] = "No se ha proporcionado un código de avería";
+                        return $result;
+                    }
+                }
+
+                $id_gestion = $id_gestion_update;
                 //Obteniendo el ultimo codigo de gestio crítico
 
 
@@ -1257,7 +1292,7 @@ class gestionCriticos{
 
 
         }catch (PDOException $error){
-            $deb = 1;
+
             $cnx->rollback();
             $result["estado"] = FALSE;
             $result["msg"] = $error->getMessage();
