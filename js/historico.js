@@ -181,7 +181,7 @@ $(document).ready(function(){
                     // c1 telefono
                     // c2 inscripcion
 
-					if(obj[0].c1!=null || obj[0].c2!=null){
+					if(obj[0].c1!=null || obj[0].c2!=null || obj[0].c1_tmp!=null){
 						//$("#mensaje").html(obj[0].c1);
 						 //alert("Critico");
 						 $("#critico").html("Cliente Cr&iacute;tico");
