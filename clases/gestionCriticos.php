@@ -165,6 +165,36 @@ class gestionCriticos{
 								where mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) FROM webpsi_criticos.gestion_movimientos mov2
   								WHERE mov2.id_gestion=c.id) order by a.fecha_registro asc
 		)AS rutina_manual
+	UNION ALL
+		SELECT * FROM(
+			
+					SELECT  c.id,a.codigo_req AS 'averia',id_atc,tipo_actividad,a.nomcliente 'nombre',fecha_Reg AS 'fecha_reg',a.quiebre 'quiebres',emp.nombre COLLATE utf8_general_ci empresa,a.telefono_codclientecms 'telefono_cliente_critico',
+					c.fecha_agenda,h.horario,m.motivo,s.submotivo,m.id 'm_id',s.id 's_id',e.estado AS 'estado',e.id AS 'codigo_estado',
+					flag_tecnico,a.origen AS 'tipo_averia',a.horas_pedido AS 'horas_averia',a.fecha_Reg AS 'fecha_registro',a.ciudad,a.codigo_req AS 'codigo_averia',
+					a.codigo_del_cliente AS 'inscripcion',a.fono1,a.telefono,a.mdf,a.obs_dev AS 'observacion_102',a.codigosegmento AS 'segmento',a.
+					estacion AS 'area_',a.direccion AS 'direccion_instalacion',a.distrito AS 'codigo_distrito',a.nomcliente AS 'nombre_cliente',a.orden AS 'orden_trabajo',a.
+					veloc_adsl,a.servicio AS 'clase_servicio_catv',a.tipo_motivo AS 'codmotivo_req_catv',a.tot_aver_cab AS 'total_averias_cable',a.
+					tot_aver_cob AS 'total_averias_cobre',a.tot_averias AS total_averias,a.fftt,a.llave,a.dir_terminal,a.fonos_contacto,a.contrata,a.zonal,a.
+					quiebre,a.lejano,a.des_distrito AS 'distrito',a.eecc_final,a.zona_movuno AS 'zona_movistar_uno',a.paquete,a.data_multip AS 'data_multiproducto',a.aver_m1 AS 'averia_m1',a.
+					fecha_data_fuente,a.telefono_codclientecms,a.rango_dias,a.sms1,a.sms2,
+					a.area2,c.fecha_creacion AS 'fecha_creacion',a.microzona,mov.tecnico, c.nmov,
+					IFNULL((select tmp.DATA17 FROM schedulle_sistemas.tmp_gaudi_total tmp where tmp.DATA17=a.codigo_req limit 1 ),'') 'existe',
+					a.tipo_actuacion AS 'actuacion'
+					,(SELECT fecha_cambio FROM webpsi_coc.tmp_provision_historico WHERE codigo_req=a.codigo_req) fecha_cambio
+					,(SELECT ROUND((TIMESTAMPDIFF(SECOND,(SELECT fecha_cambio FROM webpsi_coc.`tmp_provision_historico` WHERE codigo_req=a.codigo_req),NOW()) / 3600),2)) AS `horas_cambio`
+					,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=a.codigo_req),IF(IFNULL(a.wu_nagendas,'')='',0,a.wu_nagendas)) wu_nagendas ,c.n_evento
+					,(select paso from webpsi_officetrack.tareas where task_id=c.id order by fecha_recepcion desc limit 1) estado_evento
+								FROM webpsi_criticos.gestion_criticos c INNER JOIN webpsi_criticos.gestion_movimientos mov ON c.id=mov.id_gestion INNER JOIN
+								webpsi_criticos.gestion_rutina_manual_provision a ON c.id=a.id_gestion INNER JOIN 
+								webpsi_criticos.horarios h ON c.id_horario=h.id INNER JOIN 
+								webpsi_criticos.motivos m ON c.id_motivo=m.id INNER JOIN 
+								webpsi_criticos.submotivos s ON c.id_submotivo=s.id INNER JOIN 
+								webpsi_criticos.estados e ON c.id_estado=e.id 
+								INNER JOIN webpsi_criticos.empresa emp ON emp.id=mov.id_empresa
+								where mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) FROM webpsi_criticos.gestion_movimientos mov2
+  								WHERE mov2.id_gestion=c.id) $filtro_liquidado order by fecha_registro asc
+			
+		)AS rutina_manual_provision
 )AS T1 $filtro_sql";
         $DEB = 1;
 		//echo $sql;
@@ -187,11 +217,13 @@ class gestionCriticos{
 		if($data["actividad"]!=""){
 			//si en actividad existe alta o rutina lo separamos para el campo
 			//tipo actuacion
-			$alta = strpos($data["actividad"], "ALTA");
-			$rutina = strpos($data["actividad"], "RUTINA");
-			$manual = strpos($data["actividad"], "MANUAL");
-			$avers = strpos($data["actividad"], "Averias");
-			$provs = strpos($data["actividad"], "Provision");
+			$alta = strpos($data["actividad"], "'ALTA'");
+			$rutina = strpos($data["actividad"], "'RUTINA'");
+			$manual = strpos($data["actividad"], "'MANUAL'");
+			$avers = strpos($data["actividad"], "'Averias'");
+			$provs = strpos($data["actividad"], "'Provision'");
+			$manual_provs = strpos($data["actividad"], "'Manual_Provision'");
+
 			$comodin_averias = ($avers!==false)? "'',":"";//para que filtre al tipo_actividad vacio
 
 			$pos = "";
@@ -224,21 +256,21 @@ class gestionCriticos{
 				}
 			}
 
-			if($pos!=""){
+			/*if($pos!=""){
 				//para obiar la anterior coma
 				$pos = $pos -1;
 				$tipo_actividad = substr($data["actividad"],0,$pos);
 
 				//si no esta marcado Provision que para el tipo de actividad la agrego
 				$comodin_prov = ($provs===false)? "'Provision',":"";//para que filtre al tipo_actividad Provision sin ser marcado
-			}else{
+			}else{*/
 				$tipo_actividad = $data["actividad"];
 				if($tipo_actividad==""){
 					$tipo_actividad = "'Provision'";
 				}else{
 					$comodin_prov = ($provs===false)? "'Provision',":"";
 				}
-			}
+			//}
 
 			if($data["actividad"]=="'Averias'" || $data["actividad"]=="'Manual'" || $data["actividad"]=="'Averias','Manual'"){//si solo marcan averias
 				$comodin_prov = "";
@@ -628,6 +660,35 @@ class gestionCriticos{
 					where mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) FROM webpsi_criticos.gestion_movimientos mov2 
 					WHERE mov2.id_gestion=c.id) $filtro_Averias order by a.fecha_registro asc
 		)AS rutina_manual
+		UNION ALL
+		SELECT * FROM(
+			
+					SELECT  c.id,a.codigo_req AS 'averia',id_atc,tipo_actividad,a.nomcliente 'nombre',fecha_Reg AS 'fecha_reg',a.quiebre 'quiebres',a.eecc_final 'empresa',a.telefono_codclientecms 'telefono_cliente_critico',
+					c.fecha_agenda,h.horario,m.motivo,s.submotivo,m.id 'm_id',s.id 's_id',e.estado AS 'estado',e.id AS 'codigo_estado',
+					flag_tecnico,a.origen AS 'tipo_averia',a.horas_pedido AS 'horas_averia',a.fecha_Reg AS 'fecha_registro',a.ciudad,a.codigo_req AS 'codigo_averia',
+					a.codigo_del_cliente AS 'inscripcion',a.fono1,a.telefono,a.mdf,a.obs_dev AS 'observacion_102',a.codigosegmento AS 'segmento',a.
+					estacion AS 'area_',a.direccion AS 'direccion_instalacion',a.distrito AS 'codigo_distrito',a.nomcliente AS 'nombre_cliente',a.orden AS 'orden_trabajo',a.
+					veloc_adsl,a.servicio AS 'clase_servicio_catv',a.tipo_motivo AS 'codmotivo_req_catv',a.tot_aver_cab AS 'total_averias_cable',a.
+					tot_aver_cob AS 'total_averias_cobre',a.tot_averias AS total_averias,a.fftt,a.llave,a.dir_terminal,a.fonos_contacto,a.contrata,a.zonal,a.
+					quiebre,a.lejano,a.des_distrito AS 'distrito',a.eecc_final,a.zona_movuno AS 'zona_movistar_uno',a.paquete,a.data_multip AS 'data_multiproducto',a.aver_m1 AS 'averia_m1',a.
+					fecha_data_fuente,a.telefono_codclientecms,a.rango_dias,a.sms1,a.sms2,
+					a.area2,c.fecha_creacion AS 'fecha_creacion',a.microzona,mov.tecnico, c.nmov,
+					IFNULL((select tmp.DATA17 FROM schedulle_sistemas.tmp_gaudi_total tmp where tmp.DATA17=a.codigo_req limit 1 ),'') 'existe',
+					a.tipo_actuacion AS 'actuacion'
+					,(SELECT fecha_cambio FROM webpsi_coc.tmp_provision_historico WHERE codigo_req=a.codigo_req) fecha_cambio
+					,(SELECT ROUND((TIMESTAMPDIFF(SECOND,(SELECT fecha_cambio FROM webpsi_coc.`tmp_provision_historico` WHERE codigo_req=a.codigo_req),NOW()) / 3600),2)) AS `horas_cambio`
+				 	,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=a.codigo_req),IF(IFNULL(a.wu_nagendas,'')='',0,a.wu_nagendas)) wu_nagendas ,c.n_evento
+					,(select paso from webpsi_officetrack.tareas where task_id=c.id order by fecha_recepcion desc limit 1) estado_evento
+								FROM webpsi_criticos.gestion_criticos c INNER JOIN webpsi_criticos.gestion_movimientos mov ON c.id=mov.id_gestion INNER JOIN
+								webpsi_criticos.gestion_rutina_manual_provision a ON c.id=a.id_gestion INNER JOIN 
+								webpsi_criticos.horarios h ON c.id_horario=h.id INNER JOIN 
+								webpsi_criticos.motivos m ON c.id_motivo=m.id INNER JOIN 
+								webpsi_criticos.submotivos s ON c.id_submotivo=s.id INNER JOIN 
+								webpsi_criticos.estados e ON c.id_estado=e.id 
+								where mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) FROM webpsi_criticos.gestion_movimientos mov2
+  								WHERE mov2.id_gestion=c.id) $filtro_Averias  order by fecha_registro asc
+			
+		)AS rutina_manual_provision
 	)AS T1 $filtro_sql $filtro_estado $filtroNuevoCtc";
 
 		
