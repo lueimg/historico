@@ -118,6 +118,21 @@ class gestionAveria{
         
 	}
 
+    /**
+     * @param $cnx conexion a la base de datos
+     * @param $averia string averia de menera descriptiva
+     * @return mixed retorna un array
+     */
+    public function getGestionAveriabyAveria($cnx,$averia){
+
+        $cnx->exec("set names utf8");
+        $sql = "SELECT id_gestion FROM webpsi_criticos.gestion_averia where averia='$averia'";
+        $res = $cnx->query($sql);
+        $row = $res->fetch(PDO::FETCH_ASSOC);
+        return $row["id_gestion"];
+
+    }
+
 }
 
 ?>

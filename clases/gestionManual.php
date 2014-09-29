@@ -10,6 +10,11 @@ class GestionManual {
             $distrito, $eecc_zona, $zona_movistar_uno, 
             $codcliente, $eecc, $microzona, $celular,
             $quiebre,$averia,$tipo_actividad) {
+
+        $tabla="";
+        if($tipo_actividad!="AVERIA"){
+            $tabla="_provision";
+        }
         
         try {
             //Iniciar transaccion
@@ -26,6 +31,7 @@ class GestionManual {
             $fecreg = date("Y-m-d H:i:s");
 			
 			//Table: gestion_rutina_manual, verificar registro nuevo pendiente 
+            if($tabla==""){
             $sql = "SELECT 
                         gr.tipo_averia, gr.averia, 
                         gr.nombre_cliente, gr.telefono
@@ -33,21 +39,47 @@ class GestionManual {
                         webpsi_criticos.gestion_rutina_manual gr, 
                         webpsi_criticos.gestion_criticos gc
                     WHERE 
-                        gr.inscripcion='$inscripcion' 
+                        gr.averia='$averia' 
                         AND gc.id_estado=2 
                         AND gr.id_gestion=gc.id";
+            }
+            else{
+            $sql = "SELECT 
+                        gr.origen, gr.codigo_req, 
+                        gr.nomcliente, gr.telefono
+                    FROM 
+                        webpsi_criticos.gestion_rutina_manual_provision gr, 
+                        webpsi_criticos.gestion_criticos gc
+                    WHERE 
+                        gr.codigo_req='$averia' 
+                        AND gc.id_estado=2 
+                        AND gr.id_gestion=gc.id";
+            }
+
             $bind = $dbh->prepare($sql);
             $bind->execute();
             $data = $bind->fetch(PDO::FETCH_ASSOC);
-			
+
 			try {
-                if ( trim($data['averia']) !== ""  ) {
-                    $msg = "Existe un registro PENDIENTE:"
-                            . "\nTipo averia: " . $data['tipo_averia']
-                            . "\nAveria: " . $data['averia']
-                            . "\nCliente: " . $data['nombre_cliente'];
-                    throw new Exception( utf8_encode($msg) );
+                if($tabla==""){
+                    if ( trim($data['averia']) !== ""  ) {
+                        $msg = "Existe un registro PENDIENTE:"
+                                . "\nTipo averia: " . $data['tipo_averia']
+                                . "\nAveria: " . $data['averia']
+                                . "\nCliente: " . $data['nombre_cliente'];
+                        throw new Exception( utf8_encode($msg) );
+                    }    
                 }
+                else{
+                    if ( trim($data['codigo_req']) !== ""  ) {
+                        $msg = "Existe un registro PENDIENTE:"
+                                . "\nOrigen: " . $data['origen']
+                                . "\nCod Requer.: " . $data['codigo_req']
+                                . "\nCliente: " . $data['nomcliente'];
+                        throw new Exception( utf8_encode($msg) );
+                    } 
+                }
+                
             } catch (Exception $error) {
                 $dbh->rollback();
                 $result["estado"] = false;
@@ -72,7 +104,7 @@ class GestionManual {
                         '', '1', '2',
                         '2', '2', '$observacion',
                         '$fecreg', '', 
-                        'Manual', '1', '0'
+                        'Manual_Provision', '1', '0'
                     )";
             $dbh->exec($sql);
             
@@ -154,6 +186,8 @@ class GestionManual {
             }
 
             //Table: 
+            if($tabla==""){
+
             $sql = "INSERT INTO webpsi_criticos.gestion_rutina_manual (
                     id, id_gestion,
                     tipo_averia, horas_averia, fecha_reporte,
@@ -173,7 +207,7 @@ class GestionManual {
                     zona_movistar_uno, paquete, data_multiproducto,
                     averia_m1, fecha_data_fuente, telefono_codclientecms,
                     rango_dias, sms1, sms2,
-                    area2, eecc_final, microzona,tipo_actividad_rutina
+                    area2, eecc_final, microzona
                 ) VALUES (
                     NULL, '$id',
                     '$tipo_averia', '0', '',
@@ -193,8 +227,34 @@ class GestionManual {
                     '$zona_movistar_uno', '', '',
                     '', '$fecreg', '$codcliente',
                     '', '', '',
-                    'EN CAMPO', '$eecc', '$microzona','$tipo_actividad'
+                    'EN CAMPO', '$eecc', '$microzona'
                 )";
+            }
+            else{
+            $sql="INSERT INTO webpsi_criticos.gestion_rutina_manual_provision (
+                  id,id_gestion,origen,horas_pedido,fecha_Reg
+                  ,ciudad,codigo_req,codigo_del_cliente,fono1,telefono
+                  ,mdf,obs_dev,codigosegmento,estacion,direccion,distrito
+                  ,nomcliente,orden,veloc_adsl,servicio,tipo_motivo ,tot_aver_cab
+                  ,tot_aver_cob,tot_averias,fftt,llave,dir_terminal,fonos_contacto
+                  ,contrata,zonal,wu_nagendas,wu_nmovimient,wu_fecha_ult_age
+                  ,tot_llam_tec,tot_llam_seg,llamadastec15d,llamadastec30d,quiebre
+                  ,lejano,des_distrito,eecc_zon,zona_movuno,paquete,data_multip,aver_m1
+                  ,fecha_data_fuente,telefono_codclientecms,rango_dias,sms1,sms2,area2 
+                  ,tipo_actuacion,eecc_final,microzona)
+                VALUES (
+                    NULL, '$id','$tipo_averia', '0','$fecreg'
+                    , '', '$averia','$inscripcion', '$fono', '$fono'
+                    ,'$mdf', '$observacion', '$segmento','', '$direccion', ''
+                    ,'$nombre_cliente', '', '','','',''
+                    , '','', '','', '','$fonos_contacto'
+                    , '$contrata', '$zonal','0', '0', '0'
+                    ,'0', '0','0', '0', '$quiebre'
+                    ,'$lejano', '$distrito', '$eecc_zona','$zona_movistar_uno', '', '',''
+                    , '$fecreg', '$codcliente','', '', '','EN CAMPO'
+                    ,'RUTINA', '$eecc', '$microzona'
+                )";
+            }
             $dbh->exec($sql);
 
             $dbh->commit();

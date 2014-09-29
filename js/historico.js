@@ -178,6 +178,9 @@ $(document).ready(function(){
 					$("#r_tecno").html(obj[0].tecnologia);
 
                     //RESUELVE SI MOSTRAR AGENDAR O NO
+                    // c1 telefono
+                    // c2 inscripcion
+
 					if(obj[0].c1!=null || obj[0].c2!=null){
 						//$("#mensaje").html(obj[0].c1);
 						 //alert("Critico");
@@ -185,14 +188,14 @@ $(document).ready(function(){
 						 $("#nocritico").html("");
 						 $("#agendarVisita").css("display","block");
                                                  
-                                                 esCritico = true;
+                         esCritico = true;
 						 
 					} else {
 						$("#nocritico").html("Cliente no cr&iacute;tico");
 						$("#critico").html("");
 						$("#agendarVisita").css("display","none");
                                                 
-                                                esCritico = false;
+                        esCritico = false;
 					}
 
 					if(obj[0].posibleCritico=="1"){
@@ -299,6 +302,7 @@ $(document).ready(function(){
 	}
 
 	function listarProvision(telefono){
+
 		$.ajax({
 			url : 'listarProvision.php',
 			type : 'POST',
