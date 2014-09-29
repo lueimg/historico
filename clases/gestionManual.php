@@ -266,9 +266,11 @@ class GestionManual {
              * 4. Guardar en gestion_rutina_manual 
              */
             
+            date_default_timezone_set("America/Lima");
+            
             $fecreg = date("Y-m-d H:i:s");
 			
-			//Table: gestion_rutina_manual, verificar registro nuevo pendiente 
+            //Table: gestion_rutina_manual, verificar registro nuevo pendiente 
             $sql = "SELECT 
                         gr.tipo_averia, gr.averia, 
                         gr.nombre_cliente, gr.telefono
@@ -283,7 +285,7 @@ class GestionManual {
             $bind->execute();
             $data = $bind->fetch(PDO::FETCH_ASSOC);
 			
-			try {
+            try {
                 if ( trim($data['averia']) !== ""  ) {
                     $msg = "Existe un registro PENDIENTE:"
                             . "\nTipo averia: " . $data['tipo_averia']
@@ -312,10 +314,10 @@ class GestionManual {
                     VALUES (
                         NULL, NULL, '$nombre_cliente',
                         '$fono', '$celular',
-                        '', '1', '2',
-                        '2', '2', '$observacion',
+                        '', '1', '1',
+                        '1', '8', '$observacion',
                         '$fecreg', '', 
-                        'Manual', '1', '0'
+                        'Manual_Averia', '1', '0'
                     )";
             $dbh->exec($sql);
             
