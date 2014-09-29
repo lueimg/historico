@@ -626,7 +626,7 @@ $(document).ready(function(){
 
   //Para el Registro de Clientes Críticos
   $("#btn_registro").click(function(){
-      debugger;
+
 
     motivo = $("#motivo_registro").val()
     if(motivo==1){

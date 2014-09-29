@@ -166,7 +166,7 @@ class gestionCriticos{
   								WHERE mov2.id_gestion=c.id) order by a.fecha_registro asc
 		)AS rutina_manual
 )AS T1 $filtro_sql";
-
+        $DEB = 1;
 		//echo $sql;
 		$arr = array();
 		$res = $cnx->query($sql); 

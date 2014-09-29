@@ -8,7 +8,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 include ("../../clases/class.HistoricoCliente.php");
 
 //var_dump($_REQUEST);
-
+$deb = 1;
 if (!isset($_REQUEST["telefonoCliente"])){
 	$telefonoCliente = "14344587";
 } else {
@@ -75,16 +75,23 @@ $obj = new HistoricoCliente();
 	<th id="etiqueta">FECHA REGISTRO</th>
 	<th id="etiqueta">ESTADO GESTEL</th>
 	<th id="etiqueta">ESTADO CMS</th>
+	<th id="etiqueta">Agenda</th>
+	<th id="etiqueta">Accion</th>
 </thead>
 
 
 <?php 
-
+$deb =1;
 $arr = $obj->getRegistroAtis("fono", $telefonoCliente);
 if (count($arr)>0) {
 	foreach ($arr as $fila) {
             $estadoGestel = trim($fila["estado_gestel"]);
             $estadoCms = trim($fila["estado_cms"]);
+
+
+
+
+
 		?>
 		<tr>
 		<td id="campo"><?php echo $fila["peticion"]?></td>
