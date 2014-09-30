@@ -8,7 +8,6 @@ error_reporting(E_ALL ^ E_NOTICE);
 include ("../../clases/class.HistoricoCliente.php");
 
 //var_dump($_REQUEST);
-$deb = 1;
 if (!isset($_REQUEST["telefonoCliente"])){
 	$telefonoCliente = "14344587";
 } else {
@@ -88,7 +87,13 @@ if (count($arr)>0) {
             $estadoGestel = trim($fila["estado_gestel"]);
             $estadoCms = trim($fila["estado_cms"]);
 
+        $accion = "Agendar Visita";
+        if($fila["id_atc"]){
+            $agenda =  $fila["id_atc"];
+            $accion = "Reagendar Visita";
 
+
+        }
 
 
 
@@ -111,6 +116,15 @@ if (count($arr)>0) {
                     ?>
                 </td>
 		<td id="campo"><?php echo $fila["estado_cms"]?></td>
+		<td id="campo"><?php echo $agenda;?></td>
+		<td id="campo" cod="<?=$fila["codigo_req"]; ?>">
+            <?php if($fila["n_evento"] == 0 ): ?>
+            <div id='agendarVisita' name='agendarVisita' >
+                <button type="button" id="btn_cliente_critico_provision"
+                        style="margin-top:5px;background:red;border:0;border-radius:4px;color:#fff;padding:5px"><?=$accion;?></button>
+            </div>
+            <?php endif; ?>
+		</td>
 		</tr>
 		<?php
 	}

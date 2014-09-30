@@ -322,7 +322,7 @@ $("#filtro_general").click(function(){
 	var empresa_raiz = $("#empresa_raiz").val()
 	var fecha_ini = $("#fecha_ini").val()
 	var fecha_fin = $("#fecha_fin").val()
-	
+
 	//para avisar al reporte de excel de la bandeja que ya se hizo el primer filtro
 	$("#filtro_inicial").val(2)
 

@@ -157,10 +157,12 @@ if (count($arrTba)>0) {
                     }else
                     {
                     ?>
+                        <?php if($filaTba["n_evento"] == 0):?>
                         <div id='agendarVisita' name='agendarVisita' >
                             <button type="button" id="btn_cliente_critico"
                                     style="margin-top:5px;background:red;border:0;border-radius:4px;color:#fff;padding:5px"><?=$accion;?></button>
                         </div>
+                        <?php endif; ?>
                     <?php
                     }
                     ?>

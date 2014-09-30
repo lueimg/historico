@@ -256,6 +256,7 @@ $(document).ready(function(){
 				$("#tabs-averias").html(response);
                 //Agregamos el evento click al boton de agendar averia
                 AgendarAveriaEventoClick();
+                AgendarProvisionEventoClick();
 
                                 //Registro manual
                                 $(".rmanual").click(function (event){
@@ -384,7 +385,26 @@ $(document).ready(function(){
 
         });
     }
+    AgendarProvisionEventoClick = function(){
+        $("#btn_cliente_critico_provision").click(function(){
 
+            var idAveria =$("#btn_cliente_critico_provision").parent().parent().attr("cod");
+            var actividad  = "Provision"
+            //var fonoBus = $("#telefonoCliente").val();
+            var url = "registro_clientes_criticos_provision.php?averia_ini="+idAveria+"&actividad="+actividad;
+            var pagina = '<iframe style="border: 0px; " src="' + url + '" width="100%" height="100%"></iframe>'
+            $("#dialog-criticos").html(pagina);
+            $("#dialog-criticos").dialog({
+                autoOpen: false,
+                modal: true,
+                height: 600,
+                width: 700,
+            });
+
+            $("#dialog-criticos").dialog( "open" );
+
+        });
+    }
 
 
 	var opts = {

@@ -7,7 +7,8 @@ require_once('clases/capacidadHorarios.php');
 require_once('clases/tecnicos.php');
 require_once('clases/cedula.php');
 require_once('clases/motivos.php');
-
+require_once('clases/zonales.php');
+require_once('agenda/agendaController.php');
 //$fonoBus = $_REQUEST["fonoBus"];
 $averia_ini = $_REQUEST["averia_ini"];
 $actividad = $_REQUEST["actividad"];
@@ -22,13 +23,23 @@ $cnx = $db->conectarPDO();
 
 $ob_averia = new Provision($cnx);
 $averia = $ob_averia->getProvision($cnx, $averia_ini);
-
+$deb = 1;
 
 if($averia["eecc_final"]!=""){
-$ob_empresa = new Empresa();
-$id_empresa = $ob_empresa->getIdEmpresa($cnx,$averia["eecc_final"]);
-$ob_cedula = new Cedula();
-$cedula = $ob_cedula->getCedulaAll($cnx,$id_empresa);
+    $ob_empresa = new Empresa();
+    $id_empresa = $ob_empresa->getIdEmpresa($cnx,$averia["eecc_final"]);
+    $ob_cedula = new Cedula();
+    $cedula = $ob_cedula->getCedulaAll($cnx,$id_empresa);
+    $zonales = new Zonales();
+    $id_zonal = $zonales->getIdZonal($cnx, $averia["zonal"]);
+
+    $agenda = new agendaController();
+    $agenda->setCnx($cnx);
+    $agenda->setVempresa($id_empresa);
+    $agenda->setVzona($id_zonal);
+
+    $agendar_html = $agenda->AgendarAveriaShow();
+
 }else{
 	echo "La averia seleccionada no tiene una contrata asociada.Cierre la ventana y seleccione otra averia";
 	exit();
@@ -36,6 +47,10 @@ $cedula = $ob_cedula->getCedulaAll($cnx,$id_empresa);
 
 $ob_mot = new Motivos($cnx);
 $motivos = $ob_mot->getMotivos($cnx);
+
+
+
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -259,21 +274,15 @@ $motivos = $ob_mot->getMotivos($cnx);
 							<div class="horario">
 							<?php
 								//Creando el horario
-								$ob_horario = new capacidadHorarios($cnx);
-								$ob_horario->getHorarios($cnx,$averia["eecc_final"],$averia["zonal"],$actividad);
+//								$ob_horario = new capacidadHorarios($cnx);
+//								$ob_horario->getHorarios($cnx,$averia["eecc_final"],$averia["zonal"],$actividad);
 							?>
+                            <?=$agendar_html; ?>
 							</div>
 							<input type="submit" value="Registrar" name="registrar" id="btn_registro"/>
 						</div>
 			</div>
-			<div class="content_datos">
-				<div class="caja_text">
-					<input type="hidden" value="" id="fecha_agenda" name="fecha_agenda">
-					<input type="hidden" value="" id="horario_agenda" name="horario_agenda">
-					<input type="hidden" value="" id="hora_agenda" name="hora_agenda">
-					<input type="hidden" value="" id="dia_agenda" name="dia_agenda">
-				</div>
-			</div>
+
 		</div>
 
 		<div class="registrar">

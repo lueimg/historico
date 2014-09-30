@@ -71,7 +71,7 @@ $(document).ready(function(){
 		var indice = $(this).attr("data-indice");
 		var actividad = $(this).attr("data-actividad");
 		var averia_ini = $(".faveria_ini"+indice).html()
-						
+
 		if(actividad=='Provision'){
 			var url = "registro_clientes_criticos_provision.php?averia_ini="+averia_ini+"&actividad="+actividad;
 		}else{

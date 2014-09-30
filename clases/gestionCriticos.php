@@ -841,6 +841,8 @@ class gestionCriticos{
 	    $datosfinal=$_POST['datosfinal'];
 	    $contadordatosfinal="0";
 
+        $tecnico = ( $tecnico == "-- Seleccione --" )?"":$tecnico;
+
 	    if($datosfinal=='OK'){
 	    	$contadordatosfinal="1";
 		            
@@ -866,19 +868,20 @@ class gestionCriticos{
 		$fecha=date("Y/m/d H:i:s");
 
         try{
-
+        $deb = 1;
             //Iniciar transaccion
             $cnx->beginTransaction();
 
             //validando que la averia gestionada no exista para ser ingresada
             if($tipo_actividad=='Provision'){
             	$gestProvision = new gestionProvision();
-            	$res_gprovision = $gestProvision->existeGestionProvision($cnx,$_POST["averia"]);
+                $res_gaveria = $gestProvision->existeGestionProvision($cnx,$_POST["averia"]);
             }else{
             	$gestAverias = new gestionAveria();
             	$res_gaveria = $gestAverias->existeGestionAveria($cnx,$_POST["averia"]);	
             }
 
+            //SI NO EXISTE NI EN PROVISION NI EN AVERIA
             if($res_gaveria==""){
 				//ya que pueden haber mas de dos estados a la vez para agendado entonces
 				if($motivo_registro==1){
@@ -1161,9 +1164,8 @@ class gestionCriticos{
             }
 
 
-
-
-            if($res_gaveria!=""){
+            //si existe una gestion a actualizar
+            if(!empty($id_gestion_update)){
                 //ya que pueden haber mas de dos estados a la vez para agendado entonces
                 if($motivo_registro==1){
                     if($tecnico!="" && $flag_tecnico=="si"){
@@ -1193,18 +1195,6 @@ class gestionCriticos{
                 $cnx->exec("set names utf8");
                 if($motivo_registro==1){
                     if($averia!="" && $cr_nombre!="" && $cr_telefono!="" && $fecha_agenda!="" && $id_horario!=""){
-//                        $sql = "INSERT INTO webpsi_criticos.`gestion_criticos`
-//				        		(
-//			                        id, id_atc, nombre_cliente_critico,
-//			                        telefono_cliente_critico, celular_cliente_critico,
-//			                        fecha_agenda, id_horario, id_motivo,
-//			                        id_submotivo, id_estado, observacion,
-//			                        fecha_creacion, flag_tecnico,
-//			                        tipo_actividad, nmov, n_evento
-//			                    )
-//				        		VALUES ('$idcritico','','$cr_nombre','$cr_telefono','$cr_celular','$fecha_agenda',
-//				        	$id_horario,$id_motivo,$id_submotivo,$id_estado,'$observacion','$fecha','$flag_tecnico','$tipo_actividad','0','$contadordatosfinal')";
-
 
                         $sql = "UPDATE webpsi_criticos.`gestion_criticos`
                         SET nombre_cliente_critico = '$cr_nombre' ,
@@ -1221,12 +1211,9 @@ class gestionCriticos{
                         tipo_actividad = '$tipo_actividad'  ,
                         nmov =  0 ,
                         n_evento = $contadordatosfinal
-                        where id = $id_gestion_update
-
-                        ";
-
-
+                        where id = $id_gestion_update";
                         $cnx->exec($sql);
+
                     }else{
                         $result["estado"] = FALSE;
                         $result["msg"] = "Ingrese el nombre de cliente,telefono,observacion y seleccione una fecha a agendar";
@@ -1236,21 +1223,7 @@ class gestionCriticos{
                 else{
                     if($averia!=""){
                         //el 2 es para id_horario cualquier numero ya que es foranea sino no inserta
-//                        $sql = "INSERT INTO webpsi_criticos.`gestion_criticos`
-//				    	 		(
-//			                        id, id_atc, nombre_cliente_critico,
-//			                        telefono_cliente_critico, celular_cliente_critico,
-//			                        fecha_agenda, id_horario, id_motivo,
-//			                        id_submotivo, id_estado, observacion,
-//			                        fecha_creacion, flag_tecnico,
-//			                        tipo_actividad, nmov, n_evento
-//			                    )
-//				    	 		VALUES ('$idcritico','','$cr_nombre'
-//				    	 		,'$cr_telefono','$cr_celular',
-//				    	 		'$fecha_agenda',2,$id_motivo
-//				    	 		,$id_submotivo,$id_estado,'$observacion',
-//				    	 		'$fecha','$flag_tecnico'
-//				    	 		,'$tipo_actividad','0','$contadordatosfinal')";
+
 
                         $sql = "
                         update webpsi_criticos.`gestion_criticos` set
@@ -1308,35 +1281,6 @@ class gestionCriticos{
                     $result["msg"] = "No se ha proporcionado un código de avería";
                     return $result;
                 }
-
-                //OBS: La contrata y zona no pueden ser vacios sino la busqueda de reserva no funcionara
-//                if($id_gestion!=""){
-//                    if($tipo_actividad=='Provision'){
-//                        $res_age =  $gestProvision->addGestionProvision($cnx,$id_gestion,$tipo_averia,$horas_averia,$fecha_registro,$ciudad,$averia,
-//                            $inscripcion,$fono1,$telefono,$mdf,addslashes($observacion_102),$segmento,$area_,addslashes($direccion_instalacion),
-//                            $codigo_distrito,addslashes($nombre_cliente),$orden_trabajo,$veloc_adsl,$clase_servicio_catv,$codmotivo_req_catv,
-//                            $total_averias_cable,$total_averias_cobre,$total_averias,addslashes($fftt),$llave,addslashes($dir_terminal),$fonos_contacto,
-//                            $contrata,$zonal,
-//                            $wu_nagendas,$wu_nmovimientos,$wu_fecha_ult_agenda,$total_llamadas_tecnicas,
-//                            $total_llamadas_seguimiento,$llamadastec15dias,$llamadastec30dias,
-//                            $quiebre,$lejano,$distrito,$eecc_zona,addslashes($zona_movistar_uno),addslashes($paquete),addslashes($data_multiproducto),
-//                            $averia_m1,$fecha_data_fuente,$telefono_codclientecms,$rango_dias,addslashes($sms1),addslashes($sms2),
-//                            $area2,$tipo_actuacion,$eecc_final,$microzona);
-//                    }else{
-//
-//
-////                        $res_age =  $gestAverias->addGestionAveria($cnx,$id_gestion,$tipo_averia,$horas_averia,'',$fecha_registro,$ciudad,$averia,
-////                            $inscripcion,$fono1,$telefono,$mdf,addslashes($observacion_102),$segmento,$area_,addslashes($direccion_instalacion),
-////                            $codigo_distrito,addslashes($nombre_cliente),$orden_trabajo,$veloc_adsl,$clase_servicio_catv,$codmotivo_req_catv,
-////                            $total_averias_cable,$total_averias_cobre,$total_averias,addslashes($fftt),$llave,addslashes($dir_terminal),$fonos_contacto,
-////                            $contrata,$zonal,
-////                            $wu_nagendas,$wu_nmovimientos,$wu_fecha_ult_agenda,$total_llamadas_tecnicas,
-////                            $total_llamadas_seguimiento,$llamadastec15dias,$llamadastec30dias,
-////                            $quiebre,$lejano,$distrito,$eecc_zona,addslashes($zona_movistar_uno),addslashes($paquete),addslashes($data_multiproducto),
-////                            $averia_m1,$fecha_data_fuente,$telefono_codclientecms,$rango_dias,addslashes($sms1),addslashes($sms2),
-////                            $area2,$eecc_final,$microzona);
-//                    }
-//                }
 
                 $cnx->commit();
                 $result["estado"] = TRUE;
