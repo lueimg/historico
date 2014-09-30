@@ -390,7 +390,7 @@ class capacidadHorarios {
             $sql = "SELECT 
                         IF(b.fecha_agenda IS NULL, 
                             DATE_ADD(?, 
-                                INTERVAL IF(a.dia < ?, ?-1+a.dia, a.dia-?) 
+                                INTERVAL IF(a.dia < ?, 7-?+a.dia, a.dia-?)
                                 DAY), 
                             b.fecha_agenda) fecha, 
                         a.*, 
