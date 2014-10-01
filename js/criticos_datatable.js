@@ -568,7 +568,7 @@ $("#filtro_general").click(function(){
 	var parametros = {actividad:actividad,empresa:empresa,zonal:zonal,microzona:microzona,lejano:lejano,area2:area2,tecnico:tecnico,
 		negocio:negocio,mdf:mdf,nodo:nodo,estado:estado,flags:flags,quiebre:quiebre,area_:area_,
 		movistar1:movistar1,fecha_ini:fecha_ini,fecha_fin:fecha_fin,filtro:"filtro_general",distrito:distrito,esttransmision:esttransmision}
-	
+
 	$.ajax({
 		type: "POST",
 		url: "controladorHistorico/historicoController.php",

@@ -16,14 +16,14 @@ include_once $PATH."modulos/historico/clases/cedula.php";
 
  $db = new Conexion();
  $cnx = $db->conectarPDO();
-$deb = 1;
+
 //SI SE HACE UN REGISTRO CRITICO
 if(isset($_POST["registro_critico"]) && $_POST["registro_critico"]=="registro_critico"){
 
 	$ob_critico = new gestionCriticos();
     //PROCESO DE VALIDACION Y GUARDODO DE AVERIA CRITICO
 	$res = $ob_critico->addClienteCritico($cnx);
-    $deb = 1;
+    ;
     //SI ADD CLIENTE ES FALSO
     //ENTONCES PASAMOS A ACTUALIZAR
     if(!$res["estado"] && $res["averia"]== $_POST["averia"]) {
@@ -224,7 +224,7 @@ if(isset($_POST["actualizar_tecnico"]) && $_POST["actualizar_tecnico"]=="actuali
 	$res = $ob_critico->updateEstadoFlagCritico($cnx,$codigos,$tecnico,$estado,$flag_tecnico,$idtecnico);
 	echo json_encode($res);
 }
-
+$deb = 1;
 if(isset($_POST["filtro"]) && $_POST["filtro"]=="filtro_general"){
 
 	$actividad = trim($_POST["actividad"]);
