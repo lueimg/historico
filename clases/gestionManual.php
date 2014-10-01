@@ -591,6 +591,50 @@ class GestionManual {
         }
     }
 
+    function updateEmpresaProvision($cnx,$vempresa,$vtecnico,$codigo,$idtecnico){
+
+        try{
+
+            $cnx->beginTransaction();
+
+            if($vempresa!=""){
+                $cnx->exec("set names utf8");
+                $cad = "update webpsi_criticos.`gestion_rutina_manual_provision` set eecc_final='$vempresa' where id_gestion=$codigo";//sin contrarta o zonal
+                //echo $cad;
+                $res = $cnx->exec($cad);
+            }else{
+                $result["estado"] = FALSE;
+                $result["msg"] = "Seleccione una empresa";
+                return $result;
+            }
+
+            if($vempresa!=""){
+                $empresa = new Empresa();
+                $id_empresa = $empresa->getIdEmpresa($cnx,$vempresa);
+                $gestMovimiento = new gestionMovimientos();
+                $gestMovimiento->updateEmpresaMovimientos($cnx,$codigo,$id_empresa,$vtecnico,$idtecnico);
+            }else{
+                $result["estado"] = FALSE;
+                $result["msg"] = "Seleccione una empresa";
+                return $result;
+            }
+
+            $cnx->commit();
+            $result["estado"] = TRUE;
+            $result["msg"] = "Se asigno la empresa correctamente";
+            return $result;
+
+        }catch (PDOException $error){
+
+            $cnx->rollback();
+            $result["estado"] = FALSE;
+            $result["msg"] = $error->getMessage();
+            return $result;
+            exit();
+
+        }
+    }
+
 }
 
 ?>

@@ -419,7 +419,7 @@ $solcomArray = $ob_solcom->getSolucionesAll($cnx);
 							</div>
 						</div>
 			</div>
-			<input type="hidden" value="" id="fecha_agenda" name="fecha_agenda">
+			
 			<!--<input type="hidden" value="" id="fecha_agenda_observacion" name="fecha_agenda_observacion">
 			
 				para el estado observac
@@ -427,10 +427,7 @@ $solcomArray = $ob_solcom->getSolucionesAll($cnx);
 			<input type="hidden" value="<?php echo trim($cliente_critico["quiebre"]);?>" name="quiebre" id="quiebre">
 			<input type="hidden" value="<?php echo trim($cliente_critico["n_evento"]);?>" name="n_evento" id="n_evento">
 			<input type="hidden" value="<?php echo $actividad; ?>" id="actividad" name="actividad">
-			<input type="hidden" value="" id="datosfinal" name="datosfinal"> <?php /*indicador si realizará un evento*/ ?>			
-			<input type="hidden" value="" id="horario_agenda" name="horario_agenda">
-			<input type="hidden" value="" id="dia_agenda" name="dia_agenda">
-			<input type="hidden" value="" id="hora_agenda" name="hora_agenda">
+			<input type="hidden" value="" id="datosfinal" name="datosfinal"> <?php /*indicador si realizará un evento*/ ?>
 			<!--<input type="hidden" value="<?php echo $tecnico_movimiento;?>" id="tecnico_movimiento" name="tecnico_movimiento">-->
 			<input type="hidden" value="gestion_critico" id="gestion_critico" name="gestion_critico">
 			<input type="hidden" value="<?php echo trim($cliente_critico["id"]);?>" name="id_gestion" id="id_gestion">

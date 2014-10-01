@@ -207,6 +207,13 @@ if(isset($_POST["actualizar_empresa"]) && $_POST["actualizar_empresa"]=="actuali
 				echo json_encode($res);	
 				exit();
 			}
+		}else if($actividad[$i]=="Manual_Provision"){
+			$ob_manual = new GestionManual();
+			$res = $ob_manual->updateEmpresaProvision($cnx,$empresa,$tecnico,$codigo[$i],$idtecnico);
+			if(!$res["estado"]){
+				echo json_encode($res);	
+				exit();
+			}
 		}
 	}
 
