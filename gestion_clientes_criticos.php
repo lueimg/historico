@@ -9,6 +9,8 @@ require_once('clases/liquidado_feedback.php');
 require_once('clases/tecnicos.php');
 require_once('clases/cedula.php');
 require_once('clases/solucionesComerciales.php');
+require_once('clases/zonales.php');
+require_once('agenda/agendaController.php');
 //Definiendo la zona horaria
 date_default_timezone_set("America/Lima");
 
@@ -19,7 +21,7 @@ $cnx = $db->conectarPDO();
 $id = $_GET['id'];
 $indice = $_GET['indice'];
 $actividad = $_GET['actividad'];
-
+$deb = 1;
 if($actividad=='Provision'){
 	$ob_provision = new gestionCriticos($cnx);
 	$cliente_critico = $ob_provision->getGestionCriticoProvision($cnx,$id);
@@ -42,6 +44,9 @@ $motivos = $ob_mot->getMotivos($cnx);
 
 $ob_empresa = new Empresa();
 $id_empresa = $ob_empresa->getIdEmpresa($cnx,$cliente_critico["eecc_final"]);
+
+$zonales = new Zonales();
+$id_zonal = $zonales->getIdZonal($cnx, $cliente_critico["zonal"]);
 
 //Llenando combo de feedback
 $ob_feedback = new LiquidadoFeedback();
@@ -401,9 +406,15 @@ $solcomArray = $ob_solcom->getSolucionesAll($cnx);
 							<div class="horarios">
 							<label>Seleccione el Horario:</label><span class="fecha_error"></span>
 							<?php
-								//Creando el horario
-								$ob_horario = new capacidadHorarios();
-								$ob_horario->getHorarios($cnx,$empresa,$zonal,$actividad);
+                            $agenda = new agendaController();
+                            $agenda->setCnx($cnx);
+                            $agenda->setVempresa($id_empresa);
+                            $agenda->setVzona($id_zonal);
+                            $degb = 1;
+                            $agendar_html = $agenda->AgendarAveriaShow();
+                            print $agendar_html;
+//                            $ob_horario = new capacidadHorarios();
+//							$ob_horario->getHorarios($cnx,$empresa,$zonal,$actividad);
 							?>
 							</div>
 						</div>
@@ -442,3 +453,5 @@ $solcomArray = $ob_solcom->getSolucionesAll($cnx);
 		</div>
 	</form>
 </div>
+</body>
+</html>
