@@ -588,6 +588,24 @@ class GestionManual {
         
     }
 
+    function getGestionManualProvisionId($cnx,$id){
+        
+        $cnx->exec("set names utf8");
+        $sql = "SELECT codigo_req AS 'averia',nomcliente 'nombre',fecha_Reg AS 'fecha_reg',quiebre 'quiebres',telefono_codclientecms 'telefono_cliente_critico',
+                       origen AS 'tipo_averia',horas_pedido AS 'horas_averia',fecha_Reg AS 'fecha_registro',ciudad,codigo_req AS 'codigo_averia',
+                    codigo_del_cliente AS 'inscripcion',fono1,telefono,mdf,obs_dev AS 'observacion_102',codigosegmento AS 'segmento',
+                    estacion AS 'area_',direccion AS 'direccion_instalacion',distrito AS 'codigo_distrito',nomcliente AS 'nombre_cliente',orden AS 'orden_trabajo',
+                    veloc_adsl,servicio AS 'clase_servicio_catv',tipo_motivo AS 'codmotivo_req_catv',tot_aver_cab AS 'total_averias_cable',
+                    tot_aver_cob AS 'total_averias_cobre',tot_averias AS total_averias,fftt,llave,dir_terminal,fonos_contacto,contrata,zonal,
+                    quiebre,lejano,des_distrito AS 'distrito',eecc_final,zona_movuno AS 'zona_movistar_uno',paquete,data_multip AS 'data_multiproducto',aver_m1 AS 'averia_m1',
+                    fecha_data_fuente,telefono_codclientecms,rango_dias,sms1,wu_fecha_ult_age as 'wu_fecha_ult_agenda',
+                    sms2,area2,microzona FROM webpsi_criticos.gestion_rutina_manual_provision where id_gestion=$id";
+        $res = $cnx->query($sql);
+        $row = $res->fetch(PDO::FETCH_ASSOC);
+        return $row;
+        
+    }
+
     function updateEmpresa($cnx,$vempresa,$vtecnico,$codigo,$idtecnico){
 
         try{

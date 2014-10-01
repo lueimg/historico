@@ -34,6 +34,12 @@ if($actividad=="Provision"){
 		$ob_manual = new GestionManual();
 		$averias = $ob_manual->getGestionManualId($cnx,$id);
 	
+}else if($actividad=="Manual_Provision"){
+		$id = $_GET['id'];
+		//print_r($_GET);
+		$ob_manual = new GestionManual();
+		$averias = $ob_manual->getGestionManualProvisionId($cnx,$id);
+	
 }else if($actividad=="Averias"){
 	if(isset($_GET['tipo']) && $_GET['tipo']=='raiz'){
 		$averia = $_GET['id'];
