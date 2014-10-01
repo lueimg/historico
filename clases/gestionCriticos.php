@@ -588,23 +588,23 @@ class gestionCriticos {
 		UNION ALL
 		SELECT * FROM(
 			
-									SELECT '' as 'id',averia,'' as 'id_atc','Averias' as 'tipo_actividad',nombre_cliente 'nombre',fecha_registro as 'fecha_reg',quiebre 'quiebres',eecc_final 'empresa',telefono_codclientecms 'telefono_cliente_critico',
-									'' as 'fecha_agenda','' as 'horario','' as 'motivo','' as 'submotivo','' as 'm_id','' as 's_id','Temporal' as 'estado','Temporal' as 'codigo_estado',
-									'' as 'flag_tecnico',tipo_averia,horas_averia,fecha_registro,ciudad,averia 'codigo_averia',inscripcion,fono1,telefono,mdf,observacion_102,segmento,
-													area_,direccion_instalacion,codigo_distrito,nombre_cliente,orden_trabajo,veloc_adsl,
-													clase_servicio_catv,codmotivo_req_catv,total_averias_cable,total_averias_cobre,total_averias,
-													fftt,llave,dir_terminal,fonos_contacto,contrata,zonal,quiebre,lejano,
-													distrito,eecc_final,zona_movistar_uno,paquete,data_multiproducto,averia_m1,
-													fecha_data_fuente,telefono_codclientecms,rango_dias,sms1,
-													sms2,area2,'' AS 'fecha_creacion',microzona,'' as 'tecnico', 0 nmov,'' as 'existe','' as 'actuacion',
-													fecha_cambio,horas_cambio_vs_actual as 'horas_cambio'
-													,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=vacf.averia),IF(IFNULL(vacf.wu_nagendas,'')='',0,vacf.wu_nagendas)) wu_nagendas ,'' n_evento
-													,null estado_evento
-													FROM webpsi_coc.vistaAveriasCriticosFinal vacf
-													WHERE averia NOT IN (SELECT distinct averia FROM webpsi_criticos.gestion_averia)
-													and vacf.telefono NOT IN (SELECT distinct telefono FROM webpsi_criticos.gestion_rutina_manual)
-													$filtro_Averias
-													 order by fecha_registro asc
+                SELECT '' as 'id',averia,'' as 'id_atc','Averias' as 'tipo_actividad',nombre_cliente 'nombre',fecha_registro as 'fecha_reg',quiebre 'quiebres',eecc_final 'empresa',telefono_codclientecms 'telefono_cliente_critico',
+                '' as 'fecha_agenda','' as 'horario','' as 'motivo','' as 'submotivo','' as 'm_id','' as 's_id','Temporal' as 'estado','Temporal' as 'codigo_estado',
+                '' as 'flag_tecnico',tipo_averia,horas_averia,fecha_registro,ciudad,averia 'codigo_averia',inscripcion,fono1,telefono,mdf,observacion_102,segmento,
+                area_,direccion_instalacion,codigo_distrito,nombre_cliente,orden_trabajo,veloc_adsl,
+                clase_servicio_catv,codmotivo_req_catv,total_averias_cable,total_averias_cobre,total_averias,
+                fftt,llave,dir_terminal,fonos_contacto,contrata,zonal,quiebre,lejano,
+                distrito,eecc_final,zona_movistar_uno,paquete,data_multiproducto,averia_m1,
+                fecha_data_fuente,telefono_codclientecms,rango_dias,sms1,
+                sms2,area2,'' AS 'fecha_creacion',microzona,'' as 'tecnico', 0 nmov,'' as 'existe','' as 'actuacion',
+                fecha_cambio,horas_cambio_vs_actual as 'horas_cambio'
+                ,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=vacf.averia),IF(IFNULL(vacf.wu_nagendas,'')='',0,vacf.wu_nagendas)) wu_nagendas ,'' n_evento
+                ,null estado_evento
+                FROM webpsi_coc.vistaAveriasCriticosFinal vacf
+                WHERE averia NOT IN (SELECT distinct averia FROM webpsi_criticos.gestion_averia)
+                and averia NOT IN (SELECT distinct averia FROM webpsi_criticos.gestion_rutina_manual)
+                $filtro_Averias
+                 order by fecha_registro asc
 
 		)as averias_final
 		UNION ALL
@@ -624,11 +624,11 @@ class gestionCriticos {
 					,(SELECT ROUND((TIMESTAMPDIFF(SECOND,(SELECT fecha_cambio FROM webpsi_coc.`tmp_provision_historico` WHERE codigo_req=tp.codigo_req),NOW()) / 3600),2)) AS `horas_cambio`
 					,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=tp.codigo_req),IF(IFNULL(tp.wu_nagendas,'')='',0,tp.wu_nagendas)) wu_nagendas ,'' n_evento
 					,null	estado_evento					
-											FROM webpsi_coc.tmp_provision tp
-											WHERE codigo_req NOT IN (SELECT codigo_req FROM webpsi_criticos.gestion_provision)
-											and tp.telefono NOT IN (SELECT distinct telefono FROM webpsi_criticos.gestion_rutina_manual_provision)
-											$filtro_Averias
-											 order by fecha_registro asc
+                    FROM webpsi_coc.tmp_provision tp
+                    WHERE codigo_req NOT IN (SELECT codigo_req FROM webpsi_criticos.gestion_provision)
+                    and   codigo_req NOT IN (SELECT codigo_req FROM webpsi_criticos.gestion_rutina_manual_provision)
+                    $filtro_Averias
+                     order by fecha_registro asc
 
 		)as provision_final
 		UNION ALL
