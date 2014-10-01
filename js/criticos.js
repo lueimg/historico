@@ -956,7 +956,7 @@ function registrarMovimientos() {
 	var parametros = $("#frm_gestion_critico").serialize();
       if($("#frm_gestion_critico #n_evento").val()=="1"){
 
-        if(confirm("Ya se realizo una transmision anteriormente, confirme para enviar la actualizacion.")){ git
+        if(confirm("Ya se realizo una transmision anteriormente, confirme para enviar la actualizacion.")){
 
             $.ajax({
           type: "POST",
