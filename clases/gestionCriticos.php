@@ -687,7 +687,7 @@ class gestionCriticos {
 	)AS T1 $filtro_sql $filtro_estado $filtroNuevoCtc";
 
 
-
+		//echo $sql;
         $arr = array();
         $res = $cnx->query($sql);
         while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
