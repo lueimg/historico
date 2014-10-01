@@ -949,15 +949,14 @@ function registrarMovimientos() {
            //SI ES TECNICO OFFICETRACK
        ( 1 === 1 )
 
-
-
    )
    {
 	
+
 	var parametros = $("#frm_gestion_critico").serialize();
       if($("#frm_gestion_critico #n_evento").val()=="1"){
 
-        if(confirm("Ya se realizo una transmision anteriormente, confirme para enviar la actualizacion.")){ 
+        if(confirm("Ya se realizo una transmision anteriormente, confirme para enviar la actualizacion.")){ git
 
             $.ajax({
           type: "POST",

@@ -66,9 +66,10 @@ if(isset($_POST["gestion_critico"]) && $_POST["gestion_critico"]=="gestion_criti
 
 	$envio['UserName']					=	'';
 	$envio['Password']					=	'';
-	$envio['Operation']					=	"x".$operation;
-	$envio['TaskNumber']				=	"x".$_POST['id_gestion'];
-	$envio['EmployeeNumber']			=	$carnet; // jala el carnet del tecnico
+
+	$envio['Operation']					=	$operation;
+	$envio['TaskNumber']				=	"X".$_POST['id_gestion'];
+	$envio['EmployeeNumber']			=	"X".$carnet; // jala el carnet del tecnico
 	$envio['DueDateAsYYYYMMDDHHMMSS']	=	date("YmdHis",strtotime($averias['fecha_registro']));
 
 	$Duration=2;
@@ -159,9 +160,11 @@ elseif(isset($_POST["registro_critico"]) && $_POST["registro_critico"]=="registr
 
 	$envio['UserName']					=	'';
 	$envio['Password']					=	'';
-	$envio['Operation']					=	"x".$operation;
-	$envio['TaskNumber']				=	"x".$id_gestion;
-	$envio['EmployeeNumber']			=	$carnet; // jala el carnet del tecnico
+
+	$envio['Operation']					=	$operation;
+	$envio['TaskNumber']				=	"X".$id_gestion;
+	$envio['EmployeeNumber']			=	"X".$carnet; // jala el carnet del tecnico
+
 	$envio['DueDateAsYYYYMMDDHHMMSS']	=	date("YmdHis",strtotime($_POST['fecha_registro']));
 
 	$Duration=2;

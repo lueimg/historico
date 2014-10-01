@@ -8,7 +8,7 @@ class gestionMovimientos{
 		
 			$sql = "INSERT INTO webpsi_criticos.gestion_movimientos values  ('',$id_gestion,$id_empresa,$id_zonal,'$fecha_agenda',$id_horario,$id_dia,$id_motivo,$id_submotivo,$id_estado,$tecnicos_asignados,
 			'$observacion',$id_usuario,'$fecha','$tecnico','$fecha_consolidacion')";
-
+			//echo $sql;
 			$res = $cnx->exec($sql);
 
 			$id = $cnx->lastInsertId();
