@@ -312,7 +312,8 @@ class GestionManual {
             $contrata, $zonal, $lejano, 
             $distrito, $eecc_zona, $zona_movistar_uno, 
             $codcliente, $eecc, $microzona, $celular,
-            $quiebre, $fecha_agenda, $id_horario, $id_dia) {
+            $quiebre, $fecha_agenda, $id_horario, $id_dia,
+            $tipo_actu) {
         
         try {
             //Iniciar transaccion
@@ -331,16 +332,30 @@ class GestionManual {
             $fecreg = date("Y-m-d H:i:s");
 			
             //Table: gestion_rutina_manual, verificar registro nuevo pendiente 
-            $sql = "SELECT 
-                        gr.tipo_averia, gr.averia, 
-                        gr.nombre_cliente, gr.telefono
-                    FROM 
-                        webpsi_criticos.gestion_rutina_manual gr, 
-                        webpsi_criticos.gestion_criticos gc
-                    WHERE 
-                        gr.inscripcion='$inscripcion' 
-                        AND gc.id_estado=2 
-                        AND gr.id_gestion=gc.id";
+            if ($tipo_actu==="averia")
+            {
+                $sql = "SELECT 
+                            gr.tipo_averia, gr.averia, 
+                            gr.nombre_cliente, gr.telefono
+                        FROM 
+                            webpsi_criticos.gestion_rutina_manual gr, 
+                            webpsi_criticos.gestion_criticos gc
+                        WHERE 
+                            gr.inscripcion='$inscripcion' 
+                            AND gc.id_estado=2 
+                            AND gr.id_gestion=gc.id";
+            } else {
+                $sql = "SELECT 
+                            gr.tipo_averia, gr.averia, 
+                            gr.nombre_cliente, gr.telefono
+                        FROM 
+                            webpsi_criticos.gestion_rutina_manual gr, 
+                            webpsi_criticos.gestion_criticos gc
+                        WHERE 
+                            gr.inscripcion='$inscripcion' 
+                            AND gc.id_estado=2 
+                            AND gr.id_gestion=gc.id";
+            }
             $bind = $dbh->prepare($sql);
             $bind->execute();
             $data = $bind->fetch(PDO::FETCH_ASSOC);
@@ -377,7 +392,7 @@ class GestionManual {
                         '', '1', '1',
                         '1', '8', '$observacion',
                         '$fecreg', '', 
-                        'Manual_Averia', '1', '0'
+                        'Manual_" . ucfirst($tipo_actu) . "', '1', '0'
                     )";
             $dbh->exec($sql);
             
@@ -453,53 +468,97 @@ class GestionManual {
                         and gm.id='$idmov'";
             $res = $dbh->exec($sqlgmt);
 			
-			$atc_ave = $atc;
+	    $atc_ave = $atc;
             if ($rm_averia !== '') {
                 $atc_ave = $rm_averia;
             }
 
             //Table: 
-            $sql = "INSERT INTO webpsi_criticos.gestion_rutina_manual (
-                    id, id_gestion,
-                    tipo_averia, horas_averia, fecha_reporte,
-                    fecha_registro, ciudad, averia,
-                    inscripcion, fono1, telefono,
-                    mdf, observacion_102, segmento,
-                    area_, direccion_instalacion, codigo_distrito,
-                    nombre_cliente, orden_trabajo, veloc_adsl,
-                    clase_servicio_catv, codmotivo_req_catv, total_averias_cable,
-                    total_averias_cobre, total_averias,
-                    fftt, llave, dir_terminal,
-                    fonos_contacto, contrata, zonal,
-                    wu_nagendas, wu_nmovimientos, wu_fecha_ult_agenda,
-                    total_llamadas_tecnicas, total_llamadas_seguimiento,
-                    llamadastec15dias, llamadastec30dias, quiebre,
-                    lejano, distrito, eecc_zona,
-                    zona_movistar_uno, paquete, data_multiproducto,
-                    averia_m1, fecha_data_fuente, telefono_codclientecms,
-                    rango_dias, sms1, sms2,
-                    area2, eecc_final, microzona
-                ) VALUES (
-                    NULL, '$id',
-                    '$tipo_averia', '0', '',
-                    '$fecreg', '', '$atc_ave',
-                    '$inscripcion', '$fono', '$fono',
-                    '$mdf', '$observacion', '$segmento',
-                    '', '$direccion', '',
-                    '$nombre_cliente', '', '',
-                    '', '', '',
-                    '', '',
-                    '', '', '',
-                    '$fonos_contacto', '$contrata', '$zonal',
-                    '0', '0', '',
-                    '0', '0',
-                    '0', '0', '$quiebre',
-                    '$lejano', '$distrito', '$eecc_zona',
-                    '$zona_movistar_uno', '', '',
-                    '', '$fecreg', '$codcliente',
-                    '', '', '',
-                    'EN CAMPO', '$eecc', '$microzona'
-                )";
+            if ($tipo_actu === "averia"){
+                $sql = "INSERT INTO webpsi_criticos.gestion_rutina_manual (
+                        id, id_gestion,
+                        tipo_averia, horas_averia, fecha_reporte,
+                        fecha_registro, ciudad, averia,
+                        inscripcion, fono1, telefono,
+                        mdf, observacion_102, segmento,
+                        area_, direccion_instalacion, codigo_distrito,
+                        nombre_cliente, orden_trabajo, veloc_adsl,
+                        clase_servicio_catv, codmotivo_req_catv, total_averias_cable,
+                        total_averias_cobre, total_averias,
+                        fftt, llave, dir_terminal,
+                        fonos_contacto, contrata, zonal,
+                        wu_nagendas, wu_nmovimientos, wu_fecha_ult_agenda,
+                        total_llamadas_tecnicas, total_llamadas_seguimiento,
+                        llamadastec15dias, llamadastec30dias, quiebre,
+                        lejano, distrito, eecc_zona,
+                        zona_movistar_uno, paquete, data_multiproducto,
+                        averia_m1, fecha_data_fuente, telefono_codclientecms,
+                        rango_dias, sms1, sms2,
+                        area2, eecc_final, microzona
+                    ) VALUES (
+                        NULL, '$id',
+                        '$tipo_averia', '0', '',
+                        '$fecreg', '', '$atc_ave',
+                        '$inscripcion', '$fono', '$fono',
+                        '$mdf', '$observacion', '$segmento',
+                        '', '$direccion', '',
+                        '$nombre_cliente', '', '',
+                        '', '', '',
+                        '', '',
+                        '', '', '',
+                        '$fonos_contacto', '$contrata', '$zonal',
+                        '0', '0', '',
+                        '0', '0',
+                        '0', '0', '$quiebre',
+                        '$lejano', '$distrito', '$eecc_zona',
+                        '$zona_movistar_uno', '', '',
+                        '', '$fecreg', '$codcliente',
+                        '', '', '',
+                        'EN CAMPO', '$eecc', '$microzona'
+                    )";
+            } else {
+                $sql = "INSERT INTO webpsi_criticos.gestion_rutina_manual_provision (
+                        id, id_gestion,
+                        origen, horas_pedido, fecha_Reg,
+                        ciudad, codigo_req, codigo_del_cliente,
+                        fono1, telefono, mdf,
+                        obs_dev, codigosegmento, estacion,
+                        direccion, distrito, nomcliente,
+                        orden, veloc_adsl, servicio,
+                        tipo_motivo, tot_aver_cab, tot_aver_cob,
+                        tot_averias, fftt, llave,
+                        dir_terminal, fonos_contacto, contrata,
+                        zonal, wu_nagendas, wu_nmovimient,
+                        wu_fecha_ult_age, tot_llam_tec, tot_llam_seg,
+                        llamadastec15d, llamadastec30d,
+                        quiebre, lejano, des_distrito,
+                        eecc_zon, zona_movuno, paquete,
+                        data_multip, aver_m1, fecha_data_fuente,
+                        telefono_codclientecms, rango_dias,
+                        sms1, sms2, area2,
+                        tipo_actuacion, eecc_final, microzona 
+                    ) VALUES (
+                        NULL, '$id',
+                        '', '', '$fecreg',
+                        '', '', '',
+                        '$fono', '$fono', '',
+                        '', '', '',
+                        '$direccion', '', '',
+                        '', '', '',
+                        '', '', '',
+                        '', '', '',
+                        '', '', '',
+                        '$zonal', '', '',
+                        '', '', '',
+                        '', '',
+                        '$quiebre', '$lejano', '$distrito',
+                        '', '$zona_movistar_uno', '',
+                        '', '', '',
+                        '', '', '',
+                        '', '', '',
+                        '', '$eecc', '$microzona'
+                    )";
+            }
             $dbh->exec($sql);
 
             $dbh->commit();

@@ -231,7 +231,7 @@ if(isset($_POST["actualizar_tecnico"]) && $_POST["actualizar_tecnico"]=="actuali
 	$res = $ob_critico->updateEstadoFlagCritico($cnx,$codigos,$tecnico,$estado,$flag_tecnico,$idtecnico);
 	echo json_encode($res);
 }
-$deb = 1;
+
 if(isset($_POST["filtro"]) && $_POST["filtro"]=="filtro_general"){
 
 	$actividad = trim($_POST["actividad"]);

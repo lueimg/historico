@@ -127,7 +127,7 @@ $arrTotal4 = array();
 $arrTba = $obj->getAveriasTbaPendientes("fono", $telefonoCliente);
 if (count($arrTba)>0) {
 	foreach ($arrTba as $filaTba) {
-        $deb = 1;
+
 		?>
 		<tr>
 		<td>TBA</td>

@@ -23,7 +23,7 @@ $cnx = $db->conectarPDO();
 
 $ob_averia = new Provision($cnx);
 $averia = $ob_averia->getProvision($cnx, $averia_ini);
-$deb = 1;
+
 
 if($averia["eecc_final"]!=""){
     $ob_empresa = new Empresa();

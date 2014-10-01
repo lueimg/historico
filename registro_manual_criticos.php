@@ -16,6 +16,7 @@ require_once './clases/quiebre.php';
  * 
  * Clientes no criticos y con 1 averia pendiente
  */
+
 $arrRutina = array(
     'rutina-bas-lima'=>'STB', 
     'rutina-adsl-pais'=>'ADSL', 
