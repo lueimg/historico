@@ -180,8 +180,8 @@ echo "-->";
 			  	<label>Tipo de Actividad</label>
 			  	<select class="actividades" id="actividades" multiple="multiple" name="actividades[]" >
 					<option value="Averias">Averias</option>
-					<option value="Manual">Ingreso  Manual</option>
-					<option value="Manual_Provision">Ingreso  Manual Provision</option>
+					<option value="Manual">Ingreso Manual Averia</option>
+					<option value="Manual_Provision">Ingreso Manual Provision</option>
 					<option value="Provision">Provision</option>
 					<option value="ALTA">Alta</option>
 					<option value="RUTINA">Rutina</option>

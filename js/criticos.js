@@ -947,7 +947,7 @@ function registrarMovimientos() {
 
 
    ){
-	
+	     
 	var parametros = $("#frm_gestion_critico").serialize();
       if($("#frm_gestion_critico #n_evento").val()=="1"){
 
