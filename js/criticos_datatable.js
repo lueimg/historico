@@ -950,7 +950,7 @@ $("#filtro_general").click(function(){
 					}
 					//si me confirman valido por estado devuelto y etc
 					if(quiebre==qui){
-						if(check.attr("checked") && atc.indexOf("ATC_")!="-1"){
+						if(check.attr("checked") && (atc.indexOf("ATC_")!="-1" || atc.indexOf("RTC_")!="-1")){
 							codigo += "'" + check.attr("data-id") + "',"
 							actividad += $.trim(tipo_actividad) + ","
 						}else{
@@ -1018,7 +1018,7 @@ $("#filtro_general").click(function(){
 						
 						if(quiebre!='R9-REIT-CATV'){
 							var atc = $("#seleccion_criticos"+i).attr("data-atc");
-							if(atc.indexOf("ATC_")!="-1" && ($("#seleccion_criticos"+i).attr("data-estado")=="1" 
+							if((atc.indexOf("ATC_")!="-1" || atc.indexOf("RTC_")!="-1") && ($("#seleccion_criticos"+i).attr("data-estado")=="1" 
 								|| $("#seleccion_criticos"+i).attr("data-estado")=="8" || $("#seleccion_criticos"+i).attr("data-estado")=="2")){
 								if(empresa==""){
 									empresa = $("#seleccion_criticos"+i).attr("data-empresa")
@@ -1034,7 +1034,7 @@ $("#filtro_general").click(function(){
 									}
 								}
 							}else{
-								alert("Solo se puede asignar técnicos a las ATC que esten agendadas o Pendientes");
+								alert("Solo se puede asignar técnicos a las ATC/RTC que esten agendadas o Pendientes");
 								return -1
 							}
 						}
