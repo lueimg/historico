@@ -4,6 +4,7 @@ require_once("../../cabecera.php");
 require_once('clases/casosNuevos.php');
 require_once 'clases/mdfs.php';
 require_once 'clases/gestionManual.php';
+require_once 'clases/gestionCriticos.php';
 
 //Abriendo la conexion
  $db = new Conexion();
@@ -89,12 +90,78 @@ require_once 'clases/gestionManual.php';
         echo json_encode($save);
      }
      
-     //Registrar rutina con agenda
+    /**
+     * Registra ATC ya no genera RTC
+     */
     if ( $_POST["action"] === "registraRutinaAgenda" ) {
+        
+        $arrMdf = explode("___", $_POST['mdf']);
+        $_POST['mdf'] = trim( $arrMdf[0] );
+        $_POST["tipo_averia"] = "";
+        $_POST["horas_averia"] = "";        
+        $_POST["fecha_registro"] = date("Y-m-d H:i:s");
+        $_POST["ciudad"] = "";
+        $_POST["averia"] = trim($_POST['rm_averia']);
+        $_POST["fono1"] = trim( $_POST['telefono'] );
+        $_POST["observacion_102"] = "";
+        $_POST["area_"] = "";
+        $_POST["direccion_instalacion"] = $_POST["direccion"];
+        $_POST["codigo_distrito"] = $_POST["distrito"];
+        $_POST["nombre_cliente"] = $_POST["cr_nombre"];
+        $_POST["orden_trabajo"] = "";
+        $_POST["veloc_adsl"] = "";
+        $_POST["clase_servicio_catv"] = "";
+        $_POST["codmotivo_req_catv"] = "";
+        $_POST["total_averias_cable"] = "";
+        $_POST["total_averias_cobre"] = "";
+        $_POST["total_averias"] = "";
+        $_POST["fftt"] = "";
+        $_POST["llave"] = "";
+
+        $_POST["wu_nagendas"] = "";
+        $_POST["wu_nmovimientos"] = "";
+        $_POST["wu_fecha_ult_agenda"] = "";
+        $_POST["total_llamadas_tecnicas"] = "";
+        $_POST["total_llamadas_seguimiento"] = "";
+        $_POST["llamadastec15dias"] = "";
+        $_POST["llamadastec30dias"] = "";
+
+        $_POST["dir_terminal"] = "";
+        $_POST["fonos_contacto"] = $_POST["telefono"];
+        $_POST["contrata"] = $_POST["eecc"];
+        $_POST["eecc_final"] = $_POST["eecc"];
+        $_POST["zona_movistar_uno"] = trim( $_POST['movistar_uno'] );
+        $_POST["paquete"] = "";
+        $_POST["data_multiproducto"] = "";
+        $_POST["averia_m1"] = "";
+        $_POST["fecha_data_fuente"] = "";
+        $_POST["telefono_codclientecms"] = "";
+        $_POST["rango_dias"] = "";
+        $_POST["sms1"] = "";
+        $_POST["sms2"] = "";
+        $_POST["area2"] = "";
+        $_POST["txt_idusuario"] = "";
+        $_POST["nombretecnico"] = "";
+        $_POST["tecnico"] = "";
+        $_POST["flag_tecnico"] = "";
+        $_POST["tipo_actividad"] = $_POST["tipo_actu"];
+        $_POST["motivo_registro"] = "";
+        $_POST["tipo_actuacion"] = $_POST["tipo_actu"];
+        
+        $_POST["txt_idusuario"] = $_SESSION["exp_user"]["id"];
+
+        $_POST['datosfinal'] = "";
+        
+        $GestionCriticos = new gestionCriticos();        
+	$save = $GestionCriticos->addClienteCritico($cnx);
+        echo json_encode($save);
+        
+        /*        
         $GestionManual = new GestionManual();
         
         $arrMdf = explode("___", $_POST['mdf']);
 
+        $tipo_actu = trim( $_POST['tipo_actu'] );
         $tipo_averia = trim( $_POST['tipo_averia'] );
         $inscripcion = trim( $_POST['inscripcion'] );
         $fono = trim( $_POST['telefono'] );
@@ -133,8 +200,11 @@ require_once 'clases/gestionManual.php';
                 $contrata, $zonal, $lejano, 
                 $distrito, $eecc_zona, $zona_movistar_uno, 
                 $inscripcion, $eecc, $microzona, $celular,
-                $quiebre, $fecha_agenda, $id_horario, $id_dia);
+                $quiebre, $fecha_agenda, $id_horario, $id_dia,
+                $tipo_actu);
         echo json_encode($save);
+         * 
+         */
      }
      
  }

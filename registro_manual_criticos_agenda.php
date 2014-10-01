@@ -43,6 +43,7 @@ $rm_segmento = '';
 $rm_zonal = '';
 $rm_mdf = '';
 $rm_averia = '';
+$tipo_actu = '';
 
 if ( isset($_REQUEST['rm_telefono']) ) {
     $rm_telefono = trim($_REQUEST['rm_telefono']);
@@ -80,6 +81,10 @@ if ( isset($_REQUEST['rm_mdf']) ) {
 
 if ( isset($_REQUEST['rm_averia']) ) {
     $rm_averia = trim($_REQUEST['rm_averia']);
+}
+
+if ( isset($_REQUEST['tipo_actu']) ) {
+    $tipo_actu = trim($_REQUEST['tipo_actu']);
 }
 
 //Definiendo la zona horaria
@@ -421,7 +426,7 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
         
         <div class="registro_clientes">
             <form name="frm_criticos" id="frm_criticos" action="" method="POST">
-                
+                <input type="hidden" id="tipo_actu" name="tipo_actu" value="<?php echo ucfirst($tipo_actu);?>">
                 <table style="width: 100%">
                     <tr>
                         <td style="text-align: left; width: 105px">Tipo averia</td>
