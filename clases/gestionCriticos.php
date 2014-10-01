@@ -692,7 +692,7 @@ class gestionCriticos{
 	)AS T1 $filtro_sql $filtro_estado $filtroNuevoCtc";
 
 		
-		//echo $sql;
+		$deb = 1;
 		$arr = array();
 		$res = $cnx->query($sql); 
         while ($row = $res->fetch(PDO::FETCH_ASSOC))
@@ -729,7 +729,7 @@ class gestionCriticos{
 		$cnx->exec("set names utf8");
 		$id = trim($id);
 		//faltan borrar campos en el select al final lo borras
-		$sql = "SELECT c.id,p.eecc_final,id_atc,nombre_cliente_critico 'nombre',telefono_cliente_critico,celular_cliente_critico,
+		$sql = "SELECT p.zonal,c.id,p.eecc_final,id_atc,nombre_cliente_critico 'nombre',telefono_cliente_critico,celular_cliente_critico,
 				fecha_agenda,observacion,h.horario,m.motivo,s.submotivo,c.id_estado,e.estado,flag_tecnico,p.quiebre,c.n_evento,p.paquete 
 				FROM webpsi_criticos.gestion_criticos c,webpsi_criticos.gestion_provision p, webpsi_criticos.horarios h, webpsi_criticos.motivos m, webpsi_criticos.submotivos s,
 				webpsi_criticos.estados e where c.id_horario=h.id and c.id_motivo=m.id and c.id_submotivo=s.id 
@@ -748,7 +748,7 @@ class gestionCriticos{
 		$cnx->exec("set names utf8");
 		$id = trim($id);
 		//faltan borrar campos en el select al final lo borras
-		$sql = "SELECT c.id,p.eecc_final,id_atc,nombre_cliente_critico 'nombre',telefono_cliente_critico,celular_cliente_critico,
+		$sql = "SELECT p.zonal,c.id,p.eecc_final,id_atc,nombre_cliente_critico 'nombre',telefono_cliente_critico,celular_cliente_critico,
 				fecha_agenda,observacion,h.horario,m.motivo,s.submotivo,c.id_estado,e.estado,flag_tecnico,p.quiebre,c.n_evento,p.paquete 
 				FROM webpsi_criticos.gestion_criticos c,webpsi_criticos.gestion_rutina_manual_provision p, webpsi_criticos.horarios h, webpsi_criticos.motivos m, webpsi_criticos.submotivos s,
 				webpsi_criticos.estados e where c.id_horario=h.id and c.id_motivo=m.id and c.id_submotivo=s.id 

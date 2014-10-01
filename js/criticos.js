@@ -664,18 +664,18 @@ $(document).ready(function(){
           cr_observacion: "Ingrese una observaci&oacute;n",
         },
         submitHandler: function(form) {
-          //if($("#slct_cedula").val()==''){
-          //  alert('Seleccione Cedula');
-          //  $("#slct_cedula").focus();
-          //}
-          //else if($("#tecnico").val()==''){
-          //  alert('Seleccione Tecnico');
-          //  $("#tecnico").focus();
-          //}
-          //else{
+          if($("#slct_cedula").val()==''){
+            alert('Seleccione Cedula');
+            $("#slct_cedula").focus();
+          }
+          else if($("#tecnico").val()==''){
+            alert('Seleccione Tecnico');
+            $("#tecnico").focus();
+          }
+          else{
             registrarCriticos()
             return false  
-          //}
+          }
         }
       });
     }else{
