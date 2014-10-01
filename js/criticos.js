@@ -931,7 +931,22 @@ function registrarMovimientos() {
       }
    }
 
-   if(( ($("#frm_gestion_critico #flag_tecnico").attr("checked") && $("#frm_gestion_critico #motivo").val()=='1' && $("#frm_gestion_critico #submotivo").val()=='1') || $("#frm_gestion_critico #n_evento").val()=="1") && $("#frm_gestion_critico #motivo").val()!='5' && $("#frm_gestion_critico #quiebre").val()=="R9-REIT-CATV"){
+
+   if(
+       ( ($("#frm_gestion_critico #flag_tecnico").attr("checked") &&
+            $("#frm_gestion_critico #motivo").val()=='1' &&
+                $("#frm_gestion_critico #submotivo").val()=='1') ||
+
+            $("#frm_gestion_critico #n_evento").val()=="1"
+       ) &&
+
+       ( $("#frm_gestion_critico #motivo").val()!='5' &&
+            ( $("#frm_gestion_critico #quiebre").val()=="R9-REIT-CATV" || $("#actividad").val() === "Provision" )
+       )
+
+
+
+   ){
 	
 	var parametros = $("#frm_gestion_critico").serialize();
       if($("#frm_gestion_critico #n_evento").val()=="1"){
