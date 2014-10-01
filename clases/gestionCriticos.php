@@ -197,7 +197,7 @@ class gestionCriticos {
 			
 		)AS rutina_manual_provision
 )AS T1 $filtro_sql";
-        $DEB = 1;
+
         //echo $sql;
         $arr = array();
         $res = $cnx->query($sql);
@@ -601,7 +601,9 @@ class gestionCriticos {
 													,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=vacf.averia),IF(IFNULL(vacf.wu_nagendas,'')='',0,vacf.wu_nagendas)) wu_nagendas ,'' n_evento
 													,null estado_evento
 													FROM webpsi_coc.vistaAveriasCriticosFinal vacf
-													WHERE averia NOT IN (SELECT distinct averia FROM webpsi_criticos.gestion_averia) $filtro_Averias
+													WHERE averia NOT IN (SELECT distinct averia FROM webpsi_criticos.gestion_averia)
+													and vacf.telefono NOT IN (SELECT distinct telefono FROM webpsi_criticos.gestion_rutina_manual)
+													$filtro_Averias
 													 order by fecha_registro asc
 
 		)as averias_final
@@ -623,7 +625,9 @@ class gestionCriticos {
 					,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=tp.codigo_req),IF(IFNULL(tp.wu_nagendas,'')='',0,tp.wu_nagendas)) wu_nagendas ,'' n_evento
 					,null	estado_evento					
 											FROM webpsi_coc.tmp_provision tp
-											WHERE codigo_req NOT IN (SELECT codigo_req FROM webpsi_criticos.gestion_provision) $filtro_Averias
+											WHERE codigo_req NOT IN (SELECT codigo_req FROM webpsi_criticos.gestion_provision)
+											and tp.telefono NOT IN (SELECT distinct telefono FROM webpsi_criticos.gestion_rutina_manual_provision)
+											$filtro_Averias
 											 order by fecha_registro asc
 
 		)as provision_final
@@ -683,7 +687,7 @@ class gestionCriticos {
 	)AS T1 $filtro_sql $filtro_estado $filtroNuevoCtc";
 
 
-        $deb = 1;
+
         $arr = array();
         $res = $cnx->query($sql);
         while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
@@ -874,7 +878,7 @@ class gestionCriticos {
         $fecha = date("Y/m/d H:i:s");
 
         try {
-            $deb = 1;
+
             //Iniciar transaccion
             $cnx->beginTransaction();
 

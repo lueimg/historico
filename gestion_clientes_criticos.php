@@ -21,7 +21,7 @@ $cnx = $db->conectarPDO();
 $id = $_GET['id'];
 $indice = $_GET['indice'];
 $actividad = $_GET['actividad'];
-$deb = 1;
+
 if($actividad=='Provision'){
 	$ob_provision = new gestionCriticos($cnx);
 	$cliente_critico = $ob_provision->getGestionCriticoProvision($cnx,$id);
