@@ -713,21 +713,12 @@ class gestionCriticos {
         return $row;
     }
 
-<<<<<<< HEAD
-    public function getGestionCriticoProvision($cnx, $id) {
-
-        $cnx->exec("set names utf8");
-        $id = trim($id);
-        //faltan borrar campos en el select al final lo borras
-        $sql = "SELECT c.id,p.eecc_final,id_atc,nombre_cliente_critico 'nombre',telefono_cliente_critico,celular_cliente_critico,
-=======
 	public function getGestionCriticoProvision($cnx,$id){
 		
 		$cnx->exec("set names utf8");
 		$id = trim($id);
 		//faltan borrar campos en el select al final lo borras
 		$sql = "SELECT p.zonal,c.id,p.eecc_final,id_atc,nombre_cliente_critico 'nombre',telefono_cliente_critico,celular_cliente_critico,
->>>>>>> aa57fc09d8ac00849338b1a6685714c654181d78
 				fecha_agenda,observacion,h.horario,m.motivo,s.submotivo,c.id_estado,e.estado,flag_tecnico,p.quiebre,c.n_evento,p.paquete 
 				FROM webpsi_criticos.gestion_criticos c,webpsi_criticos.gestion_provision p, webpsi_criticos.horarios h, webpsi_criticos.motivos m, webpsi_criticos.submotivos s,
 				webpsi_criticos.estados e where c.id_horario=h.id and c.id_motivo=m.id and c.id_submotivo=s.id 
@@ -741,21 +732,12 @@ class gestionCriticos {
         return $row;
     }
 
-<<<<<<< HEAD
-    public function getGestionCriticoManualProvision($cnx, $id) {
-
-        $cnx->exec("set names utf8");
-        $id = trim($id);
-        //faltan borrar campos en el select al final lo borras
-        $sql = "SELECT c.id,p.eecc_final,id_atc,nombre_cliente_critico 'nombre',telefono_cliente_critico,celular_cliente_critico,
-=======
 	public function getGestionCriticoManualProvision($cnx,$id){
 		
 		$cnx->exec("set names utf8");
 		$id = trim($id);
 		//faltan borrar campos en el select al final lo borras
 		$sql = "SELECT p.zonal,c.id,p.eecc_final,id_atc,nombre_cliente_critico 'nombre',telefono_cliente_critico,celular_cliente_critico,
->>>>>>> aa57fc09d8ac00849338b1a6685714c654181d78
 				fecha_agenda,observacion,h.horario,m.motivo,s.submotivo,c.id_estado,e.estado,flag_tecnico,p.quiebre,c.n_evento,p.paquete 
 				FROM webpsi_criticos.gestion_criticos c,webpsi_criticos.gestion_rutina_manual_provision p, webpsi_criticos.horarios h, webpsi_criticos.motivos m, webpsi_criticos.submotivos s,
 				webpsi_criticos.estados e where c.id_horario=h.id and c.id_motivo=m.id and c.id_submotivo=s.id 
