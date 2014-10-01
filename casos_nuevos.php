@@ -145,7 +145,7 @@ require_once 'clases/gestionCriticos.php';
         $_POST["tecnico"] = "";
         $_POST["flag_tecnico"] = "";
         $_POST["tipo_actividad"] = $_POST["tipo_actu"];
-        $_POST["motivo_registro"] = "";
+        $_POST["motivo_registro"] = "1";
         $_POST["tipo_actuacion"] = $_POST["tipo_actu"];
         
         $_POST["txt_idusuario"] = $_SESSION["exp_user"]["id"];
