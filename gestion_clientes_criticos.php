@@ -26,6 +26,9 @@ if($actividad=='Provision'){
 }else if($actividad=='Manual'){
 	$ob_manual = new gestionCriticos($cnx);
 	$cliente_critico = $ob_manual->getGestionCriticoManual($cnx,$id);
+}else if($actividad=='Manual_Provision'){
+	$ob_manual = new gestionCriticos($cnx);
+	$cliente_critico = $ob_manual->getGestionCriticoManualProvision($cnx,$id);
 }else if($actividad=='Averias'){
 	$ob_critico = new gestionCriticos($cnx);
 	$cliente_critico = $ob_critico->getGestionCritico($cnx,$id);
