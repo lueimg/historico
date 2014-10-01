@@ -200,7 +200,7 @@ $solcomArray = $ob_solcom->getSolucionesAll($cnx);
 			</div>
 			<div class="caja_text ocultar" style="margin-right:10px" id="mostrar_tecnicos">
 				<div class="filtroxcampo">
-				  	<label>Celula:</label>
+				  	<label>Celula:*</label>
 				  	<select class="slct_cedula" id="slct_cedula" name="slct_cedula" onchange="cargarTecnico('tecnico','<?php echo $idtecnico_movimiento; ?>','slct_cedula','<?php echo $id_empresa; ?>','<?php echo $cliente_critico["quiebre"]; ?>');">
 				  	<option value=''>-- Seleccione --</option>
 					<?php
@@ -212,11 +212,11 @@ $solcomArray = $ob_solcom->getSolucionesAll($cnx);
 					?>
 					</select>
 			  	</div><br>
-				<label>Técnico:</label>
-				<input type='hidden' id='TecnicoDefault' name='TecnicoDefault' value='<?php echo $tecnico_movimiento; ?>'>
-				<input type='hidden' id='IdTecnicoDefault' name='IdTecnicoDefault' value='<?php echo $idtecnico_movimiento; ?>'>
-				<input type='hidden' name="nombretecnico" id="nombretecnico">
-				<input type='hidden' name="nombretecnico_movimiento" id="nombretecnico_movimiento">
+				<label>Técnico:*</label>
+				<input type='text' id='TecnicoDefault' name='TecnicoDefault' value='<?php echo $tecnico_movimiento; ?>'>
+				<input type='text' id='IdTecnicoDefault' name='IdTecnicoDefault' value='<?php echo $idtecnico_movimiento; ?>'>
+				<input type='text' name="nombretecnico" id="nombretecnico">
+				<input type='text' name="nombretecnico_movimiento" id="nombretecnico_movimiento">
 				<select name="tecnico" id="tecnico">								
 				<option value=''>-- Seleccione --</option>			
 				</select>
