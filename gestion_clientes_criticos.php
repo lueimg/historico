@@ -213,10 +213,11 @@ $solcomArray = $ob_solcom->getSolucionesAll($cnx);
 					</select>
 			  	</div><br>
 				<label>Técnico:*</label>
-				<input type='text' id='TecnicoDefault' name='TecnicoDefault' value='<?php echo $tecnico_movimiento; ?>'>
-				<input type='text' id='IdTecnicoDefault' name='IdTecnicoDefault' value='<?php echo $idtecnico_movimiento; ?>'>
-				<input type='text' name="nombretecnico" id="nombretecnico">
-				<input type='text' name="nombretecnico_movimiento" id="nombretecnico_movimiento">
+				<input type='hidden' id='TecnicoDefault' name='TecnicoDefault' value='<?php echo $tecnico_movimiento; ?>'>
+				<input type='hidden' id='IdTecnicoDefault' name='IdTecnicoDefault' value='<?php echo $idtecnico_movimiento; ?>'>
+				<input type='hidden' name="nombretecnico" id="nombretecnico">
+				<input type='hidden' name="tec_officetrack" id="tec_officetrack">
+				<input type='hidden' name="nombretecnico_movimiento" id="nombretecnico_movimiento">
 				<select name="tecnico" id="tecnico">								
 				<option value=''>-- Seleccione --</option>			
 				</select>

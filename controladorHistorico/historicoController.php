@@ -17,6 +17,15 @@ include_once $PATH."modulos/historico/clases/cedula.php";
  $db = new Conexion();
  $cnx = $db->conectarPDO();
 
+
+if($_POST["accion"]=="getTecnicoOfficeTrack"){
+
+    $ob_tecnico = new Tecnicos();
+    $estado = $ob_tecnico->esTecnicoOfficeTrack($cnx, $_POST["idtecnico"]);
+    echo $estado;
+    exit();
+}
+
 //SI SE HACE UN REGISTRO CRITICO
 if(isset($_POST["registro_critico"]) && $_POST["registro_critico"]=="registro_critico"){
 

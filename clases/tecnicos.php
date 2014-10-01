@@ -133,6 +133,20 @@ GROUP BY ape_paterno
 
     }
 
+    function esTecnicoOfficeTrack($cnx,$idtecnico)
+    {
+        $cnx->exec("set names utf8");
+        $sql = "select officetrack
+                from webpsi_criticos.tecnicos t
+                where t.activo='1'
+				AND t.id=$idtecnico";
+
+        $res = $cnx->query($sql);
+        $row = $res->fetch(PDO::FETCH_ASSOC);
+        return $row["officetrack"];
+
+    }
+
 }
 
 ?>

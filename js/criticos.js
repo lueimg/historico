@@ -766,9 +766,41 @@ $(document).ready(function(){
         $(this).css({'background-color' : ''});
     });
 
-  
+
+    //OFFICETRACK
+    $("#tecnico").change(function(){
+
+        var idtecnico =  $(this).val();
+        getTecnicoOfficeTrack(idtecnico);
+
+
+    });
+
+
+
 
 })
+
+
+function getTecnicoOfficeTrack(idtecnico)
+{
+    $.ajax({
+        type: "POST",
+        url: "controladorHistorico/historicoController.php",
+        data:  {
+            accion:"getTecnicoOfficeTrack",
+            idtecnico:idtecnico
+        },
+
+        success: function (data) {
+            $("#tec_officetrack").val(data);
+        },
+
+        error: function () {
+            alert("Error al obtener OfficeTrack estado");
+        }
+    });
+}
 
 function hexcolor(colorval) {
     var parts = colorval.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
@@ -931,6 +963,7 @@ function registrarMovimientos() {
       }
    }
 
+    var tecnicooffcetrack = $("#tec_officetrack").val();
 
    if(  //SI ES LA PRIMERA
        ( ($("#frm_gestion_critico #flag_tecnico").attr("checked") &&
@@ -945,9 +978,10 @@ function registrarMovimientos() {
        &&
            //Y SI ES ALGUNA R9 DE CUALQUIERA O CUALQUIER PROVISION
        ( $("#frm_gestion_critico #quiebre").val()=="R9-REIT-CATV" || $("#actividad").val() === "Provision" )
+
        &&
            //SI ES TECNICO OFFICETRACK
-       ( 1 === 1 )
+       ( tecnicooffcetrack == 1 )
 
    )
    {
@@ -1141,6 +1175,7 @@ function cargarTecnico(slct,tec,cedu,idemp,quie){
             }
             $('#'+slct).html('<option value="">-- Seleccione --</option>'+html);
             $('#'+slct).val(tec);
+              getTecnicoOfficeTrack(tec);
           },
           error: function () {
               alert("Error no cargaron los tecnicos");
