@@ -860,7 +860,7 @@ class gestionCriticos {
         $datosfinal = $_POST['datosfinal'];
         $contadordatosfinal = "0";
 
-        $tecnico = ( $tecnico == "-- Seleccione --" ) ? "" : $tecnico;
+        $tecnico = ( $tecnico == "-- Seleccione --" || $tecnico == "NINGUNO NINGUNO NINGUNO" ) ? "" : $tecnico;
 
         if ($datosfinal == 'OK') {
             $contadordatosfinal = "1";
@@ -898,6 +898,7 @@ class gestionCriticos {
                 $res_gaveria = $gestAverias->existeGestionAveria($cnx, $_POST["averia"]);
             }
 
+            $deb = 1;
             //SI NO EXISTE NI EN PROVISION NI EN AVERIA
             if ($res_gaveria == "") {
                 //ya que pueden haber mas de dos estados a la vez para agendado entonces
@@ -905,7 +906,7 @@ class gestionCriticos {
                     if ($tecnico != "" && $flag_tecnico == "si") {
                         $flag_tecnico = "Tecnico Entregado";
                         $id_estado = "1";
-                    } else if ($tecnico != "" && $flag_tecnico == "") {
+                    } else if ( $tecnico !=  "" && $flag_tecnico == "") {
                         $flag_tecnico = "Tecnico Asignado";
                         $id_estado = "1";
                     } else {
@@ -1108,7 +1109,7 @@ class gestionCriticos {
         $tipo_actividad = $_POST["tipo_actividad"];
         $motivo_registro = $_POST["motivo_registro"];
         $tipo_actuacion = $_POST["tipo_actuacion"];
-        $tecnico = ($tecnico == "-- Seleccione --") ? "" : $tecnico;
+        $tecnico = ($tecnico == "-- Seleccione --"|| $tecnico == "NINGUNO NINGUNO NINGUNO") ? "" : $tecnico;
         $datosfinal = $_POST['datosfinal'];
         $contadordatosfinal = "0";
 

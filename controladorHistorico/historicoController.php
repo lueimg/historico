@@ -43,6 +43,7 @@ if(isset($_POST["registro_critico"]) && $_POST["registro_critico"]=="registro_cr
 
 
     echo $res["msg"];
+    exit();
 
 
 }

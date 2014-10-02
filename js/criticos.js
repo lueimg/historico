@@ -797,7 +797,7 @@ function getTecnicoOfficeTrack(idtecnico)
         },
 
         error: function () {
-            alert("Error al obtener OfficeTrack estado");
+           // alert("Error al obtener OfficeTrack estado");
         }
     });
 }
@@ -881,6 +881,7 @@ function registrarCriticos() {
 function finalizarRegistroCritico(d,idcritico){
     $('#frm_criticos #datosfinal').val(d);
     var parametros = $("#frm_criticos").serialize();
+
     timestamp = new Date().getTime();
     $.ajax({
     type: "POST",

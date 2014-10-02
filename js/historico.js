@@ -371,7 +371,7 @@ $(document).ready(function(){
             var idAveria = $(this).parent().parent().parent().find("a").text();
 
             //var fonoBus = $("#telefonoCliente").val();
-            var url = "registro_clientes_criticos.php?averia_ini="+idAveria;
+            var url = "registro_clientes_criticos.php?averia_ini="+idAveria+"&actividad=Averias";
             var pagina = '<iframe style="border: 0px; " src="' + url + '" width="100%" height="100%"></iframe>'
             $("#dialog-criticos").html(pagina);
             $("#dialog-criticos").dialog({
