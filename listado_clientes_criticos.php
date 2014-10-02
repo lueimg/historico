@@ -200,14 +200,21 @@ echo "-->";
 			  	<label>Empresa</label>
 			  	
 				<?php
+					$selected='';
 					if($empresas!=""){
 						if($tot_empresas>1){
 						?>
 					<select class="empresa" id="empresa" multiple="multiple" name="empresa[]">
 				<?php
 							foreach ($empresas as $emp):
+								if($emp['visible']==1){
+									$selected='seleccion';
+								}
+								else{
+									$selected='';
+								}
 				?>
-								<option value="<?php echo $emp["nombre"];?>" data-id="<?php echo $emp["id"];?>"><?php echo $emp["nombre"];?></option>
+								<option class="<?php echo $selected; ?>" value="<?php echo $emp["nombre"];?>" data-id="<?php echo $emp["id"];?>"><?php echo $emp["nombre"];?></option>
 				<?php
 							endforeach;
 				?>
