@@ -1121,8 +1121,11 @@ var parametros = $("#frm_gestion_critico").serialize();
               var nmov = data.nmov
               window.parent.jQuery('.fagenda'+idfila).html(fechahora)
               window.parent.jQuery('.festado'+idfila).html(estado)
-              window.parent.jQuery('.ftecnico'+idfila).html(tecnico)
-              window.parent.jQuery('.nmov'+idfila).html("("+nmov+")")
+
+                if(estado_id!=9 && estado_id!=10 && estado_id !=20 ){
+                     window.parent.jQuery('.ftecnico'+idfila).html(tecnico)}
+
+                window.parent.jQuery('.nmov'+idfila).html("("+nmov+")")
               
               window.parent.jQuery('#seleccion_criticos'+indice).attr("data-estado",codigo_estado)
               window.parent.jQuery('#seleccion_criticos'+indice).attr("data-tecnico",tecnico)
