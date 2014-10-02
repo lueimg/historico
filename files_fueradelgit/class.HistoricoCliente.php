@@ -45,13 +45,14 @@ class HistoricoCliente {
                 (SELECT `x` FROM webunificada_fftt.`fftt_terminales` t WHERE llavexy =  t.mtgespktrm  ) AS coordX,
                 (SELECT `y` FROM webunificada_fftt.`fftt_terminales` t WHERE llavexy =  t.mtgespktrm  ) AS coordY,
                 csegmento as segmentoY
-                ,ga.id_gestion , gc.fecha_agenda,gc.id_atc
+                ,ga.id_gestion , gc.fecha_agenda,gc.id_atc , gc.n_evento
                 FROM schedulle_sistemas.pen_pais_tba a
                 	LEFT JOIN webpsi_criticos.gestion_averia ga on ga.averia = a.averia
 					left join webpsi_criticos.gestion_criticos gc on gc.id = ga.id_gestion
                 WHERE  negocio='STB' ".$filtroBusqueda."
+                 -- and ( gc.id_estado not in (3,19) or gc.id_estado is null )
                 ORDER BY fecreg ASC; "; 
-        $deb = 1;
+
         $res = $cnx->query($cad); 
         while ($row = $res->fetch(PDO::FETCH_ASSOC))
         {
@@ -380,7 +381,7 @@ class HistoricoCliente {
 				left join webpsi_coc.tmp_provision pr
 				  on pr.telefono = l.telefono
                 WHERE $qry_telefono $qry_codcliatis $qry_codsercms $qry_codclicms l.telefono!=' '";
-        $deb = 1;
+
         $res = $cnx->query($cad); 
 
         while ($row = $res->fetch(PDO::FETCH_ASSOC))
@@ -404,25 +405,29 @@ class HistoricoCliente {
 
         $filtroBusqueda = "";
         if ($tipoBusqueda=='fono') { 
-            $filtroBusqueda = " AND telefono = '$valorBuscar'";
+            $filtroBusqueda = " AND re.telefono = '$valorBuscar'";
         }
         else if ($tipoBusqueda=='codserv') { 
-            $filtroBusqueda = " AND codigodelservicio = '$valorBuscar'";
+            $filtroBusqueda = " AND re.codigodelservicio = '$valorBuscar'";
         }
         else if ($tipoBusqueda=='dni') { 
-            $filtroBusqueda = " AND dni_ruc = '$valorBuscar'";
+            $filtroBusqueda = " AND re.dni_ruc = '$valorBuscar'";
         }        
         else
             $filtroBusqueda = " ";
 
-        $cad = "SELECT re.* , cr.id_atc
+        $cad = "SELECT
+        re.* , cr.id_atc , tmp.codigo_req , cr.n_evento
                 from webpsi_coc.tb_registradastotal_  re
-                LEFT join webpsi_criticos.gestion_provision pr on pr.telefono= re.telefono
+				LEFT JOIN webpsi_coc.tmp_provision tmp on tmp.codigo_del_cliente = re.inscripcion
+                LEFT join webpsi_criticos.gestion_provision pr on pr.codigo_req = tmp.codigo_req
                 left join webpsi_criticos.gestion_criticos cr on cr.id = pr.id_gestion
-                LEFT JOIN webpsi_criticos.gestion_movimientos gm on gm.id_gestion = cr.id
-                WHERE 1=1 $filtroBusqueda  ORDER BY fecreg DESC ";
 
-        $deb = 1;
+        WHERE 1=1 $filtroBusqueda  and
+         ( cr.id_estado not in (3,19) or cr.id_estado is null )
+         ORDER BY fecreg DESC ";
+
+
         $res = $cnx->query($cad); 
 
         while ($row = $res->fetch(PDO::FETCH_ASSOC))
