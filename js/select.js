@@ -1,7 +1,9 @@
 $(document).ready(function(){
 	
+	$('.empresa option.seleccion').attr('selected', 'selected')
 	$(".empresa").multiselect();
-	$(".empresa").multiselect("checkAll");
+
+	//$(".empresa").multiselect("checkAll");
 	$(".zonales").multiselect();
 	$(".zonales").multiselect("checkAll");
 	$(".tecnico_nombre").multiselect();
@@ -245,8 +247,10 @@ $(document).ready(function(){
 
 
 $("#btn_limpiar_filtros").click(function(){
+		
+		$('.empresa option.seleccion').attr('selected', 'selected');
 		$(".empresa").multiselect();
-		$(".empresa").multiselect("checkAll");
+		//$(".empresa").multiselect("checkAll");
 		$(".zonales").multiselect();
 		$(".zonales").multiselect("checkAll");
 		$(".negocio").multiselect();
