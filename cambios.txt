@@ -1,9 +1,11 @@
+::Jorge 2/10/14
 ALTER TABLE webpsi_criticos.usuarios_contratas_criticos
 ADD COLUMN visible int(1) NULL DEFAULT 1 AFTER `id_empresa`;
 
+::Cristian 2/10/14
 Regresar eventoController.php  quitar X para idcarnet.
 
-
-
+::Luis 2/10/14
+Actualizar la classe  /webpsi/clases/class.HistoricoCliente.php
 
 
