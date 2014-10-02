@@ -56,7 +56,7 @@ class gestionMovimientos{
 		webpsi.tb_usuario t
 				WHERE c.id_gestion=cri.id AND e.id=c.id_empresa AND z.id=c.id_zonal AND h.id=c.id_horario AND m.id=c.id_motivo AND s.id=c.id_submotivo
 				AND es.id=c.id_estado and c.id_usuario=t.id AND c.id_gestion=$id ORDER BY fecha_movimiento DESC";
-		
+
 		$arr = array();
 		$res = $cnx->query($sql); 
         while ($row = $res->fetch(PDO::FETCH_ASSOC))

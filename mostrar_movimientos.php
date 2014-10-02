@@ -99,7 +99,7 @@ $feedback = $ob_feedback->getFeedbackAll($cnx);
 							<td><?php echo $mov["telefono_cliente_critico"]?></td>
 							<td><?php echo $mov["celular_cliente_critico"]?></td>
 							<td><?php echo ($mov["id_estado"]=="1" || $mov["id_estado"]=="9" || $mov["id_estado"]=="10"
-							 || $mov["id_estado"]=="20")? $fecha_age."/".$mov["horario"]:'';?></td>
+							 || $mov["id_estado"]=="20" || $mov["id_estado"]=="8" )? $fecha_age."/".$mov["horario"]:'';?></td>
 							<td><?php echo $mov["motivo"]?></td>
 							<td><?php echo $mov["submotivo"]?></td><td><?php echo $mov["estado"]?></td>
 							<td><?php echo $mov["tecnico"]?></td>

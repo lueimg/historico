@@ -96,7 +96,7 @@ $("#filtro_personalizado").click(function(){
 							fecha = "";
 						}
 
-						if(info.codigo_estado=="1" || info.codigo_estado=="9" || info.codigo_estado=="10" || info.codigo_estado=="20"){
+						if(info.codigo_estado=="1" || info.codigo_estado=="9" || info.codigo_estado=="10" || info.codigo_estado=="20" || info.codigo_estado=="8"){
 							fecha_horario = fecha+"<br>"+info.horario
 						}else{
 							fecha_horario = ""

@@ -898,7 +898,7 @@ class gestionCriticos {
                 $res_gaveria = $gestAverias->existeGestionAveria($cnx, $_POST["averia"]);
             }
 
-            $deb = 1;
+
             //SI NO EXISTE NI EN PROVISION NI EN AVERIA
             if ($res_gaveria == "") {
                 //ya que pueden haber mas de dos estados a la vez para agendado entonces
