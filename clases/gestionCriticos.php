@@ -1506,7 +1506,7 @@ class gestionCriticos {
                  */
                 if (($_POST["estado"] == "9" || $_POST["estado"] == "10" || $_POST["estado"] == "20") ||
                         ($id_motivo == "5" && $_POST["estado"] == "9") || ($id_motivo == "5" && $_POST["estado"] == "10") ||
-                        ($id_motivo == "5" && $_POST["estado"] == "20") || $id_motivo == "6" || $id_motivo == "11") {
+                        ($id_motivo == "5" && $_POST["estado"] == "20") || $id_motivo == "6" || $id_motivo == "11" || $id_motivo == "10") {
 
                     $gestMovimiento = new gestionMovimientos();
                     $res = $gestMovimiento->addGestionMovimientos($cnx, $id_gestion, $id_empresa, $id_zonal, $fecha_agenda_ini
@@ -1570,7 +1570,7 @@ class gestionCriticos {
                     $cnx->exec($sql2);
                 } else {
                     //para los estados que no registran movimientos
-                    if ($_POST["estado"] == "9" || $_POST["estado"] == "10" || $_POST["estado"] == "20" || $id_motivo == "5" || $id_motivo == "6" || $id_motivo == "11") {
+                    if ($_POST["estado"] == "9" || $_POST["estado"] == "10" || $_POST["estado"] == "20" || $id_motivo == "5" || $id_motivo == "6" || $id_motivo == "11" || $id_motivo == "10") {
                         $fecha_agenda = $fecha_agenda_ini; //ya viene preformateada no la vuelvas a formatear
                         $id_horario = $horario_agenda_ini;
 
