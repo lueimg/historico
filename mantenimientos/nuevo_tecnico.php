@@ -6,6 +6,7 @@ ini_set('display_errors',1);
 require_once("../../../cabecera.php");
 require_once("../clases/class.TecnicosCriticos.php");
 require_once("../clases/class.EmpresasCriticos.php");
+require_once('../clases/quiebre.php');
 
 $Tecnico = new TecnicosCriticos();
 
@@ -32,15 +33,14 @@ $comboOfficetrack .= "<option value=1 >-- SI --</option>";
 
 $comboOfficetrack .= "</select>";
 
-/*
-$comboCedulas = "<select name='cmbCedulas' id='cmbCedulas' class='caja_texto3' style='width: 200px'>";
-foreach ($arrCedulas as $rowCedulas ) {
-	$comboCedulas .= "<option value='".$rowCedulas["idcedula"]."'>".$rowCedulas["cedula"]."</option>";
-}
-
-$comboCedulas .= "</select>";
-*/
 $comboCedulas = "";
+
+
+//CONSIGUIENDO LOS QUIEBRES
+$quiebres = new Quiebre();
+$lista_quiebres_array = $quiebres->getQuiebresAll();
+$QuiebresOptionsHTML = $quiebres->comboQuiebres();
+
 
 ?>
 
@@ -78,15 +78,16 @@ $(document).ready(function(){
     });
 	
 	$('#btnGuardarTecnico').click(function(){
-		var idtecnico = $("#txt_idtecnico");
-        var nombre = $("#txtNombre");
-		var apellidoP = $("#txtApellidoP");
-		var apellidoM = $("#txtApellidoM");
-		var empresa = $("#cmbEmpresas");
-		var carnet = $("#txtCarnet");
-		var carnetCritico = $("#txtCarnetCritico");
-		var officetrack = $("#cmbOfficetrack");
-		var cedula = $("#cmbCedulas");
+		var idtecnico = $(".nuevo #txt_idtecnico");
+        var nombre = $(".nuevo #txtNombre");
+		var apellidoP = $(".nuevo #txtApellidoP");
+		var apellidoM = $(".nuevo #txtApellidoM");
+		var empresa = $(".nuevo #cmbEmpresas");
+		var carnet = $(".nuevo #txtCarnet");
+		var carnetCritico = $(".nuevo #txtCarnetCritico");
+		var officetrack = $(".nuevo #cmbOfficetrack");
+		var cedula = $(".nuevo #cmbCedulas");
+        var quiebres = $(".nuevo #slct_quiebre");
 
 		if (validar_requerido(nombre,"Falta llenar el campo Nombre.")==false)
 		  { nombre.focus();return false}
@@ -100,6 +101,8 @@ $(document).ready(function(){
 		  {carnet.focus();return false}
 		if (validar_requerido(carnetCritico,"Ingrese el carnet CRITICO.")==false)
 		  {carnetCritico.focus();return false}
+        if(validar_requerido(quiebres,"Seleccione un quiebre")==false)
+            {quiebres.focus();return false}
 
 		// todo conforme, se procede a clonar usuario
 		var pagina="receptor_nuevo_tecnico.php";
@@ -116,12 +119,14 @@ $(document).ready(function(){
 				carnet: carnet.val(),
 				carnetCritico: carnetCritico.val(),
 				officetrack: officetrack.val(),
-				idcedula: cedula.val()				
+				idcedula: cedula.val(),
+                quiebres:quiebres.val().join(",")
 			},
 	        success: function(html){
 				if (html=='ok') {
 					alert("Nuevo tecnico ingresado correctamente.");
 					$("#childModal_nuevo").dialog('close');
+                    location.reload();
 				}
 				else {
 					alert("Ocurrio un error.");
@@ -148,7 +153,8 @@ function cambiarEmpresa() {
 			idEmpresa: idEmpresa				
 		},
         success: function(html){
-        	$("#divCedulas").html(html);
+
+        	$(".divCedulas").html(html);
         }
     });	
 }
@@ -157,15 +163,43 @@ function cambiarEmpresa() {
 
 <link rel="stylesheet" type="text/css" href="../../../css/estiloAdmin.css">
 <link rel="stylesheet" type="text/css" href="../../../css/buttons.css">
-</head>
+        <link type="text/css" href='../css/jquery.multiselect.css' rel="Stylesheet" />
 
+        <<script type="text/javascript" src="../js/jquery.filter_input.js"></script>
+        <script type="text/javascript" src="../js/prettify.js"></script>
+        <script type="text/javascript" src="../js/jquery.multiselect.min.js"></script>
+
+        <script>
+
+
+            $(function(){
+                $("#slct_quiebre").hide();
+                $("#slct_quiebre").multiselect(
+                    {
+                        position: {
+                            my: 'left bottom',
+                            at: 'left top'
+                        }
+
+                    }
+                );
+            });
+        </script>
+</head>
+    <style>
+        .ui-multiselect-checkboxes span {
+
+            padding: 10px;
+        }
+    </style>
 <body>
-	<input type="hidden" value="<?php echo $IDUSUARIO?>" name="txt_idusuario" id="txt_idusuario"/>
-	<input type="hidden" value="<?php echo $idtecnico?>" name="txt_idtecnico" id="txt_idtecnico"/>
+
 	
 	<div id="div_Clonar" class="divClonar">
-	<table class="tablaClonar"  >
+	<table class="tablaClonar nuevo"  >
 	<tr>
+        <input type="hidden" value="<?php echo $IDUSUARIO?>" name="txt_idusuario" id="txt_idusuario"/>
+        <input type="hidden" value="<?php echo $idtecnico?>" name="txt_idtecnico" id="txt_idtecnico"/>
 		<td class="celda_titulo">Apellido Paterno:</td>
 		<td class="celda_res"  colspan="2">
 			<input type="text" name="txtApellidoP" id="txtApellidoP" class="caja_texto3" value="<?php echo $arrTecnico[0]["ape_paterno"]?>"/></td>
@@ -199,9 +233,21 @@ function cambiarEmpresa() {
 	<tr>
 		<td class="celda_titulo">Cedula:</td>
 		<td class="celda_res"  colspan="2">
-			<div id="divCedulas"><?php echo $comboCedulas;?></div>
+			<div class="divCedulas">
+                <?php echo $comboCedulas;?>
+            </div>
 		</td>
-	</tr>	
+	</tr>
+    <tr>
+        <td class="celda_titulo">Quiebre:</td>
+        <td class="celda_res"  colspan="2">
+            <div id="divQuiebres">
+                <select name="slct_quiebre" id="slct_quiebre" multiple="multiple" name="slct_quiebre[]" style="width: 300px !important">
+                    <?=$QuiebresOptionsHTML;?>
+                </select>
+            </div>
+        </td>
+    </tr>
 	<tr>
 		<td class="celda_titulo">Officetrack:</td>
 		<td class="celda_res"  colspan="2">

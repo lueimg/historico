@@ -1,3 +1,4 @@
+
 <?php
 header('Content-Type: text/html; charset=UTF-8');
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
@@ -17,7 +18,7 @@ if ($_POST['action']=='cambiar_empresa')
 	$arrCedulas = $Tecnico->ListarCelulas($idEmpresa);
 
 	$comboCedulas = "";
-	$comboCedulas = "<select name='cmbCedulas' id='cmbCedulas' class='caja_texto3' style='width: 200px'>";
+	$comboCedulas = "<select name='cmbCedulas_editar' id='cmbCedulas_editar' class='caja_texto3' style='width: 200px'>";
 	foreach ($arrCedulas as $rowCedulas ) {
 		$comboCedulas .= "<option value='".$rowCedulas["idcedula"]."'>".$rowCedulas["cedula"]."</option>";
 	}
@@ -37,10 +38,12 @@ else if ($_POST['action']=='editar_tecnico')
 	$carnetCritico = $_POST["carnetCritico"];
 	$officetrack = $_POST["officetrack"];
 	$idCedula = $_POST["idcedula"];
-	
+	$quiebres = $_POST["quiebres"];
+
 	$Tecnico = new TecnicosCriticos();
-	if ( $Tecnico->EditarTecnico( $idtecnico, $nombre, $apellidoP, $apellidoM, $empresa, $carnet, $carnetCritico, $officetrack, $idCedula )=="1" ) 
-		echo "ok";
+	if ( $Tecnico->EditarTecnico( $idtecnico, $nombre, $apellidoP, $apellidoM, $empresa,
+            $carnet, $carnetCritico, $officetrack, $idCedula,$quiebres )=="1" )
+		print 1;
 	else
 		echo "error";
     

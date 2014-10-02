@@ -38,6 +38,9 @@ $arr = $tecnico->ListarTecnicosTodos();
 $html_paginacion = $tecnico->paginacion();
 //print_r($arr);
 
+
+
+
 header('Content-Type: text/html; charset=utf-8');
 
 
@@ -56,12 +59,6 @@ header('Content-Type: text/html; charset=utf-8');
 
     <script type="text/javascript" src="../js/js.js"></script>
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-        });
-
-
-    </script>
 
     <script type="text/javascript">
         function deshabilitar_usuario(idtecnico) {
@@ -120,6 +117,7 @@ header('Content-Type: text/html; charset=utf-8');
 
         }
 
+        //CREA UN NUEVO TECNICO
         function nuevo_tecnico(idtecnico) {
 
             $("#childModal_nuevo").html("");

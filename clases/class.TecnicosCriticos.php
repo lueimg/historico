@@ -119,7 +119,7 @@ class TecnicosCriticos{
 				ORDER BY ape_paterno ASC
 				Limit ".$this->inicio.",".$this->tamano;
 
-		//echo $cad;
+
 		$res = mysql_query($cad, $cnx) or die(mysql_error()) ;
         while ($row = mysql_fetch_array($res))
         {
@@ -253,8 +253,13 @@ class TecnicosCriticos{
 		
     }		
 	
-	public function EditarTecnico( $idTecnico, $nombre, $apellidoP, $apellidoM, $idEmpresa, $carnet, $carnetCritico, $officetrack, $idCedula ) {
-	
+	public function EditarTecnico( $idTecnico, $nombre, $apellidoP, $apellidoM,
+                                   $idEmpresa, $carnet, $carnetCritico, $officetrack, $idCedula, $quiebres ) {
+
+        if(empty($idTecnico)){
+            return false;
+        }
+
 		try {
 			$db = new Conexion();
 			$cnx = $db->conectarPDO();
@@ -276,6 +281,31 @@ class TecnicosCriticos{
 			$res->bindParam("9", $idCedula);
 			$res->bindParam("10", $idTecnico);
 			$res->execute();
+
+            //REGISTRO DE QUIEBRES
+            $list_quiebres = explode(",",$quiebres);
+            //LIMPIAR ANTERIORES QUIEBRES
+            $cad = "DELETE FROM webpsi_criticos.tecnico_quiebre where
+                        idtecnico = ? ";
+            $res = $cnx->prepare($cad);
+            $res->bindParam("1", $idTecnico);
+            $res->execute();
+
+
+            //Registrar Nuevos quiebres
+            foreach($list_quiebres as $quiebre)
+            {
+                $cad = "INSERT INTO webpsi_criticos.tecnico_quiebre SET
+                        idtecnico = ? , idquiebre=? , estado=1";
+                $res = $cnx->prepare($cad);
+                $res->bindParam("1", $idTecnico);
+                $res->bindParam("2", $quiebre);
+                $res->execute();
+
+            }
+
+
+
 			return "1";
 		}
         catch (PDOException $e)
@@ -287,8 +317,9 @@ class TecnicosCriticos{
         $db = null;		
 	}
 
-	public function NuevoTecnico( $nombre, $apellidoP, $apellidoM, $idEmpresa, $carnet, $carnetCritico, $officetrack, $idCedula) {
-	
+	public function NuevoTecnico( $nombre, $apellidoP, $apellidoM, $idEmpresa,
+                                  $carnet, $carnetCritico, $officetrack, $idCedula, $quiebres) {
+
 		try {
 			$db = new Conexion();
 			$cnx = $db->conectarPDO();
@@ -311,6 +342,25 @@ class TecnicosCriticos{
 			$res->bindParam("9", $officetrack);
 			$res->bindParam("10", $idCedula);
 			$res->execute();
+
+            $idtecnico = $cnx->lastInsertId();
+
+            //REGISTRO DE QUIEBRES
+            $list_quiebres = explode(",",$quiebres);
+            foreach($list_quiebres as $quiebre)
+            {
+                $cad = "INSERT INTO webpsi_criticos.tecnico_quiebre SET
+                        idtecnico = ? , idquiebre=? , estado=1";
+                $res = $cnx->prepare($cad);
+                $res->bindParam("1", $idtecnico);
+                $res->bindParam("2", $quiebre);
+                $res->execute();
+
+
+            }
+
+
+
 			return "1";
 		}
         catch (PDOException $e)
@@ -321,7 +371,8 @@ class TecnicosCriticos{
         $cnx = null;
         $db = null;		
 	}
-	
+
+
 	
     public function ListarCelulas($idEmpresa) {
         $db = new Conexion();
@@ -329,9 +380,9 @@ class TecnicosCriticos{
 
         $cad = "SELECT c.idcedula, c.nombre as cedula, c.estado, c.idempresa
                 FROM webpsi_criticos.cedula c
-				WHERE c.idempresa=$idEmpresa
+				WHERE c.idempresa='$idEmpresa'
 				ORDER BY c.nombre ASC; ";
-		//echo $cad;
+
 		$res = mysql_query($cad, $cnx) or die(mysql_error()) ;
         while ($row = mysql_fetch_array($res))
         {

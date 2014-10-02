@@ -37,9 +37,12 @@ else if ($_POST['action']=='nuevo_tecnico')
 	$carnetCritico = $_POST["carnetCritico"];
 	$officetrack = $_POST["officetrack"];	
 	$idCedula = $_POST["idcedula"];
+	$quiebres = $_POST["quiebres"];
 
 	$Tecnico = new TecnicosCriticos();
-	if ( $Tecnico->NuevoTecnico( $nombre, $apellidoP, $apellidoM, $idEmpresa, $carnet, $carnetCritico, $officetrack, $idCedula )=="1" ) 
+	if ( $Tecnico->NuevoTecnico(
+            $nombre, $apellidoP, $apellidoM, $idEmpresa,
+            $carnet, $carnetCritico, $officetrack, $idCedula,$quiebres )=="1" )
 		echo "ok";
 	else
 		echo "error";

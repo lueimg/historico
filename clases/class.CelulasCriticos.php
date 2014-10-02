@@ -242,7 +242,7 @@ class CelulasCriticos{
                 FROM webpsi_criticos.cedula c
 				WHERE c.idempresa=$idEmpresa
 				ORDER BY c.nombre ASC; ";
-		//echo $cad;
+
 		$res = mysql_query($cad, $cnx) or die(mysql_error()) ;
         while ($row = mysql_fetch_array($res))
         {

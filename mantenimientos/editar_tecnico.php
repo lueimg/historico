@@ -1,3 +1,5 @@
+
+
 <?php
 error_reporting(1);
 ini_set('display_errors',1);
@@ -6,6 +8,7 @@ ini_set('display_errors',1);
 require_once("../../../cabecera.php");
 require_once("../clases/class.TecnicosCriticos.php");
 require_once("../clases/class.EmpresasCriticos.php");
+require_once('../clases/quiebre.php');
 
 $Tecnico = new TecnicosCriticos();
 
@@ -22,7 +25,7 @@ $Empresa = new EmpresasCriticos();
 
 $arrEmpresas = $Empresa->ListarEmpresas();
 
-$comboEmpresas = "<select name='cmbEmpresas' id='cmbEmpresas' class='caja_texto3' onchange='cambiarEmpresa();'>";
+$comboEmpresas = "<select name='cmbEmpresas_editar' id='cmbEmpresas_editar' class='caja_texto3' onchange='cambiarEmpresa();'>";
 foreach($arrEmpresas as $rowEmpresas) {
 	if ($arrTecnico[0]["id_empresa"]==$rowEmpresas["id"]) 
 		$comboEmpresas .= "<option value=".$rowEmpresas['id']." selected >".$rowEmpresas['nombre']."</option>";
@@ -44,7 +47,7 @@ if ($arrTecnico[0]["officetrack"]=="0") {
 }
 $comboOfficetrack .= "</select>";
 
-$comboCedulas = "<select name='cmbCedulas' id='cmbCedulas' class='caja_texto3' style='width: 200px'>";
+$comboCedulas = "<select name='cmbCedulas_editar' id='cmbCedulas_editar' class='caja_texto3' style='width: 200px'>";
 foreach ($arrCedulas as $rowCedulas ) {
 	if ($rowCedulas["idcedula"]==$arrTecnico[0]["idcedula"])
 		$comboCedulas .= "<option value='".$rowCedulas["idcedula"]."' selected='selected'>".$rowCedulas["cedula"]."</option>";
@@ -55,6 +58,10 @@ foreach ($arrCedulas as $rowCedulas ) {
 $comboCedulas .= "</select>";
 
 
+//CONSIGUIENDO LOS QUIEBRES
+$quiebres = new Quiebre();
+$lista_quiebres_array = $quiebres->getQuiebresAll();
+$QuiebresOptionsHTML = $quiebres->comboQuiebres($idtecnico);
 
 ?>
 
@@ -69,7 +76,27 @@ $comboCedulas .= "</select>";
                 <?php include ("../../includes.php") ?>                
 
 <!--<script type="text/javascript" src="../js/js.js"></script>-->
+        <link type="text/css" href='../css/jquery.multiselect.css' rel="Stylesheet" />
+        <script type="text/javascript" src="../js/jquery.filter_input.js"></script>
+        <script type="text/javascript" src="../js/prettify.js"></script>
+        <script type="text/javascript" src="../js/jquery.multiselect.min.js"></script>
 
+        <script>
+
+
+            $(function(){
+                $("#slct_quiebre_editar").hide();
+                $("#slct_quiebre_editar").multiselect(
+                    {
+                        position: {
+                            my: 'left bottom',
+                            at: 'left top'
+                        }
+
+                    }
+                );
+            });
+        </script>
 <script type="text/javascript">
 
 function validar_requerido(field,alerttxt)
@@ -91,17 +118,18 @@ $(document).ready(function(){
         $("#childModal").dialog('close');
     });
 	
-	$('#btnGuardarTecnico').click(function(){
-		var idtecnico = $("#txt_idtecnico");
-        var nombre = $("#txtNombre");
-		var apellidoP = $("#txtApellidoP");
-		var apellidoM = $("#txtApellidoM");
-		var empresa = $("#cmbEmpresas");
-		var carnet = $("#txtCarnet");
-		var carnetCritico = $("#txtCarnetCritico");
-		var officetrack = $("#cmbOfficetrack");
-		var cedula = $("#cmbCedulas");
+	$('#btnGuardarTecnico_editar').click(function(){
 
+		var idtecnico = $(".editar #txt_idtecnico");
+        var nombre = $(".editar #txtNombre");
+		var apellidoP = $(".editar #txtApellidoP");
+		var apellidoM = $(".editar #txtApellidoM");
+		var empresa = $(".editar #cmbEmpresas_editar");
+		var carnet = $(".editar #txtCarnet");
+		var carnetCritico = $(".editar #txtCarnetCritico");
+		var officetrack = $(".editar #cmbOfficetrack");
+		var cedula = $(".editar #cmbCedulas_editar");
+        var quiebres = $(".editar #slct_quiebre_editar");
 
 		if (validar_requerido(nombre,"Falta llenar el campo Nombre.")==false)
 		  { nombre.focus();return false}
@@ -115,6 +143,8 @@ $(document).ready(function(){
 		  {carnet.focus();return false}
 		if (validar_requerido(carnetCritico,"Ingrese el carnet CRITICO.")==false)
 		  {carnetCritico.focus();return false}
+        if(validar_requerido(quiebres,"Seleccione un quiebre")==false)
+        {quiebres.focus();return false}
 		// todo conforme, se procede a clonar usuario
 		var pagina="receptor_editar_tecnico.php";
 
@@ -131,12 +161,15 @@ $(document).ready(function(){
 				carnet: carnet.val(),
 				carnetCritico: carnetCritico.val(),
 				officetrack: officetrack.val(),
-				idcedula: cedula.val()
+				idcedula: cedula.val(),
+                quiebres:quiebres.val().join(",")
 			},
 	        success: function(html){
-				if (html=='ok') {
+
+				if (html=="1" || html == "\n1") {
 					alert("Cambios realizados correctamente.");
 					$("#childModal").dialog('close');
+                    location.reload();
 				}
 				else {
 					alert("Ocurrio un error.");
@@ -152,7 +185,7 @@ $(document).ready(function(){
       
 
 function cambiarEmpresa() {
-	var idEmpresa = $("#cmbEmpresas").val();
+	var idEmpresa = $("#cmbEmpresas_editar").val();
 	var pagina="receptor_editar_tecnico.php";
 	//alert(pagina);
 
@@ -164,7 +197,8 @@ function cambiarEmpresa() {
 			idEmpresa: idEmpresa				
 		},
         success: function(html){
-        	$("#divCedulas").html(html);
+
+        	$(".divCedulas").html(html);
         }
     });	
 }                    
@@ -177,12 +211,13 @@ function cambiarEmpresa() {
 </head>
 
 <body>
-	<input type="hidden" value="<?php echo $IDUSUARIO?>" name="txt_idusuario" id="txt_idusuario"/>
-	<input type="hidden" value="<?php echo $idtecnico?>" name="txt_idtecnico" id="txt_idtecnico"/>
+
 	
 	<div id="div_Clonar" class="divClonar">
-	<table class="tablaClonar"  >
+	<table class="tablaClonar editar">
 	<tr>
+        <input type="hidden" value="<?php echo $IDUSUARIO?>" name="txt_idusuario" id="txt_idusuario"/>
+        <input type="hidden" value="<?php echo $idtecnico?>" name="txt_idtecnico" id="txt_idtecnico"/>
 		<td class="celda_titulo">Apellido Paterno:</td>
 		<td class="celda_res"  colspan="2">
 			<input type="text" name="txtApellidoP" id="txtApellidoP" class="caja_texto3" value="<?php echo $arrTecnico[0]["ape_paterno"]?>"/></td>
@@ -216,9 +251,21 @@ function cambiarEmpresa() {
 	<tr>
 		<td class="celda_titulo">Cedula:</td>
 		<td class="celda_res"  colspan="2">
-			<div id="divCedulas"><?php echo $comboCedulas;?></div>
+			<div class="divCedulas"><?php echo $comboCedulas;?></div>
 		</td>
-	</tr>		
+	</tr>
+        <tr>
+            <td class="celda_titulo">Quiebre:</td>
+            <td class="celda_res"  colspan="2">
+                <div id="divQuiebres">
+                    <select name="slct_quiebre_editar" id="slct_quiebre_editar" multiple="multiple" name="slct_quiebre_editar[]" style="width: 300px !important">
+                        <?=$QuiebresOptionsHTML;?>
+                    </select>
+                </div>
+            </td>
+        </tr>
+
+
 	<tr>
 		<td class="celda_titulo">Officetrack:</td>
 		<td class="celda_res"  colspan="2">
@@ -229,7 +276,7 @@ function cambiarEmpresa() {
 	<tr>
 		<td class="celda_res" colspan="3" align="center">
         
-		<button id="btnGuardarTecnico" class="action blue" title="Generar Password" >
+		<button id="btnGuardarTecnico_editar" class="action blue" title="Generar Password" >
 			<span class="label">Guardar Usuario</span>
 		</button>
 		<!--<button id="btnsalir" class="action red" title="Cancelar">
