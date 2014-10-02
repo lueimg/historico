@@ -1,4 +1,9 @@
 ALTER TABLE webpsi_criticos.usuarios_contratas_criticos
 ADD COLUMN visible int(1) NULL DEFAULT 1 AFTER `id_empresa`;
 
+Regresar eventoController.php  quitar X para idcarnet.
+
+
+
+
 
