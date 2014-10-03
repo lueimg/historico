@@ -66,7 +66,7 @@ class gestionCriticos {
 								schedulle_sistemas.pen_pais_total aver ON aver.averia=a.averia
 								INNER JOIN webpsi_criticos.empresa emp ON emp.id=mov.id_empresa
 								where mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) FROM webpsi_criticos.gestion_movimientos mov2
-  								WHERE mov2.id_gestion=c.id) $filtro_liquidado order by a.fecha_registro asc
+  								WHERE mov2.id_gestion=c.id)  order by a.fecha_registro asc
 
 	)AS agendas
 	UNION ALL
@@ -96,7 +96,7 @@ class gestionCriticos {
 								webpsi_criticos.estados e ON c.id_estado=e.id 
 								INNER JOIN webpsi_criticos.empresa emp ON emp.id=mov.id_empresa
 								where mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) FROM webpsi_criticos.gestion_movimientos mov2
-  								WHERE mov2.id_gestion=c.id) $filtro_liquidado order by fecha_registro asc
+  								WHERE mov2.id_gestion=c.id)  order by fecha_registro asc
 								
 	)AS provision
 	UNION ALL
@@ -116,7 +116,7 @@ class gestionCriticos {
 					,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=acf.averia),IF(IFNULL(acf.wu_nagendas,'')='',0,acf.wu_nagendas)) wu_nagendas ,'' n_evento
 					,null estado_evento
 					FROM webpsi_coc.averias_criticos_final acf
-					WHERE averia NOT IN (SELECT distinct averia FROM webpsi_criticos.gestion_averia) $filtro_Averias
+					WHERE averia NOT IN (SELECT distinct averia FROM webpsi_criticos.gestion_averia) 
 					 order by fecha_registro asc
 		
 	)as averias_final
@@ -138,7 +138,7 @@ class gestionCriticos {
 					,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=tp.codigo_req),IF(IFNULL(tp.wu_nagendas,'')='',0,tp.wu_nagendas)) wu_nagendas ,'' n_evento
 					,null estado_evento
 					FROM webpsi_coc.tmp_provision tp
-					WHERE codigo_req NOT IN (SELECT codigo_req FROM webpsi_criticos.gestion_provision) $filtro_Averias
+					WHERE codigo_req NOT IN (SELECT codigo_req FROM webpsi_criticos.gestion_provision) 
 					 order by fecha_registro asc
 		
 	)as provision_final
@@ -193,7 +193,7 @@ class gestionCriticos {
 								webpsi_criticos.estados e ON c.id_estado=e.id 
 								INNER JOIN webpsi_criticos.empresa emp ON emp.id=mov.id_empresa
 								where mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) FROM webpsi_criticos.gestion_movimientos mov2
-  								WHERE mov2.id_gestion=c.id) $filtro_liquidado order by fecha_registro asc
+  								WHERE mov2.id_gestion=c.id)  order by fecha_registro asc
 			
 		)AS rutina_manual_provision
 )AS T1 $filtro_sql";
