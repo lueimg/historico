@@ -152,7 +152,7 @@ $motivos = $ob_mot->getMotivos($cnx);
 				</select>
 			</div>
 			<div class="caja_medium">
-				
+                <input type='hidden' name="tec_officetrack" id="tec_officetrack">
 				<input type="hidden" value="0" name="n_evento" id="n_evento">
 				<input type="hidden" value="<?php echo $indice; ?>" name="indice" id="indice">
 				<input type="hidden" value="<?php echo $actividad; ?>" id="actividad" name="actividad">
@@ -266,6 +266,7 @@ $motivos = $ob_mot->getMotivos($cnx);
 					<span class="checkbox">
 						<input type="checkbox" value="si" name="flag_tecnico" id="flag_tecnico">Tecnico Entregado
 					</span>
+                    <div><span class="labeltecoffice"></span></div>
 				</div>
 			</div>
 			<div class="content_datos">

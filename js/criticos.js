@@ -625,7 +625,9 @@ $(document).ready(function(){
   //})
 
   //Para el Registro de Clientes Críticos
-  $("#btn_registro").click(function(){
+
+    //AL DAR CLICK EN REGISTRAR AGENDAR
+    $("#btn_registro").click(function(){
 
 
     motivo = $("#motivo_registro").val()
@@ -722,6 +724,8 @@ $(document).ready(function(){
         }
       });
     }
+
+
        
   })
 
@@ -794,6 +798,12 @@ function getTecnicoOfficeTrack(idtecnico)
 
         success: function (data) {
             $("#tec_officetrack").val(data);
+            if(data == "1" || data == 1){
+                $(".labeltecoffice").text("Es tecnico officetrack")
+            }else{
+                $(".labeltecoffice").text("No es tecnico officetrack")
+
+            }
         },
 
         error: function () {
@@ -841,12 +851,20 @@ function registrarCriticos() {
 
   $("#nombretecnico").val($("#tecnico option:selected").text());
 
+    var tecnicooffcetrack = $("#tec_officetrack").val();
 
   if($('#frm_criticos #motivo_registro').val()=="1"
       && tecnico!=''
       && $("#frm_criticos #flag_tecnico").attr("checked")
-      && $("#frm_criticos #quiebre").val()=="R9-REIT-CATV"){
-      
+      &&
+      ( $("#frm_criticos #quiebre").val()=="R9-REIT-CATV" || $("#actividad").val() === "Provision" )
+
+      &&
+          //SI ES TECNICO OFFICETRACK
+      ( tecnicooffcetrack == 1 )
+
+        ){
+
       var parametros = $("#frm_criticos").serialize();
 
       $.ajax({
@@ -874,7 +892,29 @@ function registrarCriticos() {
 
    }
    else{
-    finalizarRegistroCritico('','0');
+
+      if($('#frm_criticos #motivo_registro').val()=="1"
+          && tecnico!=''
+          && $("#frm_criticos #flag_tecnico").attr("checked")
+          &&
+          ( $("#frm_criticos #quiebre").val()=="R9-REIT-CATV" || $("#actividad").val() === "Provision" )
+
+      ){
+          if(
+          confirm("No he ha enviando a officetrack , " +
+          "ya que el tecnico no cumple con el estado Officetrack" +
+          " Desea registrar de todas maneras sin officetrack ?")
+          ){
+              finalizarRegistroCritico('','0');
+          }
+      }else{
+          //REGISTRO PARA CUANDO ES PENDIENTE
+          // O AGENDAMIENTO SIN TECNICO ENTREGADO
+          finalizarRegistroCritico('','0');
+      }
+
+
+
    }
 }
 
@@ -891,8 +931,15 @@ function finalizarRegistroCritico(d,idcritico){
         success: function (data) {
             window.parent.jQuery("#filtro_general").click();
             alert(data);
+
             window.parent.jQuery('#dialog-criticos').dialog('close');
             jQuery("#btn_historico").trigger("click");
+
+            //si se hace click en registrar dentro del visor historioc
+            //reactualiza la pagina
+            if( window.parent.window.page == "visorHistorico"){
+                window.parent.jQuery("#btn_historico").trigger("click");
+            }
         },
 
         error: function () {
@@ -1048,7 +1095,47 @@ function registrarMovimientos() {
 		}
    }
    else{
-    finalizarRegistroMovimiento('');
+
+
+       if(
+           ( ($("#frm_gestion_critico #flag_tecnico").attr("checked") &&
+           $("#frm_gestion_critico #motivo").val()=='1' &&
+           $("#frm_gestion_critico #submotivo").val()=='1') ||
+               //SI YA HABIA SIDO ENVIADO A OFFICETRACK
+           $("#frm_gestion_critico #n_evento").val()=="1"
+           ) &&
+               //SI NO ES IGUAL A OBSERVACIONES
+           $("#frm_gestion_critico #motivo").val()!='5'
+
+           &&
+           ( $("#frm_gestion_critico #quiebre").val()=="R9-REIT-CATV" || $("#actividad").val() === "Provision" )
+
+       ){
+           if(
+               confirm("No he ha enviando a officetrack , " +
+               "ya que el tecnico no cumple con el estado Officetrack" +
+               " Desea registrar de todas maneras sin officetrack ?")
+           ){
+               finalizarRegistroMovimiento('');
+           }
+       }else{
+           //REGISTRO PARA CUANDO ES PENDIENTE
+           // O AGENDAMIENTO SIN TECNICO ENTREGADO
+           finalizarRegistroMovimiento('');
+       }
+
+
+
+
+
+
+
+    //finalizarRegistroMovimiento('');
+
+
+
+
+
    }
 
    
