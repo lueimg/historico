@@ -1151,13 +1151,19 @@ class gestionCriticos {
                 $res_gprovision = $gestProvision->existeGestionProvision($cnx, $_POST["averia"]);
                 $id_gestion_provision = $gestProvision->getGestionProvisionbyAveria($cnx, $_POST["averia"]);
                 $id_gestion_update = $id_gestion_provision;
+
+                $id_atc = $gestProvision->get_ID_atc_By_id_gestion($cnx , $id_gestion_update);
             } else {
 
                 $gestAverias = new gestionAveria();
                 //DEVUELVE EL ID_gestion
                 $res_gaveria = $gestAverias->getGestionAveriabyAveria($cnx, $_POST["averia"]);
                 $id_gestion_update = $res_gaveria;
+                $id_atc = $gestAverias->get_ID_atc_By_id_gestion($cnx , $id_gestion_update);
             }
+
+
+
 
 
             //si existe una gestion a actualizar
@@ -1275,7 +1281,7 @@ class gestionCriticos {
 
                 $cnx->commit();
                 $result["estado"] = TRUE;
-                $result["msg"] = "Se actualizo el Código de Atención: " . $id_gestion;
+                $result["msg"] = "Se actualizo el Código de Atención: " . $id_atc;
                 return $result;
             } else {
                 $result["estado"] = FALSE;

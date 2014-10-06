@@ -89,7 +89,9 @@ if (count($arr)>0) {
 
         $accion = "Agendar Visita";
         if($fila["id_atc"]){
-            $agenda =  $fila["id_atc"];
+            $deb = 1;
+            $agenda = "<br>" . $fila["id_atc"];
+            $agenda .= "<br>Agenda:<br> " . $fila["fecha_agenda"] . "<br>". $fila["horario"];
             $accion = "Reagendar Visita";
 
 
@@ -120,7 +122,7 @@ if (count($arr)>0) {
 		<td id="campo" cod="<?=$fila["codigo_req"]; ?>">
             <?php if($fila["n_evento"] == 0 ): ?>
             <div id='agendarVisita' name='agendarVisita' >
-                <button type="button" id="btn_cliente_critico_provision"
+                <button type="button" id="btn_cliente_critico_provision" class="btn_cliente_critico_provision"
                         style="margin-top:5px;background:red;border:0;border-radius:4px;color:#fff;padding:5px"><?=$accion;?></button>
             </div>
             <?php endif; ?>

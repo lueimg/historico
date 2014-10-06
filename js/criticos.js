@@ -625,7 +625,9 @@ $(document).ready(function(){
   //})
 
   //Para el Registro de Clientes Críticos
-  $("#btn_registro").click(function(){
+
+    //AL DAR CLICK EN REGISTRAR AGENDAR
+    $("#btn_registro").click(function(){
 
 
     motivo = $("#motivo_registro").val()
@@ -722,6 +724,8 @@ $(document).ready(function(){
         }
       });
     }
+
+
        
   })
 
@@ -927,8 +931,15 @@ function finalizarRegistroCritico(d,idcritico){
         success: function (data) {
             window.parent.jQuery("#filtro_general").click();
             alert(data);
+
             window.parent.jQuery('#dialog-criticos').dialog('close');
             jQuery("#btn_historico").trigger("click");
+
+            //si se hace click en registrar dentro del visor historioc
+            //reactualiza la pagina
+            if( window.parent.window.page == "visorHistorico"){
+                window.parent.jQuery("#btn_historico").trigger("click");
+            }
         },
 
         error: function () {

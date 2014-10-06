@@ -84,7 +84,7 @@ tr {
    
 .tabla_resultados { 
 	color: #000;
-	text-align: left;
+	text-align: center;
 	border-collapse:collapse;
 	border: 1px solid #000000;	
 	background: #FFFFFF;
@@ -97,6 +97,11 @@ tr {
   padding: 1px;
 
 }
+
+    #agendarVisita button{
+        cursor: pointer;
+    }
+
  </style>
 </head>
 
@@ -104,7 +109,7 @@ tr {
 
 <div id="resultado_historico" class="resultado_historico" style="display: table; width:90%; border: 0px solid red; float: left;">
 
-<div id="resultado_historico2" class="resultado_historico" style="display: table; border: 0px solid green; width: 45%; float: left">
+<div id="resultado_historico2" class="resultado_historico" style="display: table; border: 0px solid green; width: 75%; float: left">
 
 <div id="resListadoPend" name="resListado" class="div_listado1" style="border: 0px solid white; width: 100%;">
 
@@ -139,8 +144,9 @@ if (count($arrTba)>0) {
         <?php
         $accion = "Agendar Visita";
          if($filaTba["id_atc"]){
+
              print "<br>" . $filaTba["id_atc"];
-             print "<br>Agenda:<br> " . $filaTba["fecha_agenda"];
+             print "<br>Agenda:<br> " . $filaTba["fecha_agenda"] . "<br>". $filaTba["horario"];
              $accion = "Reagendar Visita";
 
 
@@ -150,7 +156,7 @@ if (count($arrTba)>0) {
         </td>
                 <td>
                     <?php
-                    if ( $_POST['esCritico']==='false' ) {
+                    if ( $_POST['esCritico']==='false' && empty($filaTba["id_atc"]) ) {
                         echo "<a href=\"" . trim($filaTba["averia"]) . "\" class=\"rmanual\" title=\"rutina-bas-lima\" >";
 						echo "<span style='font-family: Tahoma, Verdana, Segoe, sans-serif; font-weight: bold; color:#FF0000; font-size: 12px'>";
 						echo "Registro manual</span></a>";
