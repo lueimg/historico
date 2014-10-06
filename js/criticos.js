@@ -1,6 +1,9 @@
 $(document).ready(function(){
 
-  
+  if(window.parent.window.page = "visorHistorico"){
+      $(".agendarTecnico").hide()
+      $(".agendarCelula").hide()
+  }
   
 /* --- Para Gestion de Críticos --- */
   $("#motivo_registro").change(function(){
@@ -666,9 +669,14 @@ $(document).ready(function(){
           cr_observacion: "Ingrese una observaci&oacute;n",
         },
         submitHandler: function(form) {
-          if($("#slct_cedula").val()==''){
-            alert('Seleccione Cedula');
-            $("#slct_cedula").focus();
+
+        var page_parent = window.parent.window.page
+        if(page_parent == "visorHistorico"){
+            registrarCriticos()
+            return false
+        }else if($("#slct_cedula").val()==''){
+        alert('Seleccione Cedula');
+        $("#slct_cedula").focus();
           }
           else if($("#tecnico").val()==''){
             alert('Seleccione Tecnico');
@@ -709,7 +717,14 @@ $(document).ready(function(){
           cr_observacion: "Ingrese una observaci&oacute;n",
         },
         submitHandler: function(form) {
-          if($("#slct_cedula").val()==''){
+
+
+
+            var page_parent = window.parent.window.page
+            if(page_parent == "visorHistorico"){
+                registrarCriticos()
+                return false
+            }else if($("#slct_cedula").val()==''){
             alert('Seleccione Cedula');
             $("#slct_cedula").focus();
           }
