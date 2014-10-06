@@ -123,23 +123,26 @@ class gestionCriticos {
 	UNION ALL
 	SELECT * FROM(
 		
-					SELECT '' AS 'id',codigo_req AS 'averia','' AS 'id_atc','Provision' AS 'tipo_actividad',nomcliente 'nombre',fecha_Reg AS 'fecha_reg',quiebre 'quiebres',eecc_final 'empresa',telefono_codclientecms 'telefono_cliente_critico',
+					SELECT '' AS 'id',a.codigo_req AS 'averia','' AS 'id_atc','Provision' AS 'tipo_actividad',a.nomcliente 'nombre',a.fecha_Reg AS 'fecha_reg',a.quiebre 'quiebres',a.eecc_final 'empresa',a.telefono_codclientecms 'telefono_cliente_critico',
 					'' AS 'fecha_agenda','' AS 'horario','' AS 'motivo','' AS 'submotivo','' AS 'm_id','' AS 's_id','Temporal' AS 'estado','Temporal' AS 'codigo_estado',
-					'' AS 'flag_tecnico',origen AS 'tipo_averia',horas_pedido AS 'horas_averia',fecha_Reg AS 'fecha_registro',ciudad,codigo_req AS 'codigo_averia',
-					codigo_del_cliente AS 'inscripcion',fono1,telefono,mdf,obs_dev AS 'observacion_102',codigosegmento AS 'segmento',
-					estacion AS 'area_',direccion AS 'direccion_instalacion',distrito AS 'codigo_distrito',nomcliente AS 'nombre_cliente',orden AS 'orden_trabajo',
-					veloc_adsl,servicio AS 'clase_servicio_catv',tipo_motivo AS 'codmotivo_req_catv',tot_aver_cab AS 'total_averias_cable',
-					tot_aver_cob AS 'total_averias_cobre',tot_averias AS total_averias,fftt,llave,dir_terminal,fonos_contacto,contrata,zonal,
-					quiebre,lejano,des_distrito AS 'distrito',eecc_final,zona_movuno AS 'zona_movistar_uno',paquete,data_multip AS 'data_multiproducto',aver_m1 AS 'averia_m1',
-					fecha_data_fuente,telefono_codclientecms,rango_dias,sms1,
-					sms2,area2,'' AS 'fecha_creacion',microzona,'' as 'tecnico', 0 nmov,'' as 'existe',tipo_actuacion as 'actuacion'
-					,(SELECT fecha_cambio FROM webpsi_coc.tmp_provision_historico WHERE codigo_req=tp.codigo_req) fecha_cambio
-					,(SELECT ROUND((TIMESTAMPDIFF(SECOND,(SELECT fecha_cambio FROM webpsi_coc.`tmp_provision_historico` WHERE codigo_req=tp.codigo_req),NOW()) / 3600),2)) AS `horas_cambio`
-					,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=tp.codigo_req),IF(IFNULL(tp.wu_nagendas,'')='',0,tp.wu_nagendas)) wu_nagendas ,'' n_evento
-					,null estado_evento
-					FROM webpsi_coc.tmp_provision tp
-					WHERE codigo_req NOT IN (SELECT codigo_req FROM webpsi_criticos.gestion_provision) 
-					 order by fecha_registro asc
+					'' AS 'flag_tecnico',a.origen AS 'tipo_averia',a.horas_pedido AS 'horas_averia',a.fecha_Reg AS 'fecha_registro',a.ciudad,a.codigo_req AS 'codigo_averia',
+					a.codigo_del_cliente AS 'inscripcion',a.fono1,a.telefono,a.mdf,a.obs_dev AS 'observacion_102',a.codigosegmento AS 'segmento',
+					a.estacion AS 'area_',a.direccion AS 'direccion_instalacion',a.distrito AS 'codigo_distrito',a.nomcliente AS 'nombre_cliente',a.orden AS 'orden_trabajo',
+					a.veloc_adsl,a.servicio AS 'clase_servicio_catv',a.tipo_motivo AS 'codmotivo_req_catv',a.tot_aver_cab AS 'total_averias_cable',
+					a.tot_aver_cob AS 'total_averias_cobre',a.tot_averias AS total_averias,a.fftt,a.llave,a.dir_terminal,a.fonos_contacto,a.contrata,a.zonal,
+					a.quiebre,a.lejano,a.des_distrito AS 'distrito',a.eecc_final,a.zona_movuno AS 'zona_movistar_uno',a.paquete,a.data_multip AS 'data_multiproducto',a.aver_m1 AS 'averia_m1',
+					a.fecha_data_fuente,a.telefono_codclientecms,a.rango_dias,a.sms1,
+					a.sms2,a.area2,'' AS 'fecha_creacion',a.microzona,'' as 'tecnico', 0 nmov,'' as 'existe',a.tipo_actuacion as 'actuacion'
+					,tph.fecha_cambio 
+					,ROUND((TIMESTAMPDIFF(SECOND,tph.fecha_cambio,NOW()) / 3600),2) AS `horas_cambio`
+				  	,IFNULL(a.wu_nagendas,'0') wu_nagendas,'' n_evento
+					,null	estado_evento					
+					FROM webpsi_coc.tmp_provision a
+					LEFT JOIN webpsi_coc.tmp_provision_historico tph ON (a.codigo_req=tph.codigo_req)				
+					WHERE a.codigo_req NOT IN (SELECT codigo_req FROM webpsi_criticos.gestion_provision)  
+					and   a.codigo_req NOT IN (SELECT codigo_req FROM webpsi_criticos.gestion_rutina_manual_provision) 
+					order by fecha_registro asc
+		-- 0.680
 		
 	)as provision_final
 	UNION ALL
@@ -475,9 +478,9 @@ class gestionCriticos {
         }
 
         if ($data["empresa"] != "") {
-            $filtro_Averias = "and eecc_final in(" . $data["empresa"] . ")";
-            if ($liquidado == "1") {
-                $filtro_liquidado = "and a.eecc_final in(" . $data["empresa"] . ")";
+        	$filtro_Averias = "and eecc_final in(" . $data["empresa"] . ")";
+            $filtro_liquidado = "and a.eecc_final in(" . $data["empresa"] . ")";
+            if ($liquidado == "1") {                
                 //$filtro_estado = "and a.eecc_final in(".$data["empresa"].")";
                 if ($filtro_sql != "") {
                     $filtro_estado = "AND codigo_estado NOT IN(3,19,4,5,6,21)";
@@ -485,7 +488,6 @@ class gestionCriticos {
                     $filtro_estado = "where codigo_estado NOT IN(3,19,4,5,6,21)";
                 }
             } else {
-                $filtro_liquidado = "and a.eecc_final in(" . $data["empresa"] . ")";
                 $filtro_estado = "";
             }
         }
@@ -588,47 +590,51 @@ class gestionCriticos {
 		UNION ALL
 		SELECT * FROM(
 			
-                SELECT '' as 'id',averia,'' as 'id_atc','Averias' as 'tipo_actividad',nombre_cliente 'nombre',fecha_registro as 'fecha_reg',quiebre 'quiebres',eecc_final 'empresa',telefono_codclientecms 'telefono_cliente_critico',
+                select '' as 'id',a.averia,'' as 'id_atc','Averias' as 'tipo_actividad',a.nombre_cliente 'nombre',a.fecha_registro as 'fecha_reg',a.quiebre 'quiebres',a.eecc_final 'empresa',a.telefono_codclientecms 'telefono_cliente_critico',
                 '' as 'fecha_agenda','' as 'horario','' as 'motivo','' as 'submotivo','' as 'm_id','' as 's_id','Temporal' as 'estado','Temporal' as 'codigo_estado',
-                '' as 'flag_tecnico',tipo_averia,horas_averia,fecha_registro,ciudad,averia 'codigo_averia',inscripcion,fono1,telefono,mdf,observacion_102,segmento,
-                area_,direccion_instalacion,codigo_distrito,nombre_cliente,orden_trabajo,veloc_adsl,
-                clase_servicio_catv,codmotivo_req_catv,total_averias_cable,total_averias_cobre,total_averias,
-                fftt,llave,dir_terminal,fonos_contacto,contrata,zonal,quiebre,lejano,
-                distrito,eecc_final,zona_movistar_uno,paquete,data_multiproducto,averia_m1,
-                fecha_data_fuente,telefono_codclientecms,rango_dias,sms1,
-                sms2,area2,'' AS 'fecha_creacion',microzona,'' as 'tecnico', 0 nmov,'' as 'existe','' as 'actuacion',
-                fecha_cambio,horas_cambio_vs_actual as 'horas_cambio'
-                ,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=vacf.averia),IF(IFNULL(vacf.wu_nagendas,'')='',0,vacf.wu_nagendas)) wu_nagendas ,'' n_evento
+                '' as 'flag_tecnico',a.tipo_averia,a.horas_averia,a.fecha_registro,a.ciudad,a.averia 'codigo_averia',a.inscripcion,a.fono1,a.telefono,a.mdf,a.observacion_102,a.segmento,
+                a.area_,a.direccion_instalacion,a.codigo_distrito,a.nombre_cliente,a.orden_trabajo,a.veloc_adsl,
+                a.clase_servicio_catv,a.codmotivo_req_catv,a.total_averias_cable,a.total_averias_cobre,a.total_averias,
+                a.fftt,a.llave,a.dir_terminal,a.fonos_contacto,a.contrata,a.zonal,a.quiebre,a.lejano,
+                a.distrito,a.eecc_final,a.zona_movistar_uno,a.paquete,a.data_multiproducto,a.averia_m1,
+                a.fecha_data_fuente,a.telefono_codclientecms,a.rango_dias,a.sms1,
+                a.sms2,a.area2,'' AS 'fecha_creacion',a.microzona,'' as 'tecnico', 0 nmov,'' as 'existe','' as 'actuacion'
+                ,acfh.fecha_cambio
+				,ROUND((TIMESTAMPDIFF(SECOND,acfh.fecha_cambio,NOW()) / 3600),2) horas_cambio
+                ,IFNULL(a.wu_nagendas,'0') wu_nagendas ,'' n_evento
                 ,null estado_evento
-                FROM webpsi_coc.vistaAveriasCriticosFinal vacf
-                WHERE averia NOT IN (SELECT distinct averia FROM webpsi_criticos.gestion_averia)
-                and averia NOT IN (SELECT distinct averia FROM webpsi_criticos.gestion_rutina_manual)
-                $filtro_Averias
+				from webpsi_coc.averias_criticos_final a
+				left join webpsi_coc.averias_criticos_final_historico acfh on a.averia=acfh.averia
+				where a.averia not in (select averia from webpsi_criticos.gestion_averia)
+                and a.averia NOT IN (SELECT averia FROM webpsi_criticos.gestion_rutina_manual) 
+                $filtro_liquidado
                  order by fecha_registro asc
 
 		)as averias_final
 		UNION ALL
 		SELECT * FROM(
 
-					SELECT '' AS 'id',codigo_req AS 'averia','' AS 'id_atc','Provision' AS 'tipo_actividad',nomcliente 'nombre',fecha_Reg AS 'fecha_reg',quiebre 'quiebres',eecc_final 'empresa',telefono_codclientecms 'telefono_cliente_critico',
+					SELECT '' AS 'id',a.codigo_req AS 'averia','' AS 'id_atc','Provision' AS 'tipo_actividad',a.nomcliente 'nombre',a.fecha_Reg AS 'fecha_reg',a.quiebre 'quiebres',a.eecc_final 'empresa',a.telefono_codclientecms 'telefono_cliente_critico',
 					'' AS 'fecha_agenda','' AS 'horario','' AS 'motivo','' AS 'submotivo','' AS 'm_id','' AS 's_id','Temporal' AS 'estado','Temporal' AS 'codigo_estado',
-					'' AS 'flag_tecnico',origen AS 'tipo_averia',horas_pedido AS 'horas_averia',fecha_Reg AS 'fecha_registro',ciudad,codigo_req AS 'codigo_averia',
-					codigo_del_cliente AS 'inscripcion',fono1,telefono,mdf,obs_dev AS 'observacion_102',codigosegmento AS 'segmento',
-					estacion AS 'area_',direccion AS 'direccion_instalacion',distrito AS 'codigo_distrito',nomcliente AS 'nombre_cliente',orden AS 'orden_trabajo',
-					veloc_adsl,servicio AS 'clase_servicio_catv',tipo_motivo AS 'codmotivo_req_catv',tot_aver_cab AS 'total_averias_cable',
-					tot_aver_cob AS 'total_averias_cobre',tot_averias AS total_averias,fftt,llave,dir_terminal,fonos_contacto,contrata,zonal,
-					quiebre,lejano,des_distrito AS 'distrito',eecc_final,zona_movuno AS 'zona_movistar_uno',paquete,data_multip AS 'data_multiproducto',aver_m1 AS 'averia_m1',
-					fecha_data_fuente,telefono_codclientecms,rango_dias,sms1,
-					sms2,area2,'' AS 'fecha_creacion',microzona,'' as 'tecnico', 0 nmov,'' as 'existe',tipo_actuacion as 'actuacion'
-					,(SELECT fecha_cambio FROM webpsi_coc.tmp_provision_historico WHERE codigo_req=tp.codigo_req) fecha_cambio
-					,(SELECT ROUND((TIMESTAMPDIFF(SECOND,(SELECT fecha_cambio FROM webpsi_coc.`tmp_provision_historico` WHERE codigo_req=tp.codigo_req),NOW()) / 3600),2)) AS `horas_cambio`
-					,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=tp.codigo_req),IF(IFNULL(tp.wu_nagendas,'')='',0,tp.wu_nagendas)) wu_nagendas ,'' n_evento
+					'' AS 'flag_tecnico',a.origen AS 'tipo_averia',a.horas_pedido AS 'horas_averia',a.fecha_Reg AS 'fecha_registro',a.ciudad,a.codigo_req AS 'codigo_averia',
+					a.codigo_del_cliente AS 'inscripcion',a.fono1,a.telefono,a.mdf,a.obs_dev AS 'observacion_102',a.codigosegmento AS 'segmento',
+					a.estacion AS 'area_',a.direccion AS 'direccion_instalacion',a.distrito AS 'codigo_distrito',a.nomcliente AS 'nombre_cliente',a.orden AS 'orden_trabajo',
+					a.veloc_adsl,a.servicio AS 'clase_servicio_catv',a.tipo_motivo AS 'codmotivo_req_catv',a.tot_aver_cab AS 'total_averias_cable',
+					a.tot_aver_cob AS 'total_averias_cobre',a.tot_averias AS total_averias,a.fftt,a.llave,a.dir_terminal,a.fonos_contacto,a.contrata,a.zonal,
+					a.quiebre,a.lejano,a.des_distrito AS 'distrito',a.eecc_final,a.zona_movuno AS 'zona_movistar_uno',a.paquete,a.data_multip AS 'data_multiproducto',a.aver_m1 AS 'averia_m1',
+					a.fecha_data_fuente,a.telefono_codclientecms,a.rango_dias,a.sms1,
+					a.sms2,a.area2,'' AS 'fecha_creacion',a.microzona,'' as 'tecnico', 0 nmov,'' as 'existe',a.tipo_actuacion as 'actuacion'
+					,tph.fecha_cambio 
+					,ROUND((TIMESTAMPDIFF(SECOND,tph.fecha_cambio,NOW()) / 3600),2) AS `horas_cambio`
+				  	,IFNULL(a.wu_nagendas,'0') wu_nagendas,'' n_evento
 					,null	estado_evento					
-                    FROM webpsi_coc.tmp_provision tp
-                    WHERE codigo_req NOT IN (SELECT codigo_req FROM webpsi_criticos.gestion_provision)
-                    and   codigo_req NOT IN (SELECT codigo_req FROM webpsi_criticos.gestion_rutina_manual_provision)
-                    $filtro_Averias
-                     order by fecha_registro asc
+					FROM webpsi_coc.tmp_provision a
+					LEFT JOIN webpsi_coc.tmp_provision_historico tph ON (a.codigo_req=tph.codigo_req)				
+					WHERE a.codigo_req NOT IN (SELECT codigo_req FROM webpsi_criticos.gestion_provision)  
+					and   a.codigo_req NOT IN (SELECT codigo_req FROM webpsi_criticos.gestion_rutina_manual_provision) 
+					$filtro_liquidado
+					order by fecha_registro asc
+		-- 0.680
 
 		)as provision_final
 		UNION ALL

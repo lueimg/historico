@@ -2,10 +2,25 @@
 ALTER TABLE webpsi_criticos.usuarios_contratas_criticos
 ADD COLUMN visible int(1) NULL DEFAULT 1 AFTER `id_empresa`;
 
+////////////////////////////////////////////////////////////////////////////////
+
 ::Cristian 2/10/14
 Regresar eventoController.php  quitar X para idcarnet.
+
+////////////////////////////////////////////////////////////////////////////////
 
 ::Luis 2/10/14
 Actualizar la classe  /webpsi/clases/class.HistoricoCliente.php
 
+////////////////////////////////////////////////////////////////////////////////
 
+::Jorge 06/10/14
+Tablas => webpsi_criticos.gestion_averia , webpsi_criticos.gestion_rutina_manual y shedulle_sistemas.pen_pais_total 
+
+campo modificado: averia varbinary 30
+
+Tabla => gestion_rutina_manual
+
+crear indice averia
+
+////////////////////////////////////////////////////////////////////////////////
