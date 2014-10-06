@@ -45,10 +45,11 @@ class HistoricoCliente {
                 (SELECT `x` FROM webunificada_fftt.`fftt_terminales` t WHERE llavexy =  t.mtgespktrm  ) AS coordX,
                 (SELECT `y` FROM webunificada_fftt.`fftt_terminales` t WHERE llavexy =  t.mtgespktrm  ) AS coordY,
                 csegmento as segmentoY
-                ,ga.id_gestion , gc.fecha_agenda,gc.id_atc , gc.n_evento
+                ,ga.id_gestion , gc.fecha_agenda,gc.id_atc , gc.n_evento, ho.horario
                 FROM schedulle_sistemas.pen_pais_tba a
                 	LEFT JOIN webpsi_criticos.gestion_averia ga on ga.averia = a.averia
 					left join webpsi_criticos.gestion_criticos gc on gc.id = ga.id_gestion
+					left join webpsi_criticos.horarios ho on ho.id = gc.id_horario
                 WHERE  negocio='STB' ".$filtroBusqueda."
                  -- and ( gc.id_estado not in (3,19) or gc.id_estado is null )
                 ORDER BY fecreg ASC; "; 
@@ -417,11 +418,12 @@ class HistoricoCliente {
             $filtroBusqueda = " ";
 
         $cad = "SELECT
-        re.* , cr.id_atc , tmp.codigo_req , cr.n_evento
+        re.* , cr.id_atc , tmp.codigo_req , cr.n_evento,ho.horario, cr.fecha_agenda
                 from webpsi_coc.tb_registradastotal_  re
-				LEFT JOIN webpsi_coc.tmp_provision tmp on tmp.codigo_del_cliente = re.inscripcion
+				LEFT JOIN webpsi_coc.tmp_provision tmp on tmp.telefono = re.telefono
                 LEFT join webpsi_criticos.gestion_provision pr on pr.codigo_req = tmp.codigo_req
                 left join webpsi_criticos.gestion_criticos cr on cr.id = pr.id_gestion
+                left join webpsi_criticos.horarios ho on ho.id = cr.id_horario
 
         WHERE 1=1 $filtroBusqueda  and
          ( cr.id_estado not in (3,19) or cr.id_estado is null )
