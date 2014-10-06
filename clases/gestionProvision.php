@@ -135,6 +135,16 @@ class gestionProvision{
 
     }
 
+    public function get_ID_atc_By_id_gestion($cnx,$id_gestion){
+
+        $cnx->exec("set names utf8");
+        $sql = "SELECT id_atc FROM webpsi_criticos.gestion_criticos where id='$id_gestion'";
+        $res = $cnx->query($sql);
+        $row = $res->fetch(PDO::FETCH_ASSOC);
+        return $row["id_atc"];
+
+    }
+
 }
 
 ?>

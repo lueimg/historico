@@ -28,7 +28,12 @@ set_time_limit(0);
 	<script type="text/javascript">
 
 	$(document).ready(function(){
-	
+
+        //variables globales js
+        window.page = "visorHistorico";
+
+
+
 		$("#telefonoCliente").keydown(function(event) {
 			if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 || 
 				(event.keyCode == 67 && event.ctrlKey === true) || 

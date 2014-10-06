@@ -386,7 +386,7 @@ $(document).ready(function(){
         });
     }
     AgendarProvisionEventoClick = function(){
-        $("#btn_cliente_critico_provision").click(function(){
+        $("#btn_cliente_critico_provision,.btn_cliente_critico_provision").click(function(){
 
             var idAveria =$("#btn_cliente_critico_provision").parent().parent().attr("cod");
             var actividad  = "Provision"
