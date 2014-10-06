@@ -241,7 +241,7 @@ $motivos = $ob_mot->getMotivos($cnx);
 					<textarea class="border" maxlength="255" value="" id="cr_observacion" name="cr_observacion"></textarea>
 				</div>
 			</div>
-			<div class="content_datos">
+			<div class="content_datos agendarCelula">
 				<div class="caja_medium">
 					<label>Celula:</label>
 				  	<select class="slct_cedula" id="slct_cedula" name="slct_cedula" onchange="cargarTecnico('tecnico','','slct_cedula','<?php echo $id_empresa; ?>','<?php echo $averia["quiebre"]; ?>');">
@@ -256,7 +256,7 @@ $motivos = $ob_mot->getMotivos($cnx);
 					</select>
 				</div>
 			</div>
-			<div class="content_datos">
+			<div class="content_datos agendarTecnico">
 				<div class="caja_medium">
 					<label>Tecnico:</label>
 					<input type="hidden" id="nombretecnico" name="nombretecnico">
