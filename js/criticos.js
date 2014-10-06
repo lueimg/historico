@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-  if(window.parent.window.page = "visorHistorico"){
+  if(window.parent.window.page == "visorHistorico"){
       $(".agendarTecnico").hide()
       $(".agendarCelula").hide()
   }
