@@ -224,6 +224,7 @@ $solcomArray = $ob_solcom->getSolucionesAll($cnx);
 				<span class="checkbox">
 					<input type="checkbox" value="si" name="flag_tecnico" id="flag_tecnico">Tecnico Entregado
 				</span>
+                <div><span class="labeltecoffice"></span></div>
 			</div>
 
 			<div id="liquidaciones" class="liquidado">
