@@ -1,5 +1,4 @@
 <?php
-sleep(4);
 $PATH =  $_SERVER['DOCUMENT_ROOT']."/webpsi/";
 include_once $PATH."clases/class.Conexion.php";
 include_once $PATH."modulos/historico/clases/gestionCriticos.php";

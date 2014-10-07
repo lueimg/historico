@@ -17,10 +17,29 @@ Actualizar la classe  /webpsi/clases/class.HistoricoCliente.php
 ::Jorge 06/10/14
 Tablas => webpsi_criticos.gestion_averia , webpsi_criticos.gestion_rutina_manual y shedulle_sistemas.pen_pais_total 
 
-campo modificado: averia varbinary 30
 
-Tabla => gestion_rutina_manual
+ALTER TABLE webpsi_criticos.gestion_averia
+MODIFY  COLUMN averia VARBINARY(30) NULL;
 
-crear indice averia
+ALTER TABLE webpsi_criticos.gestion_rutina_manual
+MODIFY  COLUMN averia VARBINARY(30) NULL;
+
+ALTER TABLE shedulle_sistemas.pen_pais_total
+MODIFY  COLUMN averia VARBINARY(30) NULL;
+
+
+Tabla => weppsi_criticos.gestion_rutina_manual , weppsi_criticos.gestion_provision
+
+CREATE INDEX averia
+ON webpsi_criticos.gestion_rutina_manual (averia);
+
+CREATE INDEX codigo_req
+ON webpsi_criticos.gestion_provision (codigo_req);
+
+CREATE INDEX codigo_req
+ON webpsi_criticos.gestion_rutina_manual_provision (codigo_req);
+
+CREATE INDEX task_id
+ON webpsi_officetrack.tareas (task_id);
 
 ////////////////////////////////////////////////////////////////////////////////

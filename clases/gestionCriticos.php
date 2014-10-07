@@ -61,24 +61,25 @@ class gestionCriticos {
 				a.fftt,a.llave,a.dir_terminal,a.fonos_contacto,a.contrata,a.zonal 'zonal',a.quiebre,a.lejano,
 				a.distrito,a.eecc_final 'eecc_final',a.zona_movistar_uno,a.paquete,a.data_multiproducto,a.averia_m1,
 				a.fecha_data_fuente,a.telefono_codclientecms,a.rango_dias,a.sms1,
-				a.sms2,a.area2,c.fecha_creacion,a.microzona,mov.tecnico, c.nmov,
-				(CASE aver.averia WHEN '' THEN '' ELSE aver.averia END) 'existe','' AS 'actuacion',
-				(SELECT fecha_cambio FROM webpsi_coc.averias_criticos_final_historico WHERE averia=a.averia) fecha_cambio, 
-				(SELECT ROUND((TIMESTAMPDIFF(SECOND,(SELECT fecha_cambio FROM webpsi_coc.`averias_criticos_final_historico` WHERE averia=a.averia),NOW()) / 3600),2)) AS `horas_cambio`
+				a.sms2,a.area2,c.fecha_creacion,a.microzona,mov.tecnico, c.nmov
+				,IFNULL((SELECT averia FROM schedulle_sistemas.pen_pais_total WHERE averia=a.averia LIMIT 1 ),'') existe
+				,'' AS 'actuacion'
+				,(SELECT fecha_cambio FROM webpsi_coc.averias_criticos_final_historico WHERE averia=a.averia) fecha_cambio
+				,(SELECT ROUND((TIMESTAMPDIFF(SECOND,(SELECT fecha_cambio FROM webpsi_coc.`averias_criticos_final_historico` WHERE averia=a.averia),NOW()) / 3600),2)) AS `horas_cambio`
 				,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=a.averia),IF(IFNULL(a.wu_nagendas,'')='',0,a.wu_nagendas)) wu_nagendas ,c.n_evento
-				,(select paso from webpsi_officetrack.tareas where task_id=c.id order by fecha_recepcion desc limit 1) estado_evento
-				FROM webpsi_criticos.gestion_criticos c INNER JOIN webpsi_criticos.gestion_movimientos mov ON c.id=mov.id_gestion INNER JOIN
-				webpsi_criticos.gestion_averia a ON c.id=a.id_gestion INNER JOIN 
-				webpsi_criticos.horarios h ON c.id_horario=h.id INNER JOIN 
-				webpsi_criticos.motivos m ON c.id_motivo=m.id INNER JOIN 
-				webpsi_criticos.submotivos s ON c.id_submotivo=s.id INNER JOIN 
-				webpsi_criticos.estados e ON c.id_estado=e.id LEFT JOIN
-				schedulle_sistemas.pen_pais_total aver ON aver.averia=a.averia
-				where mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) 
+				,(SELECT paso FROM webpsi_officetrack.tareas WHERE task_id=c.id ORDER BY fecha_recepcion DESC LIMIT 1) estado_evento
+				FROM webpsi_criticos.gestion_criticos c 
+				INNER JOIN webpsi_criticos.gestion_movimientos mov ON c.id=mov.id_gestion 
+				INNER JOIN webpsi_criticos.gestion_averia a ON c.id=a.id_gestion 
+				INNER JOIN webpsi_criticos.horarios h ON c.id_horario=h.id 
+				INNER JOIN webpsi_criticos.motivos m ON c.id_motivo=m.id 
+				INNER JOIN webpsi_criticos.submotivos s ON c.id_submotivo=s.id 
+				INNER JOIN webpsi_criticos.estados e ON c.id_estado=e.id 
+				WHERE mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) 
 											FROM webpsi_criticos.gestion_movimientos mov2
 											WHERE mov2.id_gestion=c.id)  
-				$filtro_sql 
-				order by a.fecha_registro asc	
+				$filtro_sql   
+				ORDER BY a.fecha_registro 	
 			
 		)AS agendas 
 		
@@ -99,26 +100,27 @@ class gestionCriticos {
 				a.tipo_actuacion AS 'actuacion'
 				,(SELECT fecha_cambio FROM webpsi_coc.tmp_provision_historico WHERE codigo_req=a.codigo_req) fecha_cambio
 				,(SELECT ROUND((TIMESTAMPDIFF(SECOND,(SELECT fecha_cambio FROM webpsi_coc.`tmp_provision_historico` WHERE codigo_req=a.codigo_req),NOW()) / 3600),2)) AS `horas_cambio`
-				,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=a.codigo_req),IF(IFNULL(a.wu_nagendas,'')='',0,a.wu_nagendas)) wu_nagendas ,c.n_evento
+				,IFNULL((SELECT wu_nagendas FROM webpsi_coc.tmp_provision WHERE codigo_req=a.codigo_req),IF(IFNULL(a.wu_nagendas,'')='',0,a.wu_nagendas)) wu_nagendas ,c.n_evento
 				,(select paso from webpsi_officetrack.tareas where task_id=c.id order by fecha_recepcion desc limit 1) estado_evento
-				FROM webpsi_criticos.gestion_criticos c INNER JOIN webpsi_criticos.gestion_movimientos mov ON c.id=mov.id_gestion INNER JOIN
-				webpsi_criticos.gestion_provision a ON c.id=a.id_gestion INNER JOIN 
-				webpsi_criticos.horarios h ON c.id_horario=h.id INNER JOIN 
-				webpsi_criticos.motivos m ON c.id_motivo=m.id INNER JOIN 
-				webpsi_criticos.submotivos s ON c.id_submotivo=s.id INNER JOIN 
-				webpsi_criticos.estados e ON c.id_estado=e.id 
-				where mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) 
+				FROM webpsi_criticos.gestion_criticos c 
+				INNER JOIN webpsi_criticos.gestion_movimientos mov ON c.id=mov.id_gestion 
+				INNER JOIN webpsi_criticos.gestion_provision a ON c.id=a.id_gestion 
+				INNER JOIN webpsi_criticos.horarios h ON c.id_horario=h.id 
+				INNER JOIN webpsi_criticos.motivos m ON c.id_motivo=m.id 
+				INNER JOIN webpsi_criticos.submotivos s ON c.id_submotivo=s.id 
+				INNER JOIN webpsi_criticos.estados e ON c.id_estado=e.id 
+				WHERE mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) 
 											FROM webpsi_criticos.gestion_movimientos mov2
 											WHERE mov2.id_gestion=c.id)  
-				$filtro_sql2
-				order by fecha_registro asc
+				$filtro_sql2 
+				ORDER BY fecha_registro
 			
 		)AS provision 
 		
 		UNION ALL
 		SELECT * FROM(
 			
-                select '' as 'id',a.averia,'' as 'id_atc','Averias' as 'tipo_actividad',a.nombre_cliente 'nombre',a.fecha_registro as 'fecha_reg',a.quiebre 'quiebres',a.eecc_final 'empresa',a.telefono_codclientecms 'telefono_cliente_critico',
+                SELECT '' as 'id',a.averia,'' as 'id_atc','Averias' as 'tipo_actividad',a.nombre_cliente 'nombre',a.fecha_registro as 'fecha_reg',a.quiebre 'quiebres',a.eecc_final 'empresa',a.telefono_codclientecms 'telefono_cliente_critico',
                 '' as 'fecha_agenda','' as 'horario','' as 'motivo','' as 'submotivo','' as 'm_id','' as 's_id','Temporal' as 'estado','Temporal' as 'codigo_estado',
                 '' as 'flag_tecnico',a.tipo_averia,a.horas_averia,a.fecha_registro,a.ciudad,a.averia 'codigo_averia',a.inscripcion,a.fono1,a.telefono,a.mdf,a.observacion_102,a.segmento,
                 a.area_,a.direccion_instalacion,a.codigo_distrito,a.nombre_cliente,a.orden_trabajo,a.veloc_adsl,
@@ -130,13 +132,13 @@ class gestionCriticos {
                 ,acfh.fecha_cambio
 				,ROUND((TIMESTAMPDIFF(SECOND,acfh.fecha_cambio,NOW()) / 3600),2) horas_cambio
                 ,IFNULL(a.wu_nagendas,'0') wu_nagendas ,'' n_evento
-                ,null estado_evento
-				from webpsi_coc.averias_criticos_final a
-				left join webpsi_coc.averias_criticos_final_historico acfh on a.averia=acfh.averia
-				where a.averia not in (select averia from webpsi_criticos.gestion_averia)
-                and a.averia NOT IN (SELECT averia FROM webpsi_criticos.gestion_rutina_manual)
-                ".str_replace($buscar,$reemplazar,$filtro_sql)."                               
-        		ORDER by fecha_registro asc                
+                ,NULL estado_evento
+				FROM webpsi_coc.averias_criticos_final a
+				LEFT JOIN webpsi_coc.averias_criticos_final_historico acfh on a.averia=acfh.averia
+				WHERE a.averia NOT IN (SELECT averia FROM webpsi_criticos.gestion_averia)
+                AND a.averia NOT IN (SELECT averia FROM webpsi_criticos.gestion_rutina_manual)
+                ".str_replace($buscar,$reemplazar,$filtro_sql)."                          
+        		ORDER BY fecha_registro             
 
 		)as averias_final
 		
@@ -160,15 +162,16 @@ class gestionCriticos {
 				FROM webpsi_coc.tmp_provision a
 				LEFT JOIN webpsi_coc.tmp_provision_historico tph ON (a.codigo_req=tph.codigo_req)				
 				WHERE a.codigo_req NOT IN (SELECT codigo_req FROM webpsi_criticos.gestion_provision)  
-				and   a.codigo_req NOT IN (SELECT codigo_req FROM webpsi_criticos.gestion_rutina_manual_provision) 	
-				".str_replace($buscar,$reemplazar,$filtro_sql2)."				
-				order by fecha_registro asc
+				AND a.codigo_req NOT IN (SELECT codigo_req FROM webpsi_criticos.gestion_rutina_manual_provision) 	
+				".str_replace($buscar,$reemplazar,$filtro_sql2)." 				
+				ORDER BY fecha_registro
 
 		)as provision_final
 		
 		UNION ALL
 		SELECT * FROM(
-				SELECT c.id,averia as averia,id_atc,tipo_actividad,a.nombre_cliente 'nombre',a.fecha_registro 'fecha_reg',a.quiebre 'quiebres',
+
+				SELECT c.id,a.averia as averia,id_atc,tipo_actividad,a.nombre_cliente 'nombre',a.fecha_registro 'fecha_reg',a.quiebre 'quiebres',
 				a.eecc_final 'empresa',a.telefono_codclientecms 'telefono_cliente_critico', c.fecha_agenda,h.horario,m.motivo,s.submotivo,
 				m.id 'm_id',s.id 's_id',e.estado,e.id as 'codigo_estado',flag_tecnico,a.tipo_averia 'tipo_averia',a.horas_averia,
 				a.fecha_registro, a.ciudad,a.averia 'codigo_averia',a.inscripcion,a.fono1,a.telefono,a.mdf 'mdf',a.observacion_102,
@@ -177,27 +180,32 @@ class gestionCriticos {
 				a.dir_terminal,a.fonos_contacto,a.contrata,a.zonal 'zonal',a.quiebre,a.lejano, a.distrito,a.eecc_final 'eecc_final',
 				a.zona_movistar_uno,a.paquete,a.data_multiproducto,a.averia_m1, a.fecha_data_fuente,a.telefono_codclientecms,
 				a.rango_dias,a.sms1, a.sms2,a.area2,c.fecha_creacion,a.microzona,mov.tecnico, c.nmov,
-				'' as 'existe','' as 'actuacion','' as 'fecha_cambio','' as 'horas_cambio'
-				,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=a.averia),IF(IFNULL(a.wu_nagendas,'')='',0,a.wu_nagendas)) wu_nagendas ,c.n_evento
+				'' as 'existe','' as 'actuacion'				
+				,(SELECT fecha_cambio FROM webpsi_coc.averias_criticos_final_historico WHERE averia=a.averia) fecha_cambio
+				,(SELECT ROUND((TIMESTAMPDIFF(SECOND,(SELECT fecha_cambio FROM webpsi_coc.`averias_criticos_final_historico` WHERE averia=a.averia),NOW()) / 3600),2)) AS `horas_cambio`
+				,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=a.averia),
+									IF(IFNULL(a.wu_nagendas,'')='',0,a.wu_nagendas)
+								) wu_nagendas ,c.n_evento
 				,(select paso from webpsi_officetrack.tareas where task_id=c.id order by fecha_recepcion desc limit 1) estado_evento
-				FROM webpsi_criticos.gestion_criticos c 
-				inner join webpsi_criticos.gestion_movimientos mov on c.id=mov.id_gestion
-				 inner join webpsi_criticos.gestion_rutina_manual a on c.id=a.id_gestion 
-				inner join webpsi_criticos.horarios h on c.id_horario=h.id 
-				inner join webpsi_criticos.motivos m on c.id_motivo=m.id 
-				inner join webpsi_criticos.submotivos s on c.id_submotivo=s.id 
-				inner join webpsi_criticos.estados e on c.id_estado=e.id 
-				where mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) 
+				FROM webpsi_criticos.gestion_rutina_manual a
+				INNER JOIN webpsi_criticos.gestion_criticos c ON (a.id_gestion=c.id)
+				INNER JOIN webpsi_criticos.gestion_movimientos mov ON (c.id=mov.id_gestion)
+				INNER JOIN webpsi_criticos.horarios h ON (c.id_horario=h.id) 
+				INNER JOIN webpsi_criticos.motivos m ON (c.id_motivo=m.id) 
+				INNER JOIN webpsi_criticos.submotivos s ON (c.id_submotivo=s.id) 
+				INNER JOIN webpsi_criticos.estados e ON (c.id_estado=e.id) 
+				WHERE mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) 
 											FROM webpsi_criticos.gestion_movimientos mov2 
 											WHERE mov2.id_gestion=c.id)  
-				$filtro_sql
-				order by a.fecha_registro asc
+				$filtro_sql  
+				ORDER BY a.fecha_registro
+
 		)AS rutina_manual
 		
 		UNION ALL
 		SELECT * FROM(
 			
-				SELECT  c.id,a.codigo_req AS 'averia',id_atc,tipo_actividad,a.nomcliente 'nombre',fecha_Reg AS 'fecha_reg',a.quiebre 'quiebres',a.eecc_final 'empresa',a.telefono_codclientecms 'telefono_cliente_critico',
+				SELECT  c.id,a.codigo_req AS 'averia',id_atc,tipo_actividad,a.nomcliente 'nombre',a.fecha_Reg AS 'fecha_reg',a.quiebre 'quiebres',a.eecc_final 'empresa',a.telefono_codclientecms 'telefono_cliente_critico',
 				c.fecha_agenda,h.horario,m.motivo,s.submotivo,m.id 'm_id',s.id 's_id',e.estado AS 'estado',e.id AS 'codigo_estado',
 				flag_tecnico,a.origen AS 'tipo_averia',a.horas_pedido AS 'horas_averia',a.fecha_Reg AS 'fecha_registro',a.ciudad,a.codigo_req AS 'codigo_averia',
 				a.codigo_del_cliente AS 'inscripcion',a.fono1,a.telefono,a.mdf,a.obs_dev AS 'observacion_102',a.codigosegmento AS 'segmento',a.
@@ -207,23 +215,26 @@ class gestionCriticos {
 				quiebre,a.lejano,a.des_distrito AS 'distrito',a.eecc_final,a.zona_movuno AS 'zona_movistar_uno',a.paquete,a.data_multip AS 'data_multiproducto',a.aver_m1 AS 'averia_m1',a.
 				fecha_data_fuente,a.telefono_codclientecms,a.rango_dias,a.sms1,a.sms2,
 				a.area2,c.fecha_creacion AS 'fecha_creacion',a.microzona,mov.tecnico, c.nmov,
-				IFNULL((select tmp.DATA17 FROM schedulle_sistemas.tmp_gaudi_total tmp where tmp.DATA17=a.codigo_req limit 1 ),'') 'existe',
+				IFNULL((SELECT tmp.DATA17 FROM schedulle_sistemas.tmp_gaudi_total tmp WHERE tmp.DATA17=a.codigo_req LIMIT 1 ),'') 'existe',
 				a.tipo_actuacion AS 'actuacion'
 				,(SELECT fecha_cambio FROM webpsi_coc.tmp_provision_historico WHERE codigo_req=a.codigo_req) fecha_cambio
 				,(SELECT ROUND((TIMESTAMPDIFF(SECOND,(SELECT fecha_cambio FROM webpsi_coc.`tmp_provision_historico` WHERE codigo_req=a.codigo_req),NOW()) / 3600),2)) AS `horas_cambio`
-			 	,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=a.codigo_req),IF(IFNULL(a.wu_nagendas,'')='',0,a.wu_nagendas)) wu_nagendas ,c.n_evento
-				,(select paso from webpsi_officetrack.tareas where task_id=c.id order by fecha_recepcion desc limit 1) estado_evento
-				FROM webpsi_criticos.gestion_criticos c INNER JOIN webpsi_criticos.gestion_movimientos mov ON c.id=mov.id_gestion INNER JOIN
-				webpsi_criticos.gestion_rutina_manual_provision a ON c.id=a.id_gestion INNER JOIN 
-				webpsi_criticos.horarios h ON c.id_horario=h.id INNER JOIN 
-				webpsi_criticos.motivos m ON c.id_motivo=m.id INNER JOIN 
-				webpsi_criticos.submotivos s ON c.id_submotivo=s.id INNER JOIN 
-				webpsi_criticos.estados e ON c.id_estado=e.id 
-				where mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) 
+			    ,IFNULL((SELECT wu_nagendas FROM webpsi_coc.tmp_provision WHERE codigo_req=a.codigo_req),
+								 IF(IFNULL(a.wu_nagendas,'')='',0,a.wu_nagendas)
+						) wu_nagendas ,c.n_evento
+				,(SELECT paso FROM webpsi_officetrack.tareas WHERE task_id=c.id ORDER BY fecha_recepcion DESC LIMIT 1) estado_evento
+				FROM webpsi_criticos.gestion_criticos c 
+				INNER JOIN webpsi_criticos.gestion_movimientos mov ON (c.id=mov.id_gestion) 
+				INNER JOIN webpsi_criticos.gestion_rutina_manual_provision a ON (c.id=a.id_gestion) 
+				INNER JOIN webpsi_criticos.horarios h ON (c.id_horario=h.id) 
+				INNER JOIN webpsi_criticos.motivos m ON (c.id_motivo=m.id) 
+				INNER JOIN webpsi_criticos.submotivos s ON (c.id_submotivo=s.id) 
+				INNER JOIN webpsi_criticos.estados e ON (c.id_estado=e.id) 				
+				WHERE mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) 
 											FROM webpsi_criticos.gestion_movimientos mov2
 											WHERE mov2.id_gestion=c.id)   
-				$filtro_sql2
-				order by fecha_registro asc
+				$filtro_sql2 
+				ORDER BY fecha_registro
 			
 		)AS rutina_manual_provision
 		
@@ -424,29 +435,31 @@ class gestionCriticos {
         }
 
         if ($data["movistar1"] != "") {
-            $pos = strpos($data["movistar1"], ",");
+            $pos = strpos($data["movistar1"], "null");
             if ($filtro_sql != "") {
-                if ($pos !== false) {//si es array
-                    $mov1 = explode(",", $data["movistar1"]);
-                    $filtro_sql .= " and (averia_m1 is null or averia_m1=$mov1[1] or averia_m1='')";
-                } else {
-                    if ($data["movistar1"] == "'MOVISTAR UNO'") {
-                        $filtro_sql .= " and averia_m1=" . $data["movistar1"];
-                    } else {
-                        $filtro_sql .= " and (averia_m1 is null  or averia_m1='')";
-                    }
-                }
+				if($pos!=false){
+					if($data["movistar1"]=="'null'"){
+					$filtro_sql .= " and (averia_m1 is null or averia_m1='')";
+					}
+					else{
+					$filtro_sql .= " and (averia_m1 is null or averia_m1 IN (".$data['movistar1'].") or averia_m1='')";
+					}
+				}
+				else{
+					$filtro_sql .= " and averia_m1 IN (".$data['movistar1'].") ";
+				}
             } else {
-                if ($pos !== false) {//si es array
-                    $mov1 = explode(",", $data["movistar1"]);
-                    $filtro_sql .= " where (averia_m1 is null or averia_m1=$mov1[1] or averia_m1='')";
-                } else {
-                    if ($data["movistar1"] == "'MOVISTAR UNO'") {
-                        $filtro_sql .= " where averia_m1=" . $data["movistar1"];
-                    } else {
-                        $filtro_sql .= " where (averia_m1 is null or averia_m1='')";
-                    }
-                }
+                if($pos!=false){
+					if($data["movistar1"]=="'null'"){
+					$filtro_sql .= " WHERE (averia_m1 is null or averia_m1='')";
+					}
+					else{
+					$filtro_sql .= " WHERE (averia_m1 is null or averia_m1 IN (".$data['movistar1'].") or averia_m1='')";
+					}
+				}
+				else{
+					$filtro_sql .= " WHERE averia_m1 IN (".$data['movistar1'].") ";
+				}
             }
         }
 
@@ -567,27 +580,28 @@ class gestionCriticos {
 				a.fftt,a.llave,a.dir_terminal,a.fonos_contacto,a.contrata,a.zonal 'zonal',a.quiebre,a.lejano,
 				a.distrito,a.eecc_final 'eecc_final',a.zona_movistar_uno,a.paquete,a.data_multiproducto,a.averia_m1,
 				a.fecha_data_fuente,a.telefono_codclientecms,a.rango_dias,a.sms1,
-				a.sms2,a.area2,c.fecha_creacion,a.microzona,mov.tecnico, c.nmov,
-				(CASE aver.averia WHEN '' THEN '' ELSE aver.averia END) 'existe','' AS 'actuacion',
-				(SELECT fecha_cambio FROM webpsi_coc.averias_criticos_final_historico WHERE averia=a.averia) fecha_cambio, 
-				(SELECT ROUND((TIMESTAMPDIFF(SECOND,(SELECT fecha_cambio FROM webpsi_coc.`averias_criticos_final_historico` WHERE averia=a.averia),NOW()) / 3600),2)) AS `horas_cambio`
+				a.sms2,a.area2,c.fecha_creacion,a.microzona,mov.tecnico, c.nmov
+				,IFNULL((SELECT averia FROM schedulle_sistemas.pen_pais_total WHERE averia=a.averia LIMIT 1 ),'') existe
+				,'' AS 'actuacion'
+				,(SELECT fecha_cambio FROM webpsi_coc.averias_criticos_final_historico WHERE averia=a.averia) fecha_cambio
+				,(SELECT ROUND((TIMESTAMPDIFF(SECOND,(SELECT fecha_cambio FROM webpsi_coc.`averias_criticos_final_historico` WHERE averia=a.averia),NOW()) / 3600),2)) AS `horas_cambio`
 				,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=a.averia),IF(IFNULL(a.wu_nagendas,'')='',0,a.wu_nagendas)) wu_nagendas ,c.n_evento
-				,(select paso from webpsi_officetrack.tareas where task_id=c.id order by fecha_recepcion desc limit 1) estado_evento
-				FROM webpsi_criticos.gestion_criticos c INNER JOIN webpsi_criticos.gestion_movimientos mov ON c.id=mov.id_gestion INNER JOIN
-				webpsi_criticos.gestion_averia a ON c.id=a.id_gestion INNER JOIN 
-				webpsi_criticos.horarios h ON c.id_horario=h.id INNER JOIN 
-				webpsi_criticos.motivos m ON c.id_motivo=m.id INNER JOIN 
-				webpsi_criticos.submotivos s ON c.id_submotivo=s.id INNER JOIN 
-				webpsi_criticos.estados e ON c.id_estado=e.id LEFT JOIN
-				schedulle_sistemas.pen_pais_total aver ON aver.averia=a.averia
-				where mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) 
+				,(SELECT paso FROM webpsi_officetrack.tareas WHERE task_id=c.id ORDER BY fecha_recepcion DESC LIMIT 1) estado_evento
+				FROM webpsi_criticos.gestion_criticos c 
+				INNER JOIN webpsi_criticos.gestion_movimientos mov ON c.id=mov.id_gestion 
+				INNER JOIN webpsi_criticos.gestion_averia a ON c.id=a.id_gestion 
+				INNER JOIN webpsi_criticos.horarios h ON c.id_horario=h.id 
+				INNER JOIN webpsi_criticos.motivos m ON c.id_motivo=m.id 
+				INNER JOIN webpsi_criticos.submotivos s ON c.id_submotivo=s.id 
+				INNER JOIN webpsi_criticos.estados e ON c.id_estado=e.id 
+				WHERE mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) 
 											FROM webpsi_criticos.gestion_movimientos mov2
-											WHERE mov2.id_gestion=c.id) $filtro_liquidado 
-				order by a.fecha_registro asc
+											WHERE mov2.id_gestion=c.id)  
+				$filtro_liquidado    
+				ORDER BY a.fecha_registro 	
 			
+		)AS agendas 
 		
-			
-		)AS agendas
 		UNION ALL
 		SELECT * FROM(
 			
@@ -605,24 +619,27 @@ class gestionCriticos {
 				a.tipo_actuacion AS 'actuacion'
 				,(SELECT fecha_cambio FROM webpsi_coc.tmp_provision_historico WHERE codigo_req=a.codigo_req) fecha_cambio
 				,(SELECT ROUND((TIMESTAMPDIFF(SECOND,(SELECT fecha_cambio FROM webpsi_coc.`tmp_provision_historico` WHERE codigo_req=a.codigo_req),NOW()) / 3600),2)) AS `horas_cambio`
-				,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=a.codigo_req),IF(IFNULL(a.wu_nagendas,'')='',0,a.wu_nagendas)) wu_nagendas ,c.n_evento
+				,IFNULL((SELECT wu_nagendas FROM webpsi_coc.tmp_provision WHERE codigo_req=a.codigo_req),IF(IFNULL(a.wu_nagendas,'')='',0,a.wu_nagendas)) wu_nagendas ,c.n_evento
 				,(select paso from webpsi_officetrack.tareas where task_id=c.id order by fecha_recepcion desc limit 1) estado_evento
-				FROM webpsi_criticos.gestion_criticos c INNER JOIN webpsi_criticos.gestion_movimientos mov ON c.id=mov.id_gestion INNER JOIN
-				webpsi_criticos.gestion_provision a ON c.id=a.id_gestion INNER JOIN 
-				webpsi_criticos.horarios h ON c.id_horario=h.id INNER JOIN 
-				webpsi_criticos.motivos m ON c.id_motivo=m.id INNER JOIN 
-				webpsi_criticos.submotivos s ON c.id_submotivo=s.id INNER JOIN 
-				webpsi_criticos.estados e ON c.id_estado=e.id 
-				where mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) 
+				FROM webpsi_criticos.gestion_criticos c 
+				INNER JOIN webpsi_criticos.gestion_movimientos mov ON c.id=mov.id_gestion 
+				INNER JOIN webpsi_criticos.gestion_provision a ON c.id=a.id_gestion 
+				INNER JOIN webpsi_criticos.horarios h ON c.id_horario=h.id 
+				INNER JOIN webpsi_criticos.motivos m ON c.id_motivo=m.id 
+				INNER JOIN webpsi_criticos.submotivos s ON c.id_submotivo=s.id 
+				INNER JOIN webpsi_criticos.estados e ON c.id_estado=e.id 
+				WHERE mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) 
 											FROM webpsi_criticos.gestion_movimientos mov2
-											WHERE mov2.id_gestion=c.id) $filtro_liquidado 
-				order by fecha_registro asc
+											WHERE mov2.id_gestion=c.id)  
+				$filtro_liquidado  
+				ORDER BY fecha_registro
 			
-		)AS provision
+		)AS provision 
+		
 		UNION ALL
 		SELECT * FROM(
 			
-                select '' as 'id',a.averia,'' as 'id_atc','Averias' as 'tipo_actividad',a.nombre_cliente 'nombre',a.fecha_registro as 'fecha_reg',a.quiebre 'quiebres',a.eecc_final 'empresa',a.telefono_codclientecms 'telefono_cliente_critico',
+                SELECT '' as 'id',a.averia,'' as 'id_atc','Averias' as 'tipo_actividad',a.nombre_cliente 'nombre',a.fecha_registro as 'fecha_reg',a.quiebre 'quiebres',a.eecc_final 'empresa',a.telefono_codclientecms 'telefono_cliente_critico',
                 '' as 'fecha_agenda','' as 'horario','' as 'motivo','' as 'submotivo','' as 'm_id','' as 's_id','Temporal' as 'estado','Temporal' as 'codigo_estado',
                 '' as 'flag_tecnico',a.tipo_averia,a.horas_averia,a.fecha_registro,a.ciudad,a.averia 'codigo_averia',a.inscripcion,a.fono1,a.telefono,a.mdf,a.observacion_102,a.segmento,
                 a.area_,a.direccion_instalacion,a.codigo_distrito,a.nombre_cliente,a.orden_trabajo,a.veloc_adsl,
@@ -634,15 +651,16 @@ class gestionCriticos {
                 ,acfh.fecha_cambio
 				,ROUND((TIMESTAMPDIFF(SECOND,acfh.fecha_cambio,NOW()) / 3600),2) horas_cambio
                 ,IFNULL(a.wu_nagendas,'0') wu_nagendas ,'' n_evento
-                ,null estado_evento
-				from webpsi_coc.averias_criticos_final a
-				left join webpsi_coc.averias_criticos_final_historico acfh on a.averia=acfh.averia
-				where a.averia not in (select averia from webpsi_criticos.gestion_averia)
-                and a.averia NOT IN (SELECT averia FROM webpsi_criticos.gestion_rutina_manual) 
-                $filtro_liquidado
-                 order by fecha_registro asc
+                ,NULL estado_evento
+				FROM webpsi_coc.averias_criticos_final a
+				LEFT JOIN webpsi_coc.averias_criticos_final_historico acfh on a.averia=acfh.averia
+				WHERE a.averia NOT IN (SELECT averia FROM webpsi_criticos.gestion_averia)
+                AND a.averia NOT IN (SELECT averia FROM webpsi_criticos.gestion_rutina_manual)
+                $filtro_liquidado                           
+        		ORDER BY fecha_registro             
 
 		)as averias_final
+		
 		UNION ALL
 		SELECT * FROM(
 
@@ -663,14 +681,16 @@ class gestionCriticos {
 				FROM webpsi_coc.tmp_provision a
 				LEFT JOIN webpsi_coc.tmp_provision_historico tph ON (a.codigo_req=tph.codigo_req)				
 				WHERE a.codigo_req NOT IN (SELECT codigo_req FROM webpsi_criticos.gestion_provision)  
-				and   a.codigo_req NOT IN (SELECT codigo_req FROM webpsi_criticos.gestion_rutina_manual_provision) 
-				$filtro_liquidado
-				order by fecha_registro asc
+				AND a.codigo_req NOT IN (SELECT codigo_req FROM webpsi_criticos.gestion_rutina_manual_provision) 	
+				$filtro_liquidado  				
+				ORDER BY fecha_registro
 
 		)as provision_final
+		
 		UNION ALL
 		SELECT * FROM(
-				SELECT c.id,'' as averia,id_atc,tipo_actividad,a.nombre_cliente 'nombre',a.fecha_registro 'fecha_reg',a.quiebre 'quiebres',
+
+				SELECT c.id,a.averia as averia,id_atc,tipo_actividad,a.nombre_cliente 'nombre',a.fecha_registro 'fecha_reg',a.quiebre 'quiebres',
 				a.eecc_final 'empresa',a.telefono_codclientecms 'telefono_cliente_critico', c.fecha_agenda,h.horario,m.motivo,s.submotivo,
 				m.id 'm_id',s.id 's_id',e.estado,e.id as 'codigo_estado',flag_tecnico,a.tipo_averia 'tipo_averia',a.horas_averia,
 				a.fecha_registro, a.ciudad,a.averia 'codigo_averia',a.inscripcion,a.fono1,a.telefono,a.mdf 'mdf',a.observacion_102,
@@ -679,24 +699,32 @@ class gestionCriticos {
 				a.dir_terminal,a.fonos_contacto,a.contrata,a.zonal 'zonal',a.quiebre,a.lejano, a.distrito,a.eecc_final 'eecc_final',
 				a.zona_movistar_uno,a.paquete,a.data_multiproducto,a.averia_m1, a.fecha_data_fuente,a.telefono_codclientecms,
 				a.rango_dias,a.sms1, a.sms2,a.area2,c.fecha_creacion,a.microzona,mov.tecnico, c.nmov,
-				'' as 'existe','' as 'actuacion','' as 'fecha_cambio','' as 'horas_cambio'
-				,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=a.averia),IF(IFNULL(a.wu_nagendas,'')='',0,a.wu_nagendas)) wu_nagendas ,c.n_evento
+				'' as 'existe','' as 'actuacion'				
+				,(SELECT fecha_cambio FROM webpsi_coc.averias_criticos_final_historico WHERE averia=a.averia) fecha_cambio
+				,(SELECT ROUND((TIMESTAMPDIFF(SECOND,(SELECT fecha_cambio FROM webpsi_coc.`averias_criticos_final_historico` WHERE averia=a.averia),NOW()) / 3600),2)) AS `horas_cambio`
+				,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=a.averia),
+									IF(IFNULL(a.wu_nagendas,'')='',0,a.wu_nagendas)
+								) wu_nagendas ,c.n_evento
 				,(select paso from webpsi_officetrack.tareas where task_id=c.id order by fecha_recepcion desc limit 1) estado_evento
-				FROM webpsi_criticos.gestion_criticos c 
-				inner join webpsi_criticos.gestion_movimientos mov on c.id=mov.id_gestion
-				 inner join webpsi_criticos.gestion_rutina_manual a on c.id=a.id_gestion 
-				inner join webpsi_criticos.horarios h on c.id_horario=h.id 
-				inner join webpsi_criticos.motivos m on c.id_motivo=m.id 
-				inner join webpsi_criticos.submotivos s on c.id_submotivo=s.id 
-				inner join webpsi_criticos.estados e on c.id_estado=e.id 
-				where mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) FROM webpsi_criticos.gestion_movimientos mov2 
-				WHERE mov2.id_gestion=c.id) $filtro_Averias 
-				order by a.fecha_registro asc
+				FROM webpsi_criticos.gestion_rutina_manual a
+				INNER JOIN webpsi_criticos.gestion_criticos c ON (a.id_gestion=c.id)
+				INNER JOIN webpsi_criticos.gestion_movimientos mov ON (c.id=mov.id_gestion)
+				INNER JOIN webpsi_criticos.horarios h ON (c.id_horario=h.id) 
+				INNER JOIN webpsi_criticos.motivos m ON (c.id_motivo=m.id) 
+				INNER JOIN webpsi_criticos.submotivos s ON (c.id_submotivo=s.id) 
+				INNER JOIN webpsi_criticos.estados e ON (c.id_estado=e.id) 
+				WHERE mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) 
+											FROM webpsi_criticos.gestion_movimientos mov2 
+											WHERE mov2.id_gestion=c.id)  
+				$filtro_liquidado  
+				ORDER BY a.fecha_registro
+
 		)AS rutina_manual
+		
 		UNION ALL
 		SELECT * FROM(
 			
-				SELECT  c.id,a.codigo_req AS 'averia',id_atc,tipo_actividad,a.nomcliente 'nombre',fecha_Reg AS 'fecha_reg',a.quiebre 'quiebres',a.eecc_final 'empresa',a.telefono_codclientecms 'telefono_cliente_critico',
+				SELECT  c.id,a.codigo_req AS 'averia',id_atc,tipo_actividad,a.nomcliente 'nombre',a.fecha_Reg AS 'fecha_reg',a.quiebre 'quiebres',a.eecc_final 'empresa',a.telefono_codclientecms 'telefono_cliente_critico',
 				c.fecha_agenda,h.horario,m.motivo,s.submotivo,m.id 'm_id',s.id 's_id',e.estado AS 'estado',e.id AS 'codigo_estado',
 				flag_tecnico,a.origen AS 'tipo_averia',a.horas_pedido AS 'horas_averia',a.fecha_Reg AS 'fecha_registro',a.ciudad,a.codigo_req AS 'codigo_averia',
 				a.codigo_del_cliente AS 'inscripcion',a.fono1,a.telefono,a.mdf,a.obs_dev AS 'observacion_102',a.codigosegmento AS 'segmento',a.
@@ -706,24 +734,29 @@ class gestionCriticos {
 				quiebre,a.lejano,a.des_distrito AS 'distrito',a.eecc_final,a.zona_movuno AS 'zona_movistar_uno',a.paquete,a.data_multip AS 'data_multiproducto',a.aver_m1 AS 'averia_m1',a.
 				fecha_data_fuente,a.telefono_codclientecms,a.rango_dias,a.sms1,a.sms2,
 				a.area2,c.fecha_creacion AS 'fecha_creacion',a.microzona,mov.tecnico, c.nmov,
-				IFNULL((select tmp.DATA17 FROM schedulle_sistemas.tmp_gaudi_total tmp where tmp.DATA17=a.codigo_req limit 1 ),'') 'existe',
+				IFNULL((SELECT tmp.DATA17 FROM schedulle_sistemas.tmp_gaudi_total tmp WHERE tmp.DATA17=a.codigo_req LIMIT 1 ),'') 'existe',
 				a.tipo_actuacion AS 'actuacion'
 				,(SELECT fecha_cambio FROM webpsi_coc.tmp_provision_historico WHERE codigo_req=a.codigo_req) fecha_cambio
 				,(SELECT ROUND((TIMESTAMPDIFF(SECOND,(SELECT fecha_cambio FROM webpsi_coc.`tmp_provision_historico` WHERE codigo_req=a.codigo_req),NOW()) / 3600),2)) AS `horas_cambio`
-			 	,IFNULL((SELECT wu_nagendas FROM webpsi_coc.averias_criticos_final WHERE averia=a.codigo_req),IF(IFNULL(a.wu_nagendas,'')='',0,a.wu_nagendas)) wu_nagendas ,c.n_evento
-				,(select paso from webpsi_officetrack.tareas where task_id=c.id order by fecha_recepcion desc limit 1) estado_evento
-				FROM webpsi_criticos.gestion_criticos c INNER JOIN webpsi_criticos.gestion_movimientos mov ON c.id=mov.id_gestion INNER JOIN
-				webpsi_criticos.gestion_rutina_manual_provision a ON c.id=a.id_gestion INNER JOIN 
-				webpsi_criticos.horarios h ON c.id_horario=h.id INNER JOIN 
-				webpsi_criticos.motivos m ON c.id_motivo=m.id INNER JOIN 
-				webpsi_criticos.submotivos s ON c.id_submotivo=s.id INNER JOIN 
-				webpsi_criticos.estados e ON c.id_estado=e.id 
-				where mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) 
+			    ,IFNULL((SELECT wu_nagendas FROM webpsi_coc.tmp_provision WHERE codigo_req=a.codigo_req),
+								 IF(IFNULL(a.wu_nagendas,'')='',0,a.wu_nagendas)
+						) wu_nagendas ,c.n_evento
+				,(SELECT paso FROM webpsi_officetrack.tareas WHERE task_id=c.id ORDER BY fecha_recepcion DESC LIMIT 1) estado_evento
+				FROM webpsi_criticos.gestion_criticos c 
+				INNER JOIN webpsi_criticos.gestion_movimientos mov ON (c.id=mov.id_gestion) 
+				INNER JOIN webpsi_criticos.gestion_rutina_manual_provision a ON (c.id=a.id_gestion) 
+				INNER JOIN webpsi_criticos.horarios h ON (c.id_horario=h.id) 
+				INNER JOIN webpsi_criticos.motivos m ON (c.id_motivo=m.id) 
+				INNER JOIN webpsi_criticos.submotivos s ON (c.id_submotivo=s.id) 
+				INNER JOIN webpsi_criticos.estados e ON (c.id_estado=e.id) 				
+				WHERE mov.fecha_movimiento=(SELECT MAX(mov2.fecha_movimiento) 
 											FROM webpsi_criticos.gestion_movimientos mov2
-											WHERE mov2.id_gestion=c.id) $filtro_Averias  
-				order by fecha_registro asc
+											WHERE mov2.id_gestion=c.id)   
+				$filtro_liquidado 
+				ORDER BY fecha_registro
 			
 		)AS rutina_manual_provision
+		
 	)AS T1 $filtro_sql $filtro_estado $filtroNuevoCtc";
 
 
