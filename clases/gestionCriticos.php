@@ -168,7 +168,7 @@ class gestionCriticos {
 		
 		UNION ALL
 		SELECT * FROM(
-				SELECT c.id,'' as averia,id_atc,tipo_actividad,a.nombre_cliente 'nombre',a.fecha_registro 'fecha_reg',a.quiebre 'quiebres',
+				SELECT c.id,averia as averia,id_atc,tipo_actividad,a.nombre_cliente 'nombre',a.fecha_registro 'fecha_reg',a.quiebre 'quiebres',
 				a.eecc_final 'empresa',a.telefono_codclientecms 'telefono_cliente_critico', c.fecha_agenda,h.horario,m.motivo,s.submotivo,
 				m.id 'm_id',s.id 's_id',e.estado,e.id as 'codigo_estado',flag_tecnico,a.tipo_averia 'tipo_averia',a.horas_averia,
 				a.fecha_registro, a.ciudad,a.averia 'codigo_averia',a.inscripcion,a.fono1,a.telefono,a.mdf 'mdf',a.observacion_102,

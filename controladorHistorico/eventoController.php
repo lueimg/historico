@@ -1,4 +1,5 @@
 <?php
+sleep(4);
 $PATH =  $_SERVER['DOCUMENT_ROOT']."/webpsi/";
 include_once $PATH."clases/class.Conexion.php";
 include_once $PATH."modulos/historico/clases/gestionCriticos.php";
@@ -68,8 +69,8 @@ if(isset($_POST["gestion_critico"]) && $_POST["gestion_critico"]=="gestion_criti
 	$envio['Password']					=	'';
 
 	$envio['Operation']					=	$operation;
-	$envio['TaskNumber']				=	$_POST['id_gestion'];
-	$envio['EmployeeNumber']			=	$carnet; // jala el carnet del tecnico
+	$envio['TaskNumber']				=	"X".$_POST['id_gestion'];
+	$envio['EmployeeNumber']			=	"X".$carnet; // jala el carnet del tecnico
 	$envio['DueDateAsYYYYMMDDHHMMSS']	=	date("YmdHis",strtotime($averias['fecha_registro']));
 
 	$Duration=2;
@@ -162,8 +163,8 @@ elseif(isset($_POST["registro_critico"]) && $_POST["registro_critico"]=="registr
 	$envio['Password']					=	'';
 
 	$envio['Operation']					=	$operation;
-	$envio['TaskNumber']				=	$id_gestion;
-	$envio['EmployeeNumber']			=	$carnet; // jala el carnet del tecnico
+	$envio['TaskNumber']				=	"X".$id_gestion;
+	$envio['EmployeeNumber']			=	"X".$carnet; // jala el carnet del tecnico
 
 	$envio['DueDateAsYYYYMMDDHHMMSS']	=	date("YmdHis",strtotime($_POST['fecha_registro']));
 

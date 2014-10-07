@@ -12,8 +12,10 @@ class GestionManual {
             $quiebre,$averia,$tipo_actividad) {
 
         $tabla="";
+        $campo="";
         if($tipo_actividad!="AVERIA"){
             $tabla="_provision";
+            $campo="_Provision";
         }
         
         try {
@@ -104,7 +106,7 @@ class GestionManual {
                         '', '1', '2',
                         '2', '2', '$observacion',
                         '$fecreg', '', 
-                        'Manual_Provision', '1', '0'
+                        'Manual$campo', '1', '0'
                     )";
             $dbh->exec($sql);
             

@@ -894,13 +894,14 @@ function registrarCriticos() {
 
         complete: function(){
         // Handle the complete event
-        $('.modalPop').hide();
+        
         },
         success: function (data) {
           finalizarEnvioRegistro(data,'0');
         },
 
         error: function () {
+            $('.modalPop').hide();
             alert("Error: No se realizo el registro,por favor intente nuevamente; Si persiste el error favor de comunicarse con sistemas");
         }
     });
@@ -943,6 +944,15 @@ function finalizarRegistroCritico(d,idcritico){
         url: "controladorHistorico/historicoController.php?timestamp="+timestamp+"&idcritico="+idcritico,
         data: parametros,
         dataType: "html",
+        beforeSend: function(){
+    // Handle the beforeSend event
+        $('.modalPop').show();  
+        },
+        complete: function(){
+        $('.modalPop').hide();
+        // Handle the complete event
+        
+        },
         success: function (data) {
             window.parent.jQuery("#filtro_general").click();
             alert(data);
@@ -958,6 +968,7 @@ function finalizarRegistroCritico(d,idcritico){
         },
 
         error: function () {
+            $('.modalPop').hide();
             alert("Error no se realizo el registro");
         }
     });
@@ -1071,13 +1082,14 @@ function registrarMovimientos() {
 
               complete: function(){
               // Handle the complete event
-              $('.modalPop').hide();
+              
               },
               success: function (data) {
                 finalizarEnvioRegistro(data,'1');
               },
 
               error: function () {
+                  $('.modalPop').hide();
                   alert("Error: No se realizo el registro,por favor intente nuevamente; Si persiste el error favor de comunicarse con sistemas");
               }
              });
@@ -1097,13 +1109,14 @@ function registrarMovimientos() {
 
               complete: function(){
               // Handle the complete event
-              $('.modalPop').hide();
+              
               },
               success: function (data) {
                 finalizarEnvioRegistro(data,'1');
               },
 
               error: function () {
+                  $('.modalPop').hide();
                   alert("Error: No se realizo el registro,por favor intente nuevamente; Si persiste el error favor de comunicarse con sistemas");
               }
              });
@@ -1170,7 +1183,7 @@ function finalizarEnvioRegistro(d,ind){
 
         complete: function(){
         // Handle the complete event
-        $('.modalPop').hide();
+        //
         },
         success: function (datos) {          
           if(datos=="OK"){    
@@ -1183,11 +1196,13 @@ function finalizarEnvioRegistro(d,ind){
             
           }
           else{
+            $('.modalPop').hide();
             alert("No se realizo el registro,por favor intente nuevamente; Si persiste el error favor de comunicarse con sistemas");
           }  
         },
 
         error: function () {
+            $('.modalPop').hide();
             alert("Error no se realizo el registro");
         }
     });
@@ -1256,6 +1271,7 @@ var parametros = $("#frm_gestion_critico").serialize();
         },
 
         error: function () {
+            $('.modalPop').hide();
             alert("Error no se realizo el registro");
         }
     });
