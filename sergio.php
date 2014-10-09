@@ -22,6 +22,10 @@ $arrTramas = $objOT->getTramasTarea($idTarea);
 
 <script type="text/javascript" src="../../js2/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="../../js2/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script type="text/javascript" src="../../js2/fancybox/js/jquery.fancybox.js?v=2.1.5"></script>
+<script type="text/javascript" src="../../js2/fancybox/js/jquery.fancybox-buttons.js?v=1.0.5"></script>
+<link rel="stylesheet" type="text/css" href="../../js2/fancybox/css/jquery.fancybox-buttons.css?v=1.0.5" />
+<link rel="stylesheet" type="text/css" href="../../js2/fancybox/css/jquery.fancybox.css?v=2.1.5" media="screen" />
 <link type="text/css" href="../../js2/jquery-ui-1.10.3.custom/css/redmond/jquery-ui-1.10.3.custom.css" rel="Stylesheet" />
 
 <link type="text/css" href="css/reporteador.css" rel="Stylesheet" />

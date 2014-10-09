@@ -420,7 +420,7 @@ class gestionCriticos {
 
         if ($data["quiebre"] != "") {
             if ($filtro_sql != "") {
-                $filtro_sql .= " and (quiebres in(" . $data["quiebre"] . ") or (quiebres='F_PL' AND id_atc!='' ) )";
+                $filtro_sql .= " and quiebres in(" . $data["quiebre"] . ")";
             } else {
                 $filtro_sql .= "where quiebres in(" . $data["quiebre"] . ")";
             }

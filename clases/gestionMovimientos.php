@@ -225,6 +225,38 @@ if($reporte=="act"){
 												WHERE l2.id_gestion=c.id_gestion
 											  )
 						)AS rutinas 
+				UNION ALL 
+						SELECT * FROM( 
+								SELECT c.id,cri.id_atc,p.eecc_final
+									,(CASE c.id WHEN (	SELECT MAX(mov2.id) 
+														FROM webpsi_criticos.gestion_movimientos mov2
+														WHERE mov2.id_gestion=c.id_gestion
+													 ) 					
+									 THEN  'X' ELSE '' END) 'ultimo_movimiento',tipo_actividad,p.codigo_req AS 'averia'
+								,p.tipo_motivo as 'codmotivo_req_catv',p.quiebre,nombre_cliente_critico,telefono_cliente_critico
+								,celular_cliente_critico,c.observacion, c.fecha_agenda,horario,d.dias, e.nombre,z.zonal,m.motivo
+								,s.submotivo,es.estado,tecnico,p.fecha_Reg AS 'fecha_registro',fecha_creacion,fecha_movimiento,t.usuario
+								,es.id AS 'e_id',c.fecha_consolidacion,origen AS 'tipo_averia',aver_m1 AS 'averia_m1',l.penalizable
+								,(SELECT fecha_cambio 
+								 FROM webpsi_coc.`tmp_provision_historico` pch 
+								 WHERE pch.codigo_req=p.codigo_req ) AS fecha_cambio
+								FROM webpsi_criticos.gestion_rutina_manual_provision p 
+								INNER JOIN webpsi_criticos.gestion_criticos cri ON p.id_gestion=cri.id 
+								INNER JOIN webpsi_criticos.gestion_movimientos c ON c.id_gestion=cri.id 
+								INNER JOIN webpsi_criticos.empresa e ON e.id=c.id_empresa 
+								INNER JOIN webpsi_criticos.horarios h ON h.id=c.id_horario 
+								INNER JOIN webpsi_criticos.zonales z ON z.id=c.id_zonal 
+								INNER JOIN webpsi_criticos.dias d ON d.id=c.id_dia 
+								INNER JOIN webpsi_criticos.motivos m ON m.id=c.id_motivo 
+								INNER JOIN webpsi_criticos.submotivos s ON s.id=c.id_submotivo 
+								INNER JOIN webpsi_criticos.estados es ON es.id=c.id_estado 
+								INNER JOIN webpsi.tb_usuario t ON c.id_usuario=t.id 
+								LEFT JOIN	webpsi_criticos.liquidados l on c.id_gestion=l.id_gestion
+								WHERE l.id in (	SELECT max(l2.id) 
+											 	FROM webpsi_criticos.liquidados l2 
+												WHERE l2.id_gestion=c.id_gestion
+											  )
+						)AS rutina_provision
 				)AS t1  $filtro
 				ORDER BY id_atc,id ";
 
