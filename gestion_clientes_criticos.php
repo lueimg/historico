@@ -330,6 +330,7 @@ $solcomArray = $ob_solcom->getSolucionesAll($cnx);
 						<option value=''>-- Seleccione --</option>
 						</select>
 					</div>
+					<div><span class="labeltecoffice2"></span></div>
 				</div>
 				<div class="content_datos">
 					<div class="caja_text" style="display:block">

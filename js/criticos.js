@@ -790,10 +790,19 @@ $(document).ready(function(){
     $("#tecnico").change(function(){
 
         var idtecnico =  $(this).val();
-        getTecnicoOfficeTrack(idtecnico);
+        getTecnicoOfficeTrack(idtecnico,'labeltecoffice');
 
 
     });
+
+    $("#tecnico_movimiento").change(function(){
+
+        var idtecnico =  $(this).val();
+        getTecnicoOfficeTrack(idtecnico,'labeltecoffice2');
+
+
+    });
+    
 
 
 
@@ -801,7 +810,7 @@ $(document).ready(function(){
 })
 
 
-function getTecnicoOfficeTrack(idtecnico)
+function getTecnicoOfficeTrack(idtecnico,idlabel)
 {
     $.ajax({
         type: "POST",
@@ -814,9 +823,9 @@ function getTecnicoOfficeTrack(idtecnico)
         success: function (data) {
             $("#tec_officetrack").val(data);
             if(data == "1" || data == 1){
-                $(".labeltecoffice").text("Es tecnico officetrack")
+                $("."+idlabel).text("Es tecnico officetrack")
             }else{
-                $(".labeltecoffice").text("No es tecnico officetrack")
+                $("."+idlabel).text("No es tecnico officetrack")
 
             }
         },
@@ -1122,7 +1131,7 @@ function registrarMovimientos() {
                });
   		}
     }
-    else if( (estado_id==3 || estado_id==19) && $("#paso_final").val()!="0003-Cierre") ){
+    else if( (estado_id==3 || estado_id==19) && $("#paso_final").val()!="0003-Cierre" ){
         alert("No se puede liquidar; Gestion aun no cuenta con cierre en officetrack.");
     }
    }
@@ -1305,7 +1314,11 @@ function cargarTecnico(slct,tec,cedu,idemp,quie){
             }
             $('#'+slct).html('<option value="">-- Seleccione --</option>'+html);
             $('#'+slct).val(tec);
-              getTecnicoOfficeTrack(tec);
+            idlabel="labeltecoffice";
+              if(slct=="tecnico_movimiento"){
+                idlabel="labeltecoffice2";
+              }
+              getTecnicoOfficeTrack(tec,idlabel);
           },
           error: function () {
               alert("Error no cargaron los tecnicos");
