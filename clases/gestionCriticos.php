@@ -1620,6 +1620,10 @@ class gestionCriticos {
                     if ($_POST["estado"] == "3" || $_POST["estado"] == "19") {//para registrar el tecnico tambien al liquidar
                         $tecnico = $tecnico_movimiento;
                     }
+
+                    if ($id_motivo == "9" || $id_motivo == "4") {//para registrar el tecnico tambien al cancelar o devolver
+                        $tecnico = $tecnico_movimiento;
+                    }
                     $gestMovimiento = new gestionMovimientos();
 
                     $res = $gestMovimiento->addGestionMovimientos($cnx, $id_gestion, $id_empresa, $id_zonal, $fecha_agenda

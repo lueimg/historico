@@ -1004,11 +1004,11 @@ function registrarMovimientos() {
    sin_movimiento = ""
    if(estado_id==9 || estado_id==10 || estado_id==20 || estado_id==3 || estado_id==19 ||
       estado_id==7 || estado_id==11 || estado_id==12 || estado_id==13 || estado_id==14 || estado_id==15 || 
-      estado_id==16 || estado_id==17 || id_motivo==5 || estado_id==26 || id_motivo==10 ){//id_estado 26 quiebre sistemas
+      estado_id==16 || estado_id==17 || id_motivo==5 || estado_id==26 || id_motivo==10 || id_motivo==9 || id_motivo==4 ){//id_estado 26 quiebre sistemas
       idtecnico = $("#tecnico_movimiento").val();
       tecnico=$("#tecnico_movimiento option:selected").text();
      sin_movimiento = "1"     
-     if(idtecnico==''){
+     if($.trim(idtecnico)==''){
       idtecnico=$("#IdTecnicoDefault").val();
       tecnico=$("#TecnicoDefault").val();
      }
