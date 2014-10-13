@@ -781,6 +781,13 @@ class gestionCriticos {
 									INNER JOIN webpsi_criticos.empresa e ON (gm.id_empresa=e.id)
 									WHERE gm.id_gestion=c.id
 									LIMIT 1) eecc_final
+				,IFNULL(
+					(SELECT paso
+					FROM webpsi_officetrack.tareas
+					WHERE task_id=c.id
+					ORDER BY id DESC LIMIT 1
+					),''
+				) pasofinal
 				,id_atc,nombre_cliente_critico 'nombre',telefono_cliente_critico,celular_cliente_critico,
 				fecha_agenda,observacion,h.horario,m.motivo,s.submotivo,c.id_estado,e.estado,flag_tecnico,a.quiebre,c.n_evento,a.paquete 
 				FROM
@@ -812,6 +819,13 @@ class gestionCriticos {
 									INNER JOIN webpsi_criticos.empresa e ON (gm.id_empresa=e.id)
 									WHERE gm.id_gestion=c.id
 									LIMIT 1) eecc_final
+				,IFNULL(
+					(SELECT paso
+					FROM webpsi_officetrack.tareas
+					WHERE task_id=c.id
+					ORDER BY id DESC LIMIT 1
+					),''
+				) pasofinal
 				,id_atc,nombre_cliente_critico 'nombre',telefono_cliente_critico,celular_cliente_critico,
 				fecha_agenda,observacion,h.horario,m.motivo,s.submotivo,c.id_estado,e.estado,flag_tecnico,p.quiebre,c.n_evento,p.paquete 
 				FROM webpsi_criticos.gestion_criticos c,webpsi_criticos.gestion_provision p, webpsi_criticos.horarios h, webpsi_criticos.motivos m, webpsi_criticos.submotivos s,
@@ -836,6 +850,13 @@ class gestionCriticos {
 									INNER JOIN webpsi_criticos.empresa e ON (gm.id_empresa=e.id)
 									WHERE gm.id_gestion=c.id
 									LIMIT 1) eecc_final
+				,IFNULL(
+					(SELECT paso
+					FROM webpsi_officetrack.tareas
+					WHERE task_id=c.id
+					ORDER BY id DESC LIMIT 1
+					),''
+				) pasofinal
 				,id_atc,nombre_cliente_critico 'nombre',telefono_cliente_critico,celular_cliente_critico,
 				fecha_agenda,observacion,h.horario,m.motivo,s.submotivo,c.id_estado,e.estado,flag_tecnico,p.quiebre,c.n_evento,p.paquete 
 				FROM webpsi_criticos.gestion_criticos c,webpsi_criticos.gestion_rutina_manual_provision p, webpsi_criticos.horarios h, webpsi_criticos.motivos m, webpsi_criticos.submotivos s,
@@ -860,6 +881,13 @@ class gestionCriticos {
 									INNER JOIN webpsi_criticos.empresa e ON (gm.id_empresa=e.id)
 									WHERE gm.id_gestion=c.id
 									LIMIT 1) eecc_final
+				,IFNULL(
+					(SELECT paso
+					FROM webpsi_officetrack.tareas
+					WHERE task_id=c.id
+					ORDER BY id DESC LIMIT 1
+					),''
+				) pasofinal
         		,id_atc,nombre_cliente_critico 'nombre',telefono_cliente_critico,celular_cliente_critico,
 				fecha_agenda,observacion,h.horario,m.motivo,s.submotivo,c.id_estado,e.estado,flag_tecnico,r.quiebre,c.n_evento,r.paquete 
 				FROM webpsi_criticos.gestion_criticos c,webpsi_criticos.gestion_rutina_manual r, webpsi_criticos.horarios h, webpsi_criticos.motivos m, webpsi_criticos.submotivos s,

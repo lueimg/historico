@@ -426,6 +426,7 @@ $solcomArray = $ob_solcom->getSolucionesAll($cnx);
 			
 				para el estado observac
 			-->
+			<input type="hidden" value="<?php echo $cliente_critico['paso_final'];?>" name="paso_final">
 			<input type="hidden" value="<?php echo trim($cliente_critico["quiebre"]);?>" name="quiebre" id="quiebre">
 			<input type="hidden" value="<?php echo trim($cliente_critico["n_evento"]);?>" name="n_evento" id="n_evento">
 			<input type="hidden" value="<?php echo $actividad; ?>" id="actividad" name="actividad">

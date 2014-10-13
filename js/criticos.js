@@ -1064,63 +1064,67 @@ function registrarMovimientos() {
    )
    {
 	
-
-	var parametros = $("#frm_gestion_critico").serialize();
+    if( ((estado_id==3 || estado_id==19) && $("#paso_final").val()=="0003-Cierre") || (estado_id!=3 && estado_id!=19) ){
+	  var parametros = $("#frm_gestion_critico").serialize();
       if($("#frm_gestion_critico #n_evento").val()=="1"){
 
-        if(confirm("Ya se realizo una transmision anteriormente, confirme para enviar la actualizacion.")){
+          if(confirm("Ya se realizo una transmision anteriormente, confirme para enviar la actualizacion.")){
 
-            $.ajax({
-          type: "POST",
-              url: "controladorHistorico/eventoController.php",
-              data:  parametros,
-              dataType: "Json",
-              beforeSend: function(){
-          // Handle the beforeSend event
-              $('.modalPop').show();  
-              },
+              $.ajax({
+            type: "POST",
+                url: "controladorHistorico/eventoController.php",
+                data:  parametros,
+                dataType: "Json",
+                beforeSend: function(){
+            // Handle the beforeSend event
+                $('.modalPop').show();  
+                },
 
-              complete: function(){
-              // Handle the complete event
-              
-              },
-              success: function (data) {
-                finalizarEnvioRegistro(data,'1');
-              },
+                complete: function(){
+                // Handle the complete event
+                
+                },
+                success: function (data) {
+                  finalizarEnvioRegistro(data,'1');
+                },
 
-              error: function () {
-                  $('.modalPop').hide();
-                  alert("Error: No se realizo el registro,por favor intente nuevamente; Si persiste el error favor de comunicarse con sistemas");
-              }
-             });
-          }
+                error: function () {
+                    $('.modalPop').hide();
+                    alert("Error: No se realizo el registro,por favor intente nuevamente; Si persiste el error favor de comunicarse con sistemas");
+                }
+               });
+            }
 
-        }
-		else{
-			$.ajax({
-          type: "POST",
-              url: "controladorHistorico/eventoController.php",
-              data:  parametros,
-              dataType: "Json",
-              beforeSend: function(){
-          // Handle the beforeSend event
-              $('.modalPop').show();  
-              },
+      }
+  		else{
+  			$.ajax({
+            type: "POST",
+                url: "controladorHistorico/eventoController.php",
+                data:  parametros,
+                dataType: "Json",
+                beforeSend: function(){
+            // Handle the beforeSend event
+                $('.modalPop').show();  
+                },
 
-              complete: function(){
-              // Handle the complete event
-              
-              },
-              success: function (data) {
-                finalizarEnvioRegistro(data,'1');
-              },
+                complete: function(){
+                // Handle the complete event
+                
+                },
+                success: function (data) {
+                  finalizarEnvioRegistro(data,'1');
+                },
 
-              error: function () {
-                  $('.modalPop').hide();
-                  alert("Error: No se realizo el registro,por favor intente nuevamente; Si persiste el error favor de comunicarse con sistemas");
-              }
-             });
-		}
+                error: function () {
+                    $('.modalPop').hide();
+                    alert("Error: No se realizo el registro,por favor intente nuevamente; Si persiste el error favor de comunicarse con sistemas");
+                }
+               });
+  		}
+    }
+    else if( (estado_id==3 || estado_id==19) && $("#paso_final").val()!="0003-Cierre") ){
+        alert("No se puede liquidar; Gestion aun no cuenta con cierre en officetrack.");
+    }
    }
    else{
 
