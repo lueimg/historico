@@ -150,6 +150,28 @@ FROM (
                                and gm.fecha_agenda BETWEEN '".$finicio."' and '".$ffin."'
                                 ".$wheres."
                                 ) ru
+                                union all
+                        select *
+                        from(
+                                select emp.nombre empresa_nombre,'pr' ide,t.id idtecnico ,trim(gm.tecnico) tecnico,t.idcedula,gm.fecha_agenda,gc.flag_tecnico,gm.id_horario
+,g.eecc_zon, h.horario, gc.id_atc, g.quiebre, g.aver_m1, g.area2,gc.n_evento, '' averia,g.mdf,g.lejano
+,gc.nombre_cliente_critico,gc.celular_cliente_critico,gc.observacion,gc.tipo_actividad
+,t.carnet,t.carnet_critico ,g.fecha_Reg,ced.nombre
+                                from webpsi_criticos.gestion_rutina_manual_provision g
+                                inner join webpsi_criticos.gestion_criticos gc on gc.id=g.id_gestion
+                                inner join webpsi_criticos.gestion_movimientos gm on g.id_gestion=gm.id_gestion
+                                inner join webpsi_criticos.estados e on e.id=gm.id_estado
+                                inner join webpsi_criticos.gestion_movimientos_tecnicos mt on mt.idmovimiento=gm.id
+                                inner join webpsi_criticos.tecnicos t on t.id=mt.idtecnico
+                                inner join webpsi_criticos.horarios h on h.id=gm.id_horario
+                                  inner join webpsi_criticos.empresa emp on emp.id = gm.id_empresa
+                                  inner join webpsi_criticos.cedula ced on ced.idcedula = t.idcedula
+                                where gm.fecha_movimiento in (select max(gm2.fecha_movimiento) from webpsi_criticos.gestion_movimientos gm2 where gm2.id_gestion=g.id_gestion and gm2.id_estado not in ('20','10','9') GROUP BY gm2.id_gestion)
+                                and gm.tecnico!=''
+                                and gm.id_estado='1'
+                               and gm.fecha_agenda BETWEEN '".$finicio."' and '".$ffin."'
+                                ".$wheres."
+                        ) prr
                 ) r
 
         ) q1
@@ -288,6 +310,49 @@ FROM (
                                 and gm_aux.fecha_agenda BETWEEN '".$finicio."' and '".$ffin."'
                                 ".$wheres."
                         ) ru
+                                union all
+                        select *
+                        from(
+                                select emp.nombre empresa_nombre,'pr' ide,t.id idtecnico,trim(gm.tecnico) tecnico,t.idcedula,gm_aux.fecha_agenda
+                                ,'Liquidado' flag_tecnico,gm_aux.id_horario
+                                               ,g.eecc_zon, h.horario, gc.id_atc, g.quiebre, g.aver_m1, g.area2, gc.n_evento, ''  averia,g.mdf,g.lejano
+,gc.nombre_cliente_critico,gc.celular_cliente_critico,gc.observacion,gc.tipo_actividad
+,t.carnet,t.carnet_critico ,g.fecha_Reg,ced.nombre
+                                from webpsi_criticos.gestion_rutina_manual_provision g
+                                inner join webpsi_criticos.gestion_criticos gc on gc.id=g.id_gestion
+                                inner join webpsi_criticos.gestion_movimientos gm on g.id_gestion=gm.id_gestion
+                                inner join
+                                        (   select gm_2.id_gestion,gm_2.fecha_agenda,gm_2.id_horario,gm_2.id_estado
+                                            from webpsi_criticos.gestion_movimientos gm_2
+                                            where gm_2.fecha_movimiento in
+                                                            (
+                                                                select max(gm2_2.fecha_movimiento)
+                                                                from webpsi_criticos.gestion_movimientos gm2_2
+                                                                where gm_2.id_gestion=gm2_2.id_gestion
+                                                                and gm2_2.id_estado not in ('9','10','20','3','19')
+                                                                GROUP BY gm2_2.id_gestion
+                                                            )
+                                            and gm_2.tecnico!=''
+                                            and gm_2.id_estado='1'
+                                        ) gm_aux on gm_aux.id_gestion=gm.id_gestion
+                                inner join webpsi_criticos.estados e on e.id=gm.id_estado
+                                inner join webpsi_criticos.gestion_movimientos_tecnicos mt on mt.idmovimiento=gm.id
+                                inner join webpsi_criticos.tecnicos t on t.id=mt.idtecnico
+                                inner join webpsi_criticos.horarios h on h.id=gm_aux.id_horario
+                                  inner join webpsi_criticos.empresa emp on emp.id = gm.id_empresa
+                                  inner join webpsi_criticos.cedula ced on ced.idcedula = t.idcedula
+                                where gm.fecha_movimiento in
+                                                (
+                                                    select max(gm2.fecha_movimiento)
+                                                    from webpsi_criticos.gestion_movimientos gm2
+                                                    where gm2.id_gestion=g.id_gestion
+                                                    GROUP BY gm2.id_gestion
+                                                )
+                                and gm.tecnico!=''
+                                and gm.id_estado in ('3','19')
+                               and gm_aux.fecha_agenda BETWEEN '".$finicio."' and '".$ffin."'
+                                ".$wheres."
+                        ) prr
                 ) r
 
         ) q2

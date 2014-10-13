@@ -120,6 +120,31 @@ FROM (
                                 ".$wheres."
                                 GROUP BY gm.tecnico,gm.fecha_agenda
                                 ) ru
+                                union all
+                        select *
+                        from(
+                                select 'pr' ide,t.id idtecnico ,trim(gm.tecnico) tecnico,t.idcedula,gm.fecha_agenda,group_concat(DISTINCT(gm.id_horario) SEPARATOR '_') as ids,count(gm.tecnico) as total
+                                                         ,count(h1.horario) h1,count(h2.horario) h2,count(h3.horario) h3,count(h4.horario) h4,count(h5.horario) h5
+                                                         ,GROUP_CONCAT(concat_ws('_',h1.horario,h2.horario,h3.horario,h4.horario,h5.horario,gc.flag_tecnico,gm.id_horario) SEPARATOR '|') estados
+                                from webpsi_criticos.gestion_rutina_manual_provision g 
+                                inner join webpsi_criticos.gestion_criticos gc on gc.id=g.id_gestion
+                                inner join webpsi_criticos.gestion_movimientos gm on g.id_gestion=gm.id_gestion
+                                inner join webpsi_criticos.estados e on e.id=gm.id_estado 
+                                inner join webpsi_criticos.gestion_movimientos_tecnicos mt on mt.idmovimiento=gm.id
+                                inner join webpsi_criticos.tecnicos t on t.id=mt.idtecnico
+                                inner join webpsi_criticos.horarios h on h.id=gm.id_horario
+                                left join webpsi_criticos.horarios h1 on (h1.id=gm.id_horario and gm.id_horario=1)
+                                left join webpsi_criticos.horarios h2 on (h2.id=gm.id_horario and gm.id_horario=2)
+                                left join webpsi_criticos.horarios h3 on (h3.id=gm.id_horario and gm.id_horario=3)
+                                left join webpsi_criticos.horarios h4 on (h4.id=gm.id_horario and gm.id_horario=4)
+                                left join webpsi_criticos.horarios h5 on (h5.id=gm.id_horario and gm.id_horario=5)
+                                where gm.fecha_movimiento in (select max(gm2.fecha_movimiento) from webpsi_criticos.gestion_movimientos gm2 where gm2.id_gestion=g.id_gestion and gm2.id_estado not in ('20','10','9') GROUP BY gm2.id_gestion)
+                                and gm.tecnico!=''
+                                and gm.id_estado='1'
+                                and gm.fecha_agenda BETWEEN '".$finicio."' and '".$ffin."'
+                                ".$wheres."
+                                GROUP BY gm.tecnico,gm.fecha_agenda
+                        ) prr
                 ) r
                 GROUP BY tecnico,fecha_agenda
         ) q1
@@ -268,6 +293,52 @@ FROM (
                                 ".$wheres."  
                                 GROUP BY gm.tecnico,gm_aux.fecha_agenda 
                         ) ru
+                                union all
+                        select *
+                        from(
+                                select 'pr' ide,t.id idtecnico,trim(gm.tecnico) tecnico,t.idcedula,gm_aux.fecha_agenda
+                                             ,group_concat(DISTINCT(gm_aux.id_horario) SEPARATOR '_') as ids,count(gm.tecnico) as total          
+                                                ,count(h1.horario) h1,count(h2.horario) h2,count(h3.horario) h3,count(h4.horario) h4,count(h5.horario) h5
+                                             ,GROUP_CONCAT(concat_ws('_',h1.horario,h2.horario,h3.horario,h4.horario,h5.horario,'L',gm_aux.id_horario) SEPARATOR '|') estados
+                                from webpsi_criticos.gestion_rutina_manual_provision g 
+                                inner join webpsi_criticos.gestion_criticos gc on gc.id=g.id_gestion
+                                inner join webpsi_criticos.gestion_movimientos gm on g.id_gestion=gm.id_gestion
+                                inner join 
+                                        (   select gm_2.id_gestion,gm_2.fecha_agenda,gm_2.id_horario,gm_2.id_estado
+                                            from webpsi_criticos.gestion_movimientos gm_2
+                                            where gm_2.fecha_movimiento in 
+                                                            (
+                                                                select max(gm2_2.fecha_movimiento) 
+                                                                from webpsi_criticos.gestion_movimientos gm2_2 
+                                                                where gm_2.id_gestion=gm2_2.id_gestion 
+                                                                and gm2_2.id_estado not in ('9','10','20','3','19') 
+                                                                GROUP BY gm2_2.id_gestion
+                                                            )
+                                            and gm_2.tecnico!=''
+                                            and gm_2.id_estado='1'
+                                        ) gm_aux on gm_aux.id_gestion=gm.id_gestion 
+                                inner join webpsi_criticos.estados e on e.id=gm.id_estado 
+                                inner join webpsi_criticos.gestion_movimientos_tecnicos mt on mt.idmovimiento=gm.id
+                                inner join webpsi_criticos.tecnicos t on t.id=mt.idtecnico
+                                inner join webpsi_criticos.horarios h on h.id=gm_aux.id_horario
+                                left join webpsi_criticos.horarios h1 on (h1.id=gm_aux.id_horario and gm_aux.id_horario=1)
+                                left join webpsi_criticos.horarios h2 on (h2.id=gm_aux.id_horario and gm_aux.id_horario=2)
+                                left join webpsi_criticos.horarios h3 on (h3.id=gm_aux.id_horario and gm_aux.id_horario=3)
+                                left join webpsi_criticos.horarios h4 on (h4.id=gm_aux.id_horario and gm_aux.id_horario=4)
+                                left join webpsi_criticos.horarios h5 on (h5.id=gm_aux.id_horario and gm_aux.id_horario=5)
+                                where gm.fecha_movimiento in 
+                                                (
+                                                    select max(gm2.fecha_movimiento) 
+                                                    from webpsi_criticos.gestion_movimientos gm2 
+                                                    where gm2.id_gestion=g.id_gestion 
+                                                    GROUP BY gm2.id_gestion
+                                                )
+                                and gm.tecnico!=''
+                                and gm.id_estado in ('3','19')
+                                and gm_aux.fecha_agenda BETWEEN '".$finicio."' and '".$ffin."'   
+                                ".$wheres."    
+                                GROUP BY gm.tecnico,gm_aux.fecha_agenda 
+                        ) prr
                 ) r
                 GROUP BY r.tecnico,r.fecha_agenda   
         ) q2
