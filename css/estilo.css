@@ -236,6 +236,8 @@ fieldset {
 }
 /*ui-datepicker-trigger*/
 
-.labeltecoffice{
+.labeltecoffice,
+.labeltecoffice2
+{
     font-weight: bold;
 }
