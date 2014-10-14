@@ -104,35 +104,28 @@ class gestionMovimientos{
 	function getCriticoMovimiento($cnx,$emp,$reporte,$fecha_ini,$fecha_fin){
                                
        $cnx->exec("set names utf8");
-       $filtro = "";
+       
+       $filtroa="";
+       $filtrop="";
+
        if($emp!=''){
-                       $filtro =" where eecc_final in($emp)";
+           $filtroa =" AND a.eecc_final in($emp)";
+           $filtrop =" AND p.eecc_final in($emp)";
        }
 
-       //sumando un dia a la fecha fin por el between 
        if($fecha_ini!="" && $fecha_fin!=""){
-                       $fecha_f=date($fecha_fin);
-                       $fec_fin = new DateTime($fecha_f);
-$fec_fin->add(new DateInterval('P1D'));
-$fecha_res_fin = $fec_fin->format('Y-m-d');
-
-if($reporte=="act"){
-        if($filtro!=""){
-                                                      $filtro .=" and fecha_registro between '$fecha_ini' and '$fecha_res_fin'";
-                                       }else{
-                                                      $filtro =" where fecha_registro between '$fecha_ini' and '$fecha_res_fin'";
-                                       }
-                       }else{
-                                       if($filtro!=""){
-                                                      $filtro .=" and fecha_creacion between '$fecha_ini' and '$fecha_res_fin'";
-                                       }else{
-                                                      $filtro =" where fecha_creacion between '$fecha_ini' and '$fecha_res_fin'";
-                                       }
-                       }
-       }
+			if($reporte=="act"){			       
+	        	$filtroa .=" AND DATE(a.fecha_registro) BETWEEN '$fecha_ini' AND '$fecha_fin'";
+	        	$filtrop .=" AND DATE(p.fecha_Reg) BETWEEN '$fecha_ini' AND '$fecha_fin'";
+			}
+			else{			     	
+	        	$filtroa .=" AND DATE(cri.fecha_creacion) BETWEEN '$fecha_ini' AND '$fecha_fin'";
+	        	$filtrop .=" AND DATE(cri.fecha_creacion) BETWEEN '$fecha_ini' AND '$fecha_fin'";			        
+			}
+		}
 
        $sql = "	SELECT * FROM(
-						SELECT * FROM( 
+					
 								SELECT c.id,cri.id_atc,a.eecc_final
 									,(CASE c.id WHEN (	SELECT MAX(mov2.id) 
 														FROM webpsi_criticos.gestion_movimientos mov2
@@ -159,13 +152,16 @@ if($reporte=="act"){
 								INNER JOIN webpsi_criticos.estados es ON es.id=c.id_estado 
 								INNER JOIN webpsi.tb_usuario t ON c.id_usuario=t.id 
 								LEFT JOIN webpsi_criticos.liquidados l on c.id_gestion=l.id_gestion
-								WHERE l.id in (	SELECT max(l2.id) 
-												 FROM webpsi_criticos.liquidados l2 
-												 WHERE l2.id_gestion=c.id_gestion
-											  )
-						)AS averias 
+								WHERE 	(l.id in (	SELECT max(l2.id) 
+												 	FROM webpsi_criticos.liquidados l2 
+												 	WHERE l2.id_gestion=c.id_gestion
+											  	 )
+										OR l.id IS NULL
+										)
+								$filtroa 
+						
 				UNION ALL
-						SELECT * FROM( 
+						
 								SELECT c.id,cri.id_atc,p.eecc_final
 									,(CASE c.id WHEN (	SELECT MAX(mov2.id) 
 														FROM webpsi_criticos.gestion_movimientos mov2
@@ -191,13 +187,16 @@ if($reporte=="act"){
 								INNER JOIN webpsi_criticos.estados es ON es.id=c.id_estado 
 								INNER JOIN webpsi.tb_usuario t ON c.id_usuario=t.id 
 								LEFT JOIN	webpsi_criticos.liquidados l on c.id_gestion=l.id_gestion
-								WHERE l.id in (	SELECT max(l2.id) 
-											 	FROM webpsi_criticos.liquidados l2 
-												WHERE l2.id_gestion=c.id_gestion
-											  )
-						)AS provision
+								WHERE (l.id in (	SELECT max(l2.id) 
+											 		FROM webpsi_criticos.liquidados l2 
+													WHERE l2.id_gestion=c.id_gestion
+											   )
+										OR l.id IS NULL
+									  )
+								$filtrop
+						
 				UNION ALL
-						SELECT * FROM( 
+						
 								SELECT c.id,cri.id_atc,a.eecc_final
 									,(CASE c.id WHEN (	SELECT MAX(mov2.id) 
 														FROM webpsi_criticos.gestion_movimientos mov2
@@ -220,13 +219,16 @@ if($reporte=="act"){
 								INNER JOIN webpsi_criticos.estados es ON es.id=c.id_estado 
 								INNER JOIN webpsi.tb_usuario t ON c.id_usuario=t.id 
 								LEFT JOIN webpsi_criticos.liquidados l on c.id_gestion=l.id_gestion
-								WHERE l.id in (	SELECT max(l2.id) 
-												FROM webpsi_criticos.liquidados l2 
-												WHERE l2.id_gestion=c.id_gestion
-											  )
-						)AS rutinas 
+								WHERE (l.id in (	SELECT max(l2.id) 
+													FROM webpsi_criticos.liquidados l2 
+													WHERE l2.id_gestion=c.id_gestion
+											   )
+										OR l.id IS NULL
+									  )
+								$filtroa
+						
 				UNION ALL 
-						SELECT * FROM( 
+						
 								SELECT c.id,cri.id_atc,p.eecc_final
 									,(CASE c.id WHEN (	SELECT MAX(mov2.id) 
 														FROM webpsi_criticos.gestion_movimientos mov2
@@ -252,12 +254,15 @@ if($reporte=="act"){
 								INNER JOIN webpsi_criticos.estados es ON es.id=c.id_estado 
 								INNER JOIN webpsi.tb_usuario t ON c.id_usuario=t.id 
 								LEFT JOIN	webpsi_criticos.liquidados l on c.id_gestion=l.id_gestion
-								WHERE l.id in (	SELECT max(l2.id) 
-											 	FROM webpsi_criticos.liquidados l2 
-												WHERE l2.id_gestion=c.id_gestion
-											  )
-						)AS rutina_provision
-				)AS t1  $filtro
+								WHERE (l.id in (	SELECT max(l2.id) 
+											 		FROM webpsi_criticos.liquidados l2 
+													WHERE l2.id_gestion=c.id_gestion
+											   )
+										OR l.id IS NULL
+									  )
+								$filtrop
+						
+				)AS t1  
 				ORDER BY id_atc,id ";
 
 //echo $sql;
