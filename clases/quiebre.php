@@ -72,6 +72,9 @@ class Quiebre{
 
     public function quiebresPorTecnico($idtecnico = "")
     {
+        if(empty($idtecnico))
+            return false;
+
         $this->cnx->exec("set names utf8");
 
         $sql=" select idquiebre from webpsi_criticos.tecnico_quiebre
@@ -82,6 +85,7 @@ class Quiebre{
         {
             $arr[] = $row["idquiebre"];
         }
+
         if(count($arr)<= 0){
             return false;
         }
@@ -105,6 +109,7 @@ class Quiebre{
                     $selected = true;
                 }
             }
+            $deb = 1;
             $options.= $this->comboQuiebreOption($quiebre["id_quiebre"],$quiebre["nombre"],$selected);
         }
         return $options;

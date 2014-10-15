@@ -1,4 +1,6 @@
 <?php
+$PATH = $_SERVER['DOCUMENT_ROOT'] . "/webpsi/";
+require_once($PATH . '/clases/class.Conexion.php');
 
 class Empresa{
 
@@ -17,6 +19,13 @@ class Empresa{
      */
     public function setCnx($cnx)
     {
+        $this->cnx = $cnx;
+    }
+
+
+    public function __construct() {
+        $db = new Conexion();
+        $cnx = $db->conectarPDO();
         $this->cnx = $cnx;
     }
 
@@ -40,6 +49,10 @@ class Empresa{
     }
 
 	function getEmpresaAll($cnx){
+
+        if(empty($cnx)){
+            $cnx = $this->cnx;
+        }
 
         $sql = "select * from webpsi_criticos.empresa order by nombre";
         $res = $cnx->query($sql);
