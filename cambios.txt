@@ -49,3 +49,9 @@ ON webpsi_officetrack.tareas (task_id);
 Agregar en webpsi/js2/  =>  carpeta fancybox
 
 ////////////////////////////////////////////////////////////////////////////////
+
+:: Luis mori 15/10/14
+actualizar la clse class.Usuario.php
+/var/www/webpsi/clases/class.Usuario.php
+
+///////////////////////////////////////////////////////////////
