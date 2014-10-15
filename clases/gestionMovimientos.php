@@ -108,11 +108,6 @@ class gestionMovimientos{
        $filtroa="";
        $filtrop="";
 
-       if($emp!=''){
-           $filtroa =" AND a.eecc_final in($emp)";
-           $filtrop =" AND p.eecc_final in($emp)";
-       }
-
        if($fecha_ini!="" && $fecha_fin!=""){
 			if($reporte=="act"){			       
 	        	$filtroa .=" AND DATE(a.fecha_registro) BETWEEN '$fecha_ini' AND '$fecha_fin'";
@@ -126,7 +121,7 @@ class gestionMovimientos{
 
        $sql = "	SELECT * FROM(
 					
-								SELECT c.id,cri.id_atc,a.eecc_final
+								SELECT c.id,cri.id_atc,e.nombre eecc_final
 									,(CASE c.id WHEN (	SELECT MAX(mov2.id) 
 														FROM webpsi_criticos.gestion_movimientos mov2
 														WHERE mov2.id_gestion=c.id_gestion
@@ -162,7 +157,7 @@ class gestionMovimientos{
 						
 				UNION ALL
 						
-								SELECT c.id,cri.id_atc,p.eecc_final
+								SELECT c.id,cri.id_atc,e.nombre eecc_final
 									,(CASE c.id WHEN (	SELECT MAX(mov2.id) 
 														FROM webpsi_criticos.gestion_movimientos mov2
 														WHERE mov2.id_gestion=c.id_gestion
@@ -197,7 +192,7 @@ class gestionMovimientos{
 						
 				UNION ALL
 						
-								SELECT c.id,cri.id_atc,a.eecc_final
+								SELECT c.id,cri.id_atc,e.nombre eecc_final
 									,(CASE c.id WHEN (	SELECT MAX(mov2.id) 
 														FROM webpsi_criticos.gestion_movimientos mov2
 														WHERE mov2.id_gestion=c.id_gestion
@@ -229,7 +224,7 @@ class gestionMovimientos{
 						
 				UNION ALL 
 						
-								SELECT c.id,cri.id_atc,p.eecc_final
+								SELECT c.id,cri.id_atc,e.nombre eecc_final
 									,(CASE c.id WHEN (	SELECT MAX(mov2.id) 
 														FROM webpsi_criticos.gestion_movimientos mov2
 														WHERE mov2.id_gestion=c.id_gestion
