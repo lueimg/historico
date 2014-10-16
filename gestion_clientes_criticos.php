@@ -10,7 +10,9 @@ require_once('clases/tecnicos.php');
 require_once('clases/cedula.php');
 require_once('clases/solucionesComerciales.php');
 require_once('clases/zonales.php');
+require_once('clases/actividad_quiebre.php');
 require_once('agenda/agendaController.php');
+
 //Definiendo la zona horaria
 date_default_timezone_set("America/Lima");
 
@@ -35,6 +37,12 @@ if($actividad=='Provision'){
 	$ob_critico = new gestionCriticos($cnx);
 	$cliente_critico = $ob_critico->getGestionCritico($cnx,$id);
 }
+
+$validador=new ActividadQuiebre($cnx);
+$array_valida=array();
+$array_valida["quiebre"]=$cliente_critico["quiebre"];
+$array_valida["actividad"]=$actividad;
+$siva_nova=$validador->ValidarActividadQuiebre($cnx,$array_valida);
 
 $ob_mov = new gestionMovimientos($cnx);
 $gestion_movimiento = $ob_mov->getGestionMovimiento($cnx,$id);
@@ -427,7 +435,8 @@ $solcomArray = $ob_solcom->getSolucionesAll($cnx);
 			
 				para el estado observac
 			-->
-			<input type="hidden" value="<?php echo $cliente_critico['paso_final'];?>" name="paso_final">
+			<input type="hidden" value="<?php echo $siva_nova;?>" id="siva_nova">
+			<input type="hidden" value="<?php echo $cliente_critico["pasofinal"];?>" id="paso_final">
 			<input type="hidden" value="<?php echo trim($cliente_critico["quiebre"]);?>" name="quiebre" id="quiebre">
 			<input type="hidden" value="<?php echo trim($cliente_critico["n_evento"]);?>" name="n_evento" id="n_evento">
 			<input type="hidden" value="<?php echo $actividad; ?>" id="actividad" name="actividad">

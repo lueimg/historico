@@ -8,6 +8,7 @@ require_once('clases/tecnicos.php');
 require_once('clases/cedula.php');
 require_once('clases/motivos.php');
 require_once('clases/zonales.php');
+require_once('clases/actividad_quiebre.php');
 require_once('agenda/agendaController.php');
 //$fonoBus = $_REQUEST["fonoBus"];
 $averia_ini = $_REQUEST["averia_ini"];
@@ -47,6 +48,12 @@ if($averia["eecc_final"]!=""){
 
 $ob_mot = new Motivos($cnx);
 $motivos = $ob_mot->getMotivos($cnx);
+
+$validador=new ActividadQuiebre($cnx);
+$array_valida=array();
+$array_valida["quiebre"]=$averia["quiebre"];
+$array_valida["actividad"]=$actividad;
+$siva_nova=$validador->ValidarActividadQuiebre($cnx,$array_valida);
 
 
 
@@ -152,6 +159,7 @@ $motivos = $ob_mot->getMotivos($cnx);
 				</select>
 			</div>
 			<div class="caja_medium">
+				<input type="hidden" value="<?php echo $siva_nova;?>" id="siva_nova">
                 <input type='hidden' name="tec_officetrack" id="tec_officetrack">
 				<input type="hidden" value="0" name="n_evento" id="n_evento">
 				<input type="hidden" value="<?php echo $indice; ?>" name="indice" id="indice">

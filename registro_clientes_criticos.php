@@ -14,6 +14,7 @@ require_once('agenda/agendaController.php');
 require_once('clases/tecnicos.php');
 require_once('clases/cedula.php');
 require_once('clases/motivos.php');
+require_once('clases/actividad_quiebre.php');
 
 //$fonoBus = $_REQUEST["fonoBus"];
 $averia_ini = $_REQUEST["averia_ini"];
@@ -55,6 +56,13 @@ $cedula = $ob_cedula->getCedulaAll($cnx,$id_empresa);
 
 $ob_mot = new Motivos($cnx);
 $motivos = $ob_mot->getMotivos($cnx);
+
+$validador=new ActividadQuiebre($cnx);
+$array_valida=array();
+$array_valida["quiebre"]=$averia["quiebre"];
+$array_valida["actividad"]=$actividad;
+$siva_nova=$validador->ValidarActividadQuiebre($cnx,$array_valida);
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -156,6 +164,7 @@ $motivos = $ob_mot->getMotivos($cnx);
 				</select>
 			</div>
 			<div class="caja_medium">
+				<input type="hidden" value="<?php echo $siva_nova;?>" id="siva_nova">
                 <input type='hidden' name="tec_officetrack" id="tec_officetrack">
 				<input type="hidden" value="0" name="n_evento" id="n_evento">
 				<input type="hidden" value="<?php echo $indice; ?>" name="indice" id="indice">

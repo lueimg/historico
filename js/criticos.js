@@ -881,8 +881,8 @@ function registrarCriticos() {
       && tecnico!=''
       && $("#frm_criticos #flag_tecnico").attr("checked")
       &&
-      ( $("#frm_criticos #quiebre").val()=="R9-REIT-CATV" || $("#actividad").val() === "Provision" )
-
+      //( $("#frm_criticos #quiebre").val()=="R9-REIT-CATV" || $("#actividad").val() === "Provision" )
+      $("#siva_nova").val()=="SiVa"
       &&
           //SI ES TECNICO OFFICETRACK
       ( tecnicooffcetrack == 1 )
@@ -922,8 +922,8 @@ function registrarCriticos() {
           && tecnico!=''
           && $("#frm_criticos #flag_tecnico").attr("checked")
           &&
-          ( $("#frm_criticos #quiebre").val()=="R9-REIT-CATV" || $("#actividad").val() === "Provision" )
-
+          //( $("#frm_criticos #quiebre").val()=="R9-REIT-CATV" || $("#actividad").val() === "Provision" )
+          $("#siva_nova").val()=="SiVa"
       ){
           if(
           confirm("No he ha enviando a officetrack , " +
@@ -1064,8 +1064,8 @@ function registrarMovimientos() {
 
        &&
            //Y SI ES ALGUNA R9 DE CUALQUIERA O CUALQUIER PROVISION
-       ( $("#frm_gestion_critico #quiebre").val()=="R9-REIT-CATV" || $("#actividad").val() === "Provision" )
-
+       // (  $("#frm_gestion_critico #quiebre").val()=="R9-REIT-CATV" || $("#actividad").val() === "Provision" )
+          $("#siva_nova").val()=="SiVa"
        &&
            //SI ES TECNICO OFFICETRACK
        ( tecnicooffcetrack == 1 )
@@ -1149,7 +1149,8 @@ function registrarMovimientos() {
            $("#frm_gestion_critico #motivo").val()!='5'
 
            &&
-           ( $("#frm_gestion_critico #quiebre").val()=="R9-REIT-CATV" || $("#actividad").val() === "Provision" )
+           //( $("#frm_gestion_critico #quiebre").val()=="R9-REIT-CATV" || $("#actividad").val() === "Provision" )
+           $("#siva_nova").val()=="SiVa"
 
        ){
            if(
