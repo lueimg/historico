@@ -1248,7 +1248,7 @@ $(".visor_gps").click(function(){
 	   closeOnScape: true,
 		modal: true,
 		height: '800',
-		width: '90%',
+		width: '98%',
 	});
 	$("#dialog-visor-gps").dialog( "open" );
 });
