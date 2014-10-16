@@ -55,3 +55,44 @@ actualizar la clse class.Usuario.php
 /var/www/webpsi/clases/class.Usuario.php
 
 ///////////////////////////////////////////////////////////////
+
+:: Jorge Salcedo 16-10-14
+
+BD actividad y actividad_quiebre en webpsi_criticos
+
+DROP TABLE IF EXISTS `actividad`;
+CREATE TABLE `actividad` (
+  `id_actividad` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(50) DEFAULT NULL,
+  `estado` int(1) DEFAULT '1',
+  PRIMARY KEY (`id_actividad`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of actividad
+-- ----------------------------
+INSERT INTO `actividad` VALUES ('1', 'Averias', '1');
+INSERT INTO `actividad` VALUES ('2', 'Provision', '1');
+INSERT INTO `actividad` VALUES ('3', 'Manual', '1');
+INSERT INTO `actividad` VALUES ('4', 'Manual_Provision', '1');
+
+
+DROP TABLE IF EXISTS `actividad_quiebre`;
+CREATE TABLE `actividad_quiebre` (
+  `id_actividad` int(11) DEFAULT NULL,
+  `id_quiebre` int(11) DEFAULT NULL,
+  `estado` int(1) DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of actividad_quiebre
+-- ----------------------------
+INSERT INTO `actividad_quiebre` VALUES ('2', '1', '1');
+INSERT INTO `actividad_quiebre` VALUES ('2', '2', '1');
+INSERT INTO `actividad_quiebre` VALUES ('2', '3', '1');
+INSERT INTO `actividad_quiebre` VALUES ('2', '4', '1');
+INSERT INTO `actividad_quiebre` VALUES ('2', '5', '1');
+INSERT INTO `actividad_quiebre` VALUES ('2', '6', '1');
+INSERT INTO `actividad_quiebre` VALUES ('1', '6', '1');
+INSERT INTO `actividad_quiebre` VALUES ('3', '6', '1');
+INSERT INTO `actividad_quiebre` VALUES ('4', '6', '1');
