@@ -393,9 +393,146 @@ class TecnicosCriticos{
         $db = NULL;
         return $arr;
 		
-    }		
+    }
 	
-	
+	public  function TecnicosOfficetrackAll()
+    {
+        $db = new Conexion();
+        $cnx = $db->conectarPDO();
+
+        $sql = "select * from webpsi_criticos.tecnicos t where t.activo = 1 and t.officetrack = 1";
+
+        $stmt = $cnx->query($sql);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return json_encode($result);
+
+
+    }
+
+    public function asistenciaTecnicosOfficetrack($fecha,$ids)
+    {
+        $db = new Conexion();
+        $cnx = $db->conectarPDO();
+
+        list($dia,$mes,$anio) = explode("/",$fecha);
+        $fecha = "$anio-$mes-$dia";
+
+
+        $sql = "
+        select  t.id , asi.fecha_asistencia , en.entrada , asi.numero_tecnico carnet , asi.direccion, asi.descripcion
+        ,CONCAT_WS(' ',t.ape_paterno,t.ape_materno,t.nombres) nombre
+        ,ce.nombre celula
+        from  webpsi_criticos.tecnicos t
+         inner join webpsi_criticos.cedula ce on ce.idcedula = t.idcedula
+         left join webpsi_officetrack.asistencia_tecnico asi   on t.carnet_critico = asi.numero_tecnico
+         left join webpsi_officetrack.asistencia_entradas en on en.id = asi.id_entrada
+        where asi.fecha_asistencia >= '$fecha' and asi.fecha_asistencia < DATE_ADD('$fecha',INTERVAL 1 DAY)
+         and t.activo = 1 and t.officetrack = 1
+        and  t.id in ($ids)
+        order by asi.id_entrada
+        ";
+
+        $stmt = $cnx->query($sql);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if(empty($result))
+            $error = 1;
+        else
+            $error = 0 ;
+
+        return json_encode(array("error"=>$error ,"data"=>$result));
+
+    }
+
+    public function asistenciaTecnicosCompacto($fecha,$ids)
+    {
+        $db = new Conexion();
+        $cnx = $db->conectarPDO();
+
+
+        try{
+
+        list($dia,$mes,$anio) = explode("/",$fecha);
+        $fecha = "$anio-$mes-$dia";
+
+        $sql = "select * from webpsi_officetrack.asistencia_entradas";
+
+        $entradas_sql = "";
+            $td_registros = "";
+        foreach( $cnx->query($sql) as $entrada)
+        {
+            $entradas_sql .= " ,(
+                            select MAX(fecha_asistencia) from webpsi_officetrack.asistencia_tecnico asi
+                            WHERE asi.numero_tecnico = tec.carnet_critico and asi.id_entrada = " . $entrada["id"] . "
+                            and asi.fecha_asistencia >= '$fecha' and asi.fecha_asistencia < DATE_ADD('$fecha',INTERVAL 1 DAY)
+                            ) ". $entrada["entrada"];
+
+            $td_registros .= "<th class='th_res_grupal2'>". $entrada["entrada"]."</th>";
+
+        }
+
+
+
+
+        $sql = "
+                SELECT
+                tec.carnet_critico carnet
+                ,ce.nombre celula
+                 ,CONCAT_WS(' ',tec.ape_paterno,tec.ape_materno,tec.nombres) nombre
+                  $entradas_sql
+                  ,IFNULL(lo.estado,'--') estado
+                 FROM webpsi_criticos.tecnicos tec
+                 inner join webpsi_criticos.cedula ce on ce.idcedula = tec.idcedula
+                 LEFT  join (
+                 SELECT
+                  a.id,a.EmployeeNum carnet,DATE_FORMAT(a.TIMESTAMP, '%Y-%m-%d %H:%i:%s') t ,
+                IF(DATE_ADD(DATE_FORMAT(a.TIMESTAMP, '%Y-%m-%d %H:%i:%s'),INTERVAL 1 HOUR) >= NOW() ,'Activo','Inactivo') estado
+                FROM   webpsi_officetrack.locations a
+                 JOIN (  SELECT   MAX(id) id   FROM  webpsi_officetrack.locations  WHERE DATE(TIMESTAMP)='$fecha' GROUP BY EmployeeNum   )
+                mx ON a.id = mx.id
+                 ) lo on lo.carnet = tec.carnet_critico
+                where tec.activo = 1 and tec.officetrack = 1
+                and tec.id in ($ids)
+                ";
+        $deb = 1;
+        $stmt = $cnx->query($sql);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $deb = 1;
+        if(empty($result)) {
+            $error = 1;
+            $msj = "No encontraron registros";
+        }else{
+            $error = 0 ;
+            $td_cabecera = "<th class='th_res_grupal2'>Carnet</th>
+                            <th class='th_res_grupal2'>Celula</th>
+                            <th class='th_res_grupal2'>Tecnico</th>".$td_registros
+                            ."<th class='th_res_grupal2'>Estado</th>  "
+                            ;
+
+            $table ="<table class='tabla_res_grupal'><tr> $td_cabecera </tr>";
+                foreach($result as $row){
+                    $table .= "<tr>";
+                        foreach($row as $field){   $table .= "<td class='td_res_grupal2'>".$field."</td>"; }
+//                    $table .="<td class='td_res_grupal2 carnet' num='".$row["carnet"]."'></td>";
+                    $table .="</tr>";
+                }
+
+                $table .=" </table>";
+
+
+        }
+
+        return $table;
+
+        }catch (PDOException $e){
+
+            return json_encode(array("error"=>1 ,"msj"=>$e->getMessage()));
+        }
+
+    }
+
+
 }
 
 ?>

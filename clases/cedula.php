@@ -63,7 +63,7 @@ class Cedula{
         }
 
         $cnx->exec("set names utf8");
-        $sql = "select idcedula id,nombre
+        $sql = "select idcedula id,nombre , idempresa
                 from webpsi_criticos.cedula
                 where estado='1'
                 $where
@@ -93,7 +93,7 @@ class Cedula{
                 {
                     $selected = "selected";
                 }
-                $options .= "<option class='added' value='".$row["id"]."' $selected>". $row["nombre"]. "</option>";
+                $options .= "<option class='added' idemp='".$row["idempresa"]."' value='".$row["id"]."' $selected>". $row["nombre"]. "</option>";
             }
         }
 

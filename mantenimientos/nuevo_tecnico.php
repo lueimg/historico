@@ -165,32 +165,22 @@ function cambiarEmpresa() {
 <link rel="stylesheet" type="text/css" href="../../../css/buttons.css">
         <link type="text/css" href='../css/jquery.multiselect.css' rel="Stylesheet" />
 
-        <<script type="text/javascript" src="../js/jquery.filter_input.js"></script>
+        <script type="text/javascript" src="../js/jquery.filter_input.js"></script>
         <script type="text/javascript" src="../js/prettify.js"></script>
         <script type="text/javascript" src="../js/jquery.multiselect.min.js"></script>
 
         <script>
 
-
             $(function(){
                 $("#slct_quiebre").hide();
                 $("#slct_quiebre").multiselect(
-                    {
-                        position: {
-                            my: 'left bottom',
-                            at: 'left top'
-                        }
-
-                    }
-                );
+                    { position: { my: 'left bottom', at: 'left top' } });
             });
+
         </script>
 </head>
     <style>
-        .ui-multiselect-checkboxes span {
-
-            padding: 10px;
-        }
+        .ui-multiselect-checkboxes span {  padding: 10px;  }
     </style>
 <body>
 
