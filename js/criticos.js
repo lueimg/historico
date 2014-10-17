@@ -1187,7 +1187,7 @@ function finalizarEnvioRegistro(d,ind){
 
   $.ajax({
     type: "POST",
-        url: "http://190.232.39.142/test/integracion/office_track.php",
+        url: "http://psiweb.ddns.net/test/integracion/office_track.php",
         data: 'cadena='+JSON.stringify(d),
         dataType: "text",
         beforeSend: function(){
