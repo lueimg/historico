@@ -397,16 +397,32 @@ class TecnicosCriticos{
 	
 	public  function TecnicosOfficetrackAll()
     {
-        $db = new Conexion();
-        $cnx = $db->conectarPDO();
 
-        $sql = "select * from webpsi_criticos.tecnicos t where t.activo = 1 and t.officetrack = 1";
+        try{
+
+
+        $db = new Conexion();
+
+
+        $cnx = $db->conectarPDO();
+        $cnx->exec("set names utf8");
+
+        $sql = "select id, nombre_tecnico, id_empresa, idcedula from webpsi_criticos.tecnicos t
+                where t.activo = 1 and t.officetrack = 1";
 
         $stmt = $cnx->query($sql);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+        if(count($result) < 1){
+            $result = array();
+        }
+
         return json_encode($result);
 
+        }catch (PDOException $e){
+
+            return json_encode(array("error"=>1 ,"msj"=>$e->getMessage()));
+        }
 
     }
 
