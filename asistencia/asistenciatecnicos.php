@@ -32,8 +32,8 @@ header('Content-Type: text/html; charset=utf-8');
 <head>
     <title>PSI - Web SMS - Mensajes Grupales</title>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+    <meta charset="utf-8">
     <meta name="author" content="Sergio MC"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <?php include("../../../includes.php") ?>
     <script type="text/javascript" src="../js/js.js"></script>
     <link rel="stylesheet" type="text/css" href="../../../estilos.css">
