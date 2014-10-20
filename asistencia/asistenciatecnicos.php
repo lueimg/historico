@@ -73,7 +73,7 @@ header('Content-Type: text/html; charset=utf-8');
     <?php echo pintar_cabecera(); ?>    <br/>
     <div id="div_res_grupal" class="div_res_grupal"
          style="border: 1px solid #304B73; padding-top: 0px; float:left; overflow-y: auto;
-			 width: 780px;">
+			 width: 100%;">
 
 
         <div id="filtros" class="form-group">
@@ -105,14 +105,33 @@ header('Content-Type: text/html; charset=utf-8');
                         <select class="tecnicos_ot" id="tecnicos_ot" name="tecnicos_ot" class="form-control" multiple></select>
                     </span>
                 </div>
+                <div id="tipo-reporte" class="opciones">
+                    <label class="control-label">Tipo de reportes:</label>
+                    <span>
+                        <input type="radio" name="reporteTipo" class="reporteTipo" id="repo_dia" value="repo_dia" checked/>
+                        <label for="repo_dia"> Por dia</label>
+                    </span>
+                    <span>
+                        <input type="radio" name="reporteTipo"  class="reporteTipo"  id="repo_rango" value="repo_rango"/>
+                        <label for="repo_rango"> Por rango de fechas</label>
+                    </span>
+                </div>
                 <div>
                     <label class="control-label">Fecha Asistencia:</label>
                     <span><input type="text" class="asistenciaFecha" id="asistenciaFecha" readonly/></span>
+
+                    <span style="display: none" class="fechaFin">
+                        <label class="control-label">Fecha Final:</label>
+                        <span><input type="text" class="asistenciaFecha" id="asisFechaFin" readonly/></span>
+                    </span>
                 </div>
                 <div>
 
                     <button id="mostrarAsistencia">Mostrar Asistencias</button>
                     <button id="reiniciarFiltros">Reiniciar Filtros</button>
+                    <span><a href="#" id="AsisExportExcel">
+                            <img src="../img/excel2007.png" alt="" width="20px" style="vertical-align: bottom;"/>
+                            Exportar a excel</a></span>
                 </div>
             </div>
 

@@ -449,8 +449,7 @@ class TecnicosCriticos{
     {
         $db = new Conexion();
         $cnx = $db->conectarPDO();
-
-
+        $deb = 1;
         try{
 
         list($dia,$mes,$anio) = explode("/",$fecha);
@@ -472,16 +471,13 @@ class TecnicosCriticos{
 
         }
 
-
-
-
         $sql = "
                 SELECT
                 tec.carnet_critico carnet
                 ,ce.nombre celula
                  ,CONCAT_WS(' ',tec.ape_paterno,tec.ape_materno,tec.nombres) nombre
                   $entradas_sql
-                  ,IFNULL(lo.estado,'--') estado
+                  ,IFNULL(lo.estado,'Inactivo') estado
                  FROM webpsi_criticos.tecnicos tec
                  inner join webpsi_criticos.cedula ce on ce.idcedula = tec.idcedula
                  LEFT  join (
@@ -495,10 +491,10 @@ class TecnicosCriticos{
                 where tec.activo = 1 and tec.officetrack = 1
                 and tec.id in ($ids)
                 ";
-        $deb = 1;
+
         $stmt = $cnx->query($sql);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $deb = 1;
+
         if(empty($result)) {
             $error = 1;
             $msj = "No encontraron registros";
@@ -513,12 +509,16 @@ class TecnicosCriticos{
             $table ="<table class='tabla_res_grupal'><tr> $td_cabecera </tr>";
                 foreach($result as $row){
                     $table .= "<tr>";
-                        foreach($row as $field){   $table .= "<td class='td_res_grupal2'>".$field."</td>"; }
-//                    $table .="<td class='td_res_grupal2 carnet' num='".$row["carnet"]."'></td>";
+                        foreach($row as $field){
+                            if($field== "Activo"){
+                                $field ="<img src='../../../img/estado_habilitado.png'>";
+                            }elseif($field== "Inactivo"){
+                                $field ="<img src='../../../img/estado_deshabilitado.png'>";
+                            }
+                            $table .= "<td class='td_res_grupal2'>".$field."</td>"; }
                     $table .="</tr>";
                 }
-
-                $table .=" </table>";
+            $table .=" </table>";
 
 
         }
@@ -528,6 +528,85 @@ class TecnicosCriticos{
         }catch (PDOException $e){
 
             return json_encode(array("error"=>1 ,"msj"=>$e->getMessage()));
+        }
+
+    }
+
+    public function MostrarAsistenciaRangoFechas($fecha, $fechaFin, $ids_tecnicos)
+    {
+
+        $db = new Conexion();
+        $cnx = $db->conectarPDO();
+
+        list($dia,$mes,$anio) = explode("/",$fecha);
+        $fechaIni = "$anio-$mes-$dia";
+
+        list($dia,$mes,$anio) = explode("/",$fechaFin);
+        $fechaFin = "$anio-$mes-$dia";
+
+        //CUANTAS FECHAS MOSTRAR
+        $dias	= (strtotime($fechaFin)-strtotime($fechaIni))/86400;
+
+        if($dias < 0 ){
+            return "1";
+
+        }
+
+        $dias 	= abs($dias);
+        $cant_dias = floor($dias);
+
+        $sql_fechas = "";
+        $th_fechas ="";
+        $deb =1;
+        for($i = 0; $i<= $cant_dias; $i++)
+        {
+            $fechaNew = date('Y-m-d',strtotime('+'.$i.' days', strtotime($fechaIni)));
+            $sql_fechas.="
+            ,(  select  GROUP_CONCAT(DISTINCT SUBSTRING(en.entrada,1,1))
+                from webpsi_officetrack.asistencia_tecnico asis
+                inner join webpsi_officetrack.asistencia_entradas en  on en.id = asis.id_entrada
+                where  DATE(asis.fecha_asistencia)  = '$fechaNew' and asis.numero_tecnico = tec.carnet_critico ) '$fechaNew'
+            ";
+            list($anio,$mes,$dia) = explode("-",$fechaNew);
+            $th_fechas .= "<th class='th_res_grupal2'>". $dia . "/". $mes."</th>";
+        }
+
+        try{
+
+            $sql = "
+            select
+
+                tec.carnet_critico
+                ,tec.nombre_tecnico
+                $sql_fechas
+                from webpsi_criticos.tecnicos tec
+                where tec.activo = 1 and tec.officetrack = 1
+                and tec.id in ($ids_tecnicos)
+            ";
+            $deb = 1;
+            $stmt = $cnx->query($sql);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $deb = 1;
+            $error = 0 ;
+            $td_cabecera = "<th class='th_res_grupal2'>Carnet</th>
+                            <th class='th_res_grupal2'>Tecnico</th>".$th_fechas
+
+                            ;
+
+            $table ="<table class='tabla_res_grupal'><tr> $td_cabecera </tr>";
+            foreach($result as $row){
+                $table .= "<tr>";
+                foreach($row as $field){
+                    $table .= "<td class='td_res_grupal2'>" .$field."</td>"; }
+                $table .="</tr>";
+            }
+
+            $table .=" </table>";
+
+            return $table;
+
+        }catch (PDOException $e){
+                return json_encode(array("error"=>1 ,"msj"=>$e->getMessage()));
         }
 
     }

@@ -522,6 +522,19 @@ header('Content-Type: text/html; charset=utf-8');
 
             ?>
 
+                //EVENT ENTER
+                $("#nombre_busqueda").keypress(function(e){
+                    if(e.which === 13){ $("#btnFiltrar_nombre").trigger("click") }
+                });
+
+                $("#carnet").keypress(function(e){
+                                    if(e.which === 13){ $("#btnFiltrar_carnet").trigger("click") }
+                });
+                $("#carnet_critico").keypress(function(e){
+                                    if(e.which === 13){ $("#btnFiltrar_critico").trigger("click") }
+                });
+
+
             });
 
 
