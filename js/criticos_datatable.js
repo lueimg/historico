@@ -1302,6 +1302,13 @@ validarTexto=function(valor){
 	$("#txt_tan").focus();
 }
 
+validaEnter=function(e){ 
+	tecla = (document.all) ? e.keyCode : e.which; // 2
+    if (tecla==13){
+    	$("#filtro_personalizado").click();
+    }
+}
+
 validaNumerosIn=function(e) { // 1
         tecla = (document.all) ? e.keyCode : e.which; // 2
         if (tecla==8 || tecla==0 || tecla==46 || tecla==44) return true;//8 barra, 0 flechas desplaz

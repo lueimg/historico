@@ -41,14 +41,6 @@ class gestionCriticos {
             $filtro_sql = "";
         }
 
-        //para la primera carga
-        $filtro_Averias = "and eecc_final in(" . $empresa . ")";
-        if ($liquidado == "1") {
-            $filtro_liquidado = "AND e.estado<>'Liquidado' and a.eecc_final in(" . $empresa . ")";
-        } else {
-            $filtro_liquidado = "and a.eecc_final in(" . $empresa . ")";
-        }
-
 
         $sql = "SELECT * FROM(
 	SELECT * FROM(

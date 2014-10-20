@@ -139,10 +139,10 @@ echo "-->";
         <script type="text/javascript" src="js/jquery.multiselect.min.js"></script>
 		
         <script type="text/javascript" src="js/historico.js"></script>
-		<script type="text/javascript" src="js/select.js"></script>
         <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" src="js/criticos_datatable.js"></script>
         <script type="text/javascript" src="js/jquery.iframe.js"></script>
+        <script type="text/javascript" src="js/select.js"></script>
 
         <script type="text/javascript" charset="utf-8" src="js/ZeroClipboard/ZeroClipboard.js"></script>
 		<!--<script type="text/javascript" charset="utf-8" src="js/TableTools.js"></script>-->
@@ -174,7 +174,7 @@ echo "-->";
 				<option value="atc">ATC/RTC</option>
 				<option value="id_gestion">ID GESTION</option>
 			</select>
-			<input class="border" type="text" value="" name="txt_tan" id="txt_tan" onkeypress="return validaNumeros(event);">
+			<input class="border" type="text" value="" name="txt_tan" id="txt_tan" onkeypress="return validaNumeros(event);" onkeyup="return validaEnter(event);">
 			<span class="btn_buscar" id="filtro_personalizado"><img src="img/lupa.png" title="Buscar">Busqueda Personalizada</span>
 			<span class="filtroxcampo">
 			  	<label>Tipo de Actividad</label>
