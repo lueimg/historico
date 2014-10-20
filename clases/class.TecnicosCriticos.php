@@ -461,7 +461,7 @@ class TecnicosCriticos{
 
     }
 
-    public function asistenciaTecnicosCompacto($fecha,$ids)
+    public function asistenciaTecnicosCompacto($fecha,$ids , $mostrarEnExcel = 0)
     {
         $db = new Conexion();
         $cnx = $db->conectarPDO();
@@ -522,13 +522,13 @@ class TecnicosCriticos{
                             ."<th class='th_res_grupal2'>Estado</th>  "
                             ;
 
-            $table ="<table class='tabla_res_grupal'><tr> $td_cabecera </tr>";
+            $table ="<table class='tabla_res_grupal' border='$mostrarEnExcel'><tr> $td_cabecera </tr>";
                 foreach($result as $row){
                     $table .= "<tr>";
                         foreach($row as $field){
-                            if($field== "Activo"){
+                            if($field== "Activo" && $mostrarEnExcel != 1 ){
                                 $field ="<img src='../../../img/estado_habilitado.png'>";
-                            }elseif($field== "Inactivo"){
+                            }elseif($field== "Inactivo" && $mostrarEnExcel != 1){
                                 $field ="<img src='../../../img/estado_deshabilitado.png'>";
                             }
                             $table .= "<td class='td_res_grupal2'>".$field."</td>"; }
@@ -548,7 +548,7 @@ class TecnicosCriticos{
 
     }
 
-    public function MostrarAsistenciaRangoFechas($fecha, $fechaFin, $ids_tecnicos)
+    public function MostrarAsistenciaRangoFechas($fecha, $fechaFin, $ids_tecnicos , $mostrarEnExcel = 0)
     {
 
         $db = new Conexion();
@@ -609,7 +609,7 @@ class TecnicosCriticos{
 
                             ;
 
-            $table ="<table class='tabla_res_grupal'><tr> $td_cabecera </tr>";
+            $table ="<table class='tabla_res_grupal' border='$mostrarEnExcel'><tr> $td_cabecera </tr>";
             foreach($result as $row){
                 $table .= "<tr>";
                 foreach($row as $field){
