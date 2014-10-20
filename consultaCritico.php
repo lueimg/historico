@@ -35,6 +35,7 @@ input[type="text"], select {
 	$(document).ready(function(){
 
         $("#cmbTipo").val(1);
+        validarTexto(1);
 		$("#txtBus").val('');
 		$("#txtBus").focus();
 	
@@ -45,12 +46,12 @@ input[type="text"], select {
 				return false;
 			}
 			
-			var pagina="consultaCritico_ajax.php";
+			var pagina="controladorHistorico/historicoController.php";
 			$.ajax({
 				type: "POST",
 				url: pagina,
 				data: {
-					action: 'buscar',
+					filtro: 'filtro_personalizado',
 					cmbTipo: $("#cmbTipo").val(),
 					txtBus: $("#txtBus").val()
 				},
@@ -61,7 +62,81 @@ input[type="text"], select {
 
 		});
 
+		$(".detalle").click(cargarDetalle);
+
 	});
+
+cargarDetalle=function(){
+var pagina="consultaCritico_ajax.php";
+	$.ajax({
+		type: "POST",
+		url: pagina,
+		data: {
+			action: 'buscar',
+			cmbTipo: $("#cmbTipo").val(),
+			txtBus: $("#txtBus").val()
+		},
+		success: function(html){
+			$("#resultado1").html(html);
+		}
+	});
+}
+
+validarTexto=function(valor){
+	$("#txtBus").val('');
+	if(valor=="1"){		
+		$("#txtBus").attr("onKeyPress","return validaNumeros(event);");		
+	}
+	else if(valor=="2" || valor=="3"){
+		$("#txtBus").attr("onKeyPress","return validaAlfanumerico(event);");
+	}
+	/*else if(valor=="4"){
+		$("#txtBus").attr("onKeyPress","return validaLetras(event);");
+	}*/
+	else if(valor=='5'){
+		$("#txtBus").attr("onKeyPress","return validaNumerosIn(event);");
+	}
+	$("#txtBus").focus();
+}
+
+validaEnter=function(e){ 
+	tecla = (document.all) ? e.keyCode : e.which; // 2
+    if (tecla==13){
+    	$("#btnBuscar").click();
+    }
+}
+
+validaNumerosIn=function(e) { // 1
+        tecla = (document.all) ? e.keyCode : e.which; // 2
+        if (tecla==8 || tecla==0 || tecla==46 || tecla==44) return true;//8 barra, 0 flechas desplaz
+        patron = /\d/; // Solo acepta números
+        te = String.fromCharCode(tecla); // 5
+        return patron.test(te); // 6
+}
+
+validaNumeros=function(e) { // 1
+        tecla = (document.all) ? e.keyCode : e.which; // 2
+        if (tecla==8 || tecla==0 || tecla==46) return true;//8 barra, 0 flechas desplaz
+        patron = /\d/; // Solo acepta números
+        te = String.fromCharCode(tecla); // 5
+        return patron.test(te); // 6
+}
+
+validaLetras=function(e) { // 1
+        tecla = (document.all) ? e.keyCode : e.which; // 2
+        if (tecla==8 || tecla==0 || tecla==32) return true;//8 barra, 0 flechas desplaz
+        patron =/[A-Za-zñÑáéíóúÁÉÍÓÚ\s]/; // 4 ,\s espacio en blanco, patron = /\d/; // Solo acepta números, patron = /\w/; // Acepta números y letras, patron = /\D/; // No acepta números, patron =/[A-Za-z\s]/; //sin ñÑ
+        te = String.fromCharCode(tecla); // 5
+        return patron.test(te); // 6
+}
+
+validaAlfanumerico=function(e) { // 1
+        tecla = (document.all) ? e.keyCode : e.which; // 2
+        if (tecla==8 || tecla==0 || tecla==46 || tecla==45 || tecla==95) return true;//8 barra, 0 flechas desplaz
+        patron =/[A-Za-zñÑáéíóúÁÉÍÓÚ@.,_\-\s\d]/; // 4 ,\s espacio en blanco, patron = /\d/; // Solo acepta números, patron = /\w/; // Acepta números y letras, patron = /\D/; // No acepta números, patron =/[A-Za-z\s]/; //sin ñÑ
+        te = String.fromCharCode(tecla); // 5
+        return patron.test(te); // 6
+}
 	
 
 
@@ -89,15 +164,14 @@ input[type="text"], select {
 		<tr class="tr_busqueda">
 			<td style="width: 15%">Tipo Busqueda:</td >
 			<td style="width: 10%; background-color:white; padding: 3px;" >
-				<select name='cmbTipo' id='cmbTipo' >
-					<option value='0' selected>-- Seleccionar -- </option>
+				<select name='cmbTipo' id='cmbTipo' onchange="validarTexto(this.value);" >					
 					<option value='1'>&nbsp;Telefono</option>
 					<option value='2'>&nbsp;Averia</option>
 					<option value='3'>&nbsp;ATC</option>
-					<option value='4'>&nbsp;Cod Cliente CMS</option>
+					<option value='5'>&nbsp;Id Gestion</option>
 				</select>
 			</td >
-			<td style="width: 75%; background-color:white; padding: 3px;"><input type='text' name='txtBus' id='txtBus' />
+			<td style="width: 75%; background-color:white; padding: 3px;"><input type='text' name='txtBus' id='txtBus' onkeyup="return validaEnter(event);" />
 			<input type='button' name='btnBuscar' id='btnBuscar' value='Buscar' />
 			</td >			
 		</tr>
@@ -107,6 +181,24 @@ input[type="text"], select {
 <br/>
 
 <div id="register"></div>
+
+<div id="div_listado" class="divBusqueda" style="width: 750px" >
+	<table class="tablaBusqueda" style='width: 90%'>
+		<thead>
+			<th colspan='7'>RESULTADOS DE LA BUSQUEDA</th>
+		</thead>
+		<tr class="tr_busqueda">
+			<th class="celda0" style='text-align:center'>Fecha Movimiento</th >
+			<th class="celda0" style='text-align:center'>Usuario</th >
+			<th class="celda0" style='text-align:center'>Estado</th >
+			<th class="celda0" style='text-align:center'>Observaciones</th >
+			<th class="celda0" style='text-align:center'>Motivo</th >
+			<th class="celda0" style='text-align:center'>Submotivo</th >	
+			<th class="celda0" style='text-align:center'>Fecha Agenda / Turno</th >			
+		</tr>		
+		
+	</table>
+</div>
 	
 <div id="resultado1"></div>
 
