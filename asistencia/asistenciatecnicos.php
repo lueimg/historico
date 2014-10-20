@@ -5,7 +5,7 @@ require_once('../clases/empresa.php');
 include_once "../../../clases/class.Conexion.php";
 require_once('../clases/cedula.php');
 
-require"../../officetrack/clases/class.Location.php";
+
 
 $db = new Conexion();
 $cnx = $db->conectarPDO();
@@ -23,10 +23,6 @@ $celulas_options = $cedula->getCedulaAllByEmpresaSelectOptions();
 $tecnico = new TecnicosCriticos();
 $json_tecnicos_ot= $tecnico->TecnicosOfficetrackAll();
 
-//location
-$location = new Location();
-
-$data = $location->getLocations($cnx, array("CY0002","LA0000"), $numArray = array(), $date = date("Y-m-d"));
 
 
 header('Content-Type: text/html; charset=utf-8');
