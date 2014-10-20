@@ -12,9 +12,13 @@ $().ready(function(){
     $slct_tecnico.multiselect("checkAll");
 
 
-    $( "#asistenciaFecha" ).datepicker();
+    $( "#asistenciaFecha" ).datepicker({maxDate: "+0D"});
     $( "#asistenciaFecha" ).datepicker("option", "dateFormat", "dd/mm/yy");
     $("#asistenciaFecha").val(fecha.diaHoy);
+
+    $( "#asisFechaFin" ).datepicker({maxDate: "+0D"});
+    $( "#asisFechaFin" ).datepicker("option", "dateFormat", "dd/mm/yy");
+    $("#asisFechaFin").val(fecha.diaHoy);
 
     //FILTRO EMPRESA
     $("#fil_empresa").change(function () {
@@ -72,30 +76,37 @@ $().ready(function(){
     $("#mostrarAsistencia").click(function(){
 
         var ids_tecnicos = $("#tecnicos_ot").val();
+        var tipo_repo = $(".reporteTipo:checked").val();
 
         if(ids_tecnicos != null ){
+            if(tipo_repo == "repo_dia"){
+                var accion = "MostrarAsistencia"
+            }else{
+                var accion = "MostrarAsistenciaRangoFechas"
+            }
 
             $.ajax({
                 type: "POST",
                 url: url_ajax,
                 data: {
-                    accion:"MostrarAsistencia",
+                    accion:accion,
                     ids_tecnicos: ids_tecnicos.join(),
-                    fecha:$("#asistenciaFecha").val()
-                }
-                ,
+                    fecha:$("#asistenciaFecha").val(),
+                    fechaFin:$("#asisFechaFin").val()
+                },
                 success: function (obj) {
 
                     if(obj == null){
                         this.error();
-                    }else {
-                        MostrarAsistenciaHTML(obj);
+                    }else if(obj == "1"){
+                        alert("La fecha Final no puede ser menor que la fecha de Inicio")
                     }
-
+                    else {
+                        $("#asistenciaTecnicos").html(obj);
+                    }
                 },
                 error: function () {
-                    alert("Error al cargar al guardar la asistencia, " +
-                    "Por favor actualize su pagina y vuelva a intentar");
+                    alert("Error al cargar al guardar la asistencia, " +  "Por favor actualize su pagina y vuelva a intentar");
                 }
             });
 
@@ -105,6 +116,56 @@ $().ready(function(){
         }
 
     });
+
+
+    $("#tipo-reporte").click(function(){
+
+        var tipo_repo = $(".reporteTipo:checked").val();
+        if(tipo_repo == "repo_dia"){
+            $(".fechaFin").hide("fast");
+        }else{
+            $(".fechaFin").show("fast");
+            $("#asisFechaFin").val(fecha.diaHoy);
+        }
+    });
+
+    $("#AsisExportExcel").click(function(){
+       //EXPORTAR EXCEL
+        //DATOS A ENVIAR
+
+        var tipo_repo = $(".reporteTipo:checked").val();
+        var ids_tecnicos = $("#tecnicos_ot").val();
+        var fecha = $("#asistenciaFecha").val();
+        var fechaFin = $("#asisFechaFin").val();
+
+
+        if(ids_tecnicos != null ) {
+            if (tipo_repo == "repo_dia") {
+                var accion = "MostrarAsistencia"
+            } else {
+                var accion = "MostrarAsistenciaRangoFechas"
+            }
+
+            window.open("asistenciaTecnicos_ajax.php?" +
+                "accion="+accion
+                + "&excel=1"
+                + "&ids_tecnicos="+ids_tecnicos.join()
+                + "&fecha="+fecha
+                + "&fechaFin="+fechaFin
+                + "&empresa="+$("#fil_empresa option:selected").text()
+                + "&celula="+$("#fil_celula option:selected").text()
+            );
+
+        }else{
+            alert("Debe seleccionar al menos 1 Tecnico");
+        }
+
+
+
+
+    });
+
+
 
 //tpls
     window.templates = {};
@@ -123,9 +184,4 @@ agregarTecnicos = function(lista){
 }
 
 
-MostrarAsistenciaHTML = function(data){
 
-    //AGREGAR LOS DETALLES
-    $("#asistenciaTecnicos").html(data)
-
-}
