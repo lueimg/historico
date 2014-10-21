@@ -97,11 +97,17 @@ INSERT INTO `actividad_quiebre` VALUES ('1', '6', '1');
 INSERT INTO `actividad_quiebre` VALUES ('3', '6', '1');
 INSERT INTO `actividad_quiebre` VALUES ('4', '6', '1');
 
-/////////////////////////////////////////////
+//////////////////////////////////////////////////////
 
 LUIS MORI
 Se agrego ;charset=utf8
 a la clase de conexxion
 /var/www/webpsi/clases/class.Conexion.php
 
+ ** Copiarlo de la carpeta  archivos_fuera del git
+
+/////////////////////////////////////////////////////
+
+LUIS MORI
+Clase actualizada  /var/www/webpsi/clases/class.Persona.php
  ** Copiarlo de la carpeta  archivos_fuera del git
