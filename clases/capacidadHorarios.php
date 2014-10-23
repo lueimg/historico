@@ -243,7 +243,7 @@ class capacidadHorarios {
                             FROM 
                                 webpsi_criticos.gestion_movimientos gm2
                             WHERE gm2.id_gestion=g.id_gestion
-                                AND gm2.id_estado NOT IN ('20','10','9')
+                                AND gm2.id_estado NOT IN ('20','10','9','27')
                             GROUP BY gm2.id_gestion
                             )
                         AND gm.tecnico!=''
