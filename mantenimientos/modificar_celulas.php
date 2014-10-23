@@ -2,6 +2,7 @@
 require_once("../../../cabecera.php");
 require_once("../clases/class.CelulasCriticos.php");
 require_once('../clases/empresa.php');
+require_once('../clases/quiebre.php');
 include_once "../../../clases/class.Conexion.php";
 
 $db = new Conexion();
@@ -33,6 +34,9 @@ $empresa = new Empresa();
 $empresa->setCnx($cnx);
 $empresa_options = $empresa->getEmpresaAllSelectOptions($idempresa);
 
+$quiebres = new Quiebre();
+$quiebres_options = $quiebres->comboQuiebres();
+
 ?>
 
 
@@ -40,11 +44,15 @@ $empresa_options = $empresa->getEmpresaAllSelectOptions($idempresa);
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>WEBPSI - Mantenimiento de Celulas</title>
-<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
 <meta name="author" content="Sergio MC"/>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta charset="UTF-8">
 
 <?php include("../../../includes.php") ?>
+
+<link type="text/css" href='../css/jquery.multiselect.css' rel="Stylesheet" />
+<script type="text/javascript" src="../js/jquery.filter_input.js"></script>
+<script type="text/javascript" src="../js/prettify.js"></script>
+<script type="text/javascript" src="../js/jquery.multiselect.min.js"></script>
 
 <script type="text/javascript" src="../js/js.js"></script>
 <link rel="stylesheet" type="text/css" href="../../../css/estiloAdmin.css">
@@ -127,6 +135,10 @@ $empresa_options = $empresa->getEmpresaAllSelectOptions($idempresa);
         $("#childModal").html("");
         $("#childModal").html(templates.formCedulaTemplate());
 
+
+        //CARGAR MULTISELEC
+        $("#quiebres").multiselect({});
+
         //CARGAR DATOS
         var element = $(e)
             .parent()
@@ -139,26 +151,38 @@ $empresa_options = $empresa->getEmpresaAllSelectOptions($idempresa);
         $("#slct_estado").val(celula.estado)
         $("#idcelula").val(celula.idcedula)
 
+        if( celula.quiebres != null ){
+            var quiebres  = celula.quiebres.split(",");
+            quiebres.forEach(function(i){
+                $("#quiebres option[value="+i+"]").attr("selected",true);
+            });
+            $("#quiebres").multiselect("refresh");
+        }
 
         $("#childModal #guardarCelula span").text("Actualizar Celula");
 
         $("#childModal #guardarCelula").click(function () {
-            $.ajax({
-                type: "POST",
-                url: "modificar_celulas_ajax.php",
-                data: {
-                    action: "EditarCelula",
-                    idcelula: $("#idcelula").val(),
-                    idempresa: $("#slct_empresa").val(),
-                    estado: $("#slct_estado").val(),
-                    nombre: $("#celula_nombre").val()
-                },
-                success: function (response) {
-                    $("#childModal_nuevo").dialog("close");
-                    alert(response);
-                    location.reload();
-                }
-            });
+
+            var validacion = validarFormulario("#childModal_nuevo");
+            if(validacion){
+                $.ajax({
+                    type: "POST",
+                    url: "modificar_celulas_ajax.php",
+                    data: {
+                        action: "EditarCelula",
+                        idcelula: $("#idcelula").val(),
+                        idempresa: $("#slct_empresa").val(),
+                        estado: $("#slct_estado").val(),
+                        nombre: $("#celula_nombre").val(),
+                        quiebres:$("#quiebres").val().join()
+                    },
+                    success: function (response) {
+                        $("#childModal_nuevo").dialog("close");
+                        alert(response);
+                        location.reload();
+                    }
+                });
+            }
         });
 
         $("#childModal").dialog({
@@ -176,34 +200,35 @@ $empresa_options = $empresa->getEmpresaAllSelectOptions($idempresa);
         $("#childModal_nuevo").html("");
         $("#childModal_nuevo").html(templates.formCedulaTemplate());
 
-        //AGREGAR ACCION
+       //CARGAR MULTISELEC
+        $("#quiebres").multiselect({});
 
+        //AGREGAR ACCION
         $("#childModal_nuevo #guardarCelula").click(function () {
 
-            //obtenemos datos
-            var idempresa = $("#slct_empresa").val()
-            var nombre = $("#celula_nombre").val()
-            var estado = $("#slct_estado").val()
+            var validacion = validarFormulario("#childModal_nuevo");
+            if(validacion){
+                //obtenemos datos
+                var idempresa = $("#slct_empresa").val()
+                var nombre = $("#celula_nombre").val()
+                var estado = $("#slct_estado").val()
 
-            if (nombre === "") {
-//            alert("Debe poner nombre a la celula");
-                $("#celula_nombre")
-                    .parent()
-                    .append("<div>(*)Debe Agregar un nombre antes de guardar</div>");
-                return false;
+                var quiebres = $("#quiebres").val().join();
+
+                //Enviamos datos aguardar
+                $.post("modificar_celulas_ajax.php", {
+                    idempresa: idempresa,
+                    nombre: nombre,
+                    estado: estado,
+                    quiebres:quiebres,
+                    action: "CrearCelula"
+                }, function (data) {
+                    $("#childModal_nuevo").dialog("close");
+                    alert(data);
+                    location.reload();
+                });
             }
 
-            //Enviamos datos aguardar
-            $.post("modificar_celulas_ajax.php", {
-                idempresa: idempresa,
-                nombre: nombre,
-                estado: estado,
-                action: "CrearCelula"
-            }, function (data) {
-                $("#childModal_nuevo").dialog("close");
-                alert(data);
-                location.reload();
-            });
 
         });
 
@@ -211,11 +236,47 @@ $empresa_options = $empresa->getEmpresaAllSelectOptions($idempresa);
             modal: true,
             width: '45%',
             hide: 'slide',
-            title: 'Nuevo tecnico',
+            title: 'Nueva Celula',
             position: 'top'
         });
 
     }
+
+validarFormulario  = function(idparent){
+    var error = 0;
+
+    $(idparent + " input").each(function(i,el){
+
+
+        //si no es un campo de empresa critica, si no es un checkbox
+        if( $(el).attr("id") != "idcelula"){
+
+            var value  = $(el).val();
+            if(value == ""){
+                $(el).css("border-color","red");
+                alert("Debe llenar todos los datos");
+                console.log($(el))
+                error++;
+                return false;
+            }else{
+                $(el).css("border-color","");
+            }
+        }
+
+
+    });
+    if(error > 0 ){
+        return false;
+    }
+
+
+    if($("#quiebres").val() == null ){
+        alert("Debe seleccionar al menos un quiebre");
+        return false
+    }
+
+    return true;
+}
 
 
 </script>
@@ -308,8 +369,7 @@ $empresa_options = $empresa->getEmpresaAllSelectOptions($idempresa);
 
 <div id="div_res_grupal" class="div_res_grupal" style="border: 1px solid #304B73; padding-top: 0px; float:left; overflow-y: auto;
 			height: 500px; width: 780px;">
-    <span style="padding: 20px" class="nueva-celula"><a href="#" onclick="nueva_celula();">[ Agregar Celula
-            ]</a> </span>
+    <span style="padding: 20px" class="nueva-celula"><a href="#" onclick="nueva_celula();">[ Agregar Celula ]</a> </span>
 
     <div id="celula_filtros" class="form-group">
         <label class="control-label">Filtros:</label>
@@ -536,6 +596,8 @@ $empresa_options = $empresa->getEmpresaAllSelectOptions($idempresa);
             ?>
 
 
+
+
         });
     </script>
 
@@ -543,6 +605,12 @@ $empresa_options = $empresa->getEmpresaAllSelectOptions($idempresa);
     <script id="formCedulaTemplate" type="text/template">
         <div id="div_Clonar" class="divClonar">
             <table class="tablaClonar">
+                <tr>
+                    <td class="celda_titulo">Nombre:</td>
+                    <td class="celda_res" colspan="2">
+                        <input type="text" name="celula_nombre" id="celula_nombre" class="celula_nombre" value=""/>
+                    </td>
+                </tr>
                 <tr>
                     <input type="hidden" name="idcelula" id="idcelula" class="idcelula" value=""/>
                     <td class="celda_titulo">Empresa:</td>
@@ -553,9 +621,11 @@ $empresa_options = $empresa->getEmpresaAllSelectOptions($idempresa);
                     </td>
                 </tr>
                 <tr>
-                    <td class="celda_titulo">Nombre:</td>
+                    <td class="celda_titulo">Quiebres:</td>
                     <td class="celda_res" colspan="2">
-                        <input type="text" name="celula_nombre" id="celula_nombre" class="celula_nombre" value=""/>
+                        <select class="quiebres" id="quiebres" name="quiebres" multiple>
+                            <?= $quiebres_options ?>
+                        </select>
                     </td>
                 </tr>
                 <tr>

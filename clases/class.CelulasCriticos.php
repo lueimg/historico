@@ -78,15 +78,14 @@ class CelulasCriticos{
             }
         }
 
-
-        //consiguiendo pagina
-
+            //consiguiendo pagina
             $this->inicio = ($this->pagina - 1) * $this->tamano;
 
-
-        $cad = "SELECT a.idcedula, a.nombre, a.estado, a.responsable, e.nombre as empresa, a.idempresa
+        $cad = "SELECT a.idcedula, a.nombre, a.estado, a.responsable, e.nombre as empresa, a.idempresa , q.quiebres
                 FROM webpsi_criticos.cedula a
-                inner join webpsi_criticos.empresa e on  a.idempresa=e.id
+                 inner join webpsi_criticos.empresa e on  a.idempresa=e.id
+                left join (SELECT cq.id_celula, GROUP_CONCAT(cq.id_quiebre) quiebres FROM webpsi_criticos.celula_quiebre cq
+                GROUP BY cq.id_celula) q  on q.id_celula = a.idcedula
                 $where
 				ORDER BY a.idcedula ASC
                 Limit ".$this->inicio.",".$this->tamano;
@@ -203,33 +202,90 @@ class CelulasCriticos{
 		
     }		
 	
-	public function EditarCelula( $idcelula, $idempresa , $nombre , $estado ) {
-	
+	public function EditarCelula( $idcelula, $idempresa , $nombre , $estado ,$quiebres) {
+
         $db = new Conexion();
-        $cnx = $db->conectarBD();
+        $cnx = $db->conectarPDO();
 
-        // LA TABLES ES CEDULA PERO DEBIERIA SER CELULA xD
-        $cad = "UPDATE webpsi_criticos.cedula  SET
-                    nombre = '$nombre', estado = $estado, idempresa = $idempresa
-                     WHERE idcedula = $idcelula";
-        $res = mysql_query($cad, $cnx) ;
+        try{
 
-        return $res;
+            $cnx->beginTransaction();
 
-	}
+            // LA TABLES ES CEDULA PERO DEBIERIA SER CELULA xD
+            $cad = "UPDATE  webpsi_criticos.cedula SET
+                    nombre = '$nombre', estado = $estado, idempresa = $idempresa WHERE idcedula = $idcelula ";
+            $res = $cnx->exec($cad);
 
-	public function CrearCelula( $idempresa, $nombre , $estado= 0 , $responsable = "Sin responsable" )
+            $id_celula_new = $idcelula;
+
+            //INSERTAR GRUPO
+            $del = "Delete from webpsi_criticos.celula_quiebre where id_celula = $id_celula_new";
+            $cnx->exec($del);
+
+            $quiebres = explode(",",$quiebres);
+            if(count($quiebres)> 0){
+                foreach($quiebres as $quiebre ){
+                    $sql = "INSERT into webpsi_criticos.celula_quiebre set
+                   id_celula = :id_celula , id_quiebre = :id_quiebre, estado = 1";
+                    $stmt = $cnx->prepare($sql);
+                    $stmt->execute(array(
+                        ":id_celula"=>$id_celula_new,
+                        ":id_quiebre"=>$quiebre,
+                    ));
+                }
+            }
+
+
+            $cnx->commit();
+            return 1;
+
+        }catch (PDOException $e){
+            $cnx->rollBack();
+            return $e->getMessage();
+        }
+
+
+    }
+
+	public function CrearCelula( $idempresa, $nombre , $estado= 0 , $quiebres ,$responsable = "Sin responsable" )
     {
 
-            $db = new Conexion();
-            $cnx = $db->conectarBD();
+        $db = new Conexion();
+        $cnx = $db->conectarPDO();
+
+        try{
+
+            $cnx->beginTransaction();
 
             // LA TABLES ES CEDULA PERO DEBIERIA SER CELULA xD
 			$cad = "INSERT INTO webpsi_criticos.cedula SET
                     nombre = '$nombre', estado = $estado, idempresa = $idempresa , responsable='$responsable' ";
-            $res = mysql_query($cad, $cnx) ;
+            $res = $cnx->exec($cad);
 
-			return "1";
+            $id_celula_new = $cnx->lastInsertId();
+
+            //INSERTAR GRUPO
+            $quiebres = explode(",",$quiebres);
+            if(count($quiebres)> 0){
+                foreach($quiebres as $quiebre ){
+                    $sql = "INSERT into webpsi_criticos.celula_quiebre set
+                   id_celula = :id_celula , id_quiebre = :id_quiebre, estado = 1";
+                    $stmt = $cnx->prepare($sql);
+                    $stmt->execute(array(
+                        ":id_celula"=>$id_celula_new,
+                        ":id_quiebre"=>$quiebre,
+                    ));
+                }
+            }
+
+
+            $cnx->commit();
+            return 1;
+
+        }catch (PDOException $e){
+            $cnx->rollBack();
+            return $e->getMessage();
+        }
 
 	}
 	

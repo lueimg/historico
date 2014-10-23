@@ -493,7 +493,7 @@ class TecnicosCriticos{
                 ,ce.nombre celula
                  ,CONCAT_WS(' ',tec.ape_paterno,tec.ape_materno,tec.nombres) nombre
                   $entradas_sql
-                  ,IFNULL(lo.estado,'Inactivo') estado
+                  ,IFNULL(lo.estado,'Inactivo') estado , lo.t
                  FROM webpsi_criticos.tecnicos tec
                  inner join webpsi_criticos.cedula ce on ce.idcedula = tec.idcedula
                  LEFT  join (
@@ -507,7 +507,7 @@ class TecnicosCriticos{
                 where tec.activo = 1 and tec.officetrack = 1
                 and tec.id in ($ids)
                 ";
-
+$deb = 1;
         $stmt = $cnx->query($sql);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -520,6 +520,7 @@ class TecnicosCriticos{
                             <th class='th_res_grupal2'>Celula</th>
                             <th class='th_res_grupal2'>Tecnico</th>".$td_registros
                             ."<th class='th_res_grupal2'>Estado</th>  "
+                            ."<th class='th_res_grupal2'>Ultimo Registro</th>  "
                             ;
 
             $table ="<table class='tabla_res_grupal' border='$mostrarEnExcel'><tr> $td_cabecera </tr>";

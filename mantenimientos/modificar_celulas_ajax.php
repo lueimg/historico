@@ -38,11 +38,11 @@ if($action == "CrearCelula")
     $celula = new CelulasCriticos();
     //obtenemos los datos enviados , idempresa ,nombre , estado
     extract($_POST);
-    $save = $celula->CrearCelula($idempresa,$nombre,$estado);
-    if($save)
+    $save = $celula->CrearCelula($idempresa,$nombre,$estado,$quiebres);
+    if($save == 1)
         print "Guardado Correctamente";
     else
-        print "Error al guardar , por favor intente de nuevo o contacte con el administrador. Gracias";
+        print $save;
 
 
 }elseif($action == "EditarCelula")
@@ -51,11 +51,11 @@ if($action == "CrearCelula")
     //obtenemos los datos enviados , idempresa ,nombre , estado
     extract($_POST);
 //     die(json_encode($_POST));
-    $save = $celula->EditarCelula( $idcelula , $idempresa,$nombre, $estado );
-    if($save)
+    $save = $celula->EditarCelula( $idcelula , $idempresa,$nombre, $estado,$quiebres );
+    if($save == 1)
         print "Actualizado Correctamente";
     else
-        print "Error al actualizar , por favor intente de nuevo o contacte con el administrador. Gracias";
+        print $save;
 }elseif($action == "filtro_empresa")
 {
     extract($_POST);
