@@ -67,7 +67,7 @@ $idtecnico_movimiento=$tecult['id'];
 
 
 $ob_cedula = new Cedula();
-$cedula = $ob_cedula->getCedulaAll($cnx,$id_empresa);
+$cedula = $ob_cedula->getCedulaAll($cnx,$id_empresa,$cliente_critico["quiebre"]);
 
 //Lista de soluciones comerciales
 $ob_solcom = new SolucionesComerciales();
@@ -162,7 +162,7 @@ $solcomArray = $ob_solcom->getSolucionesAll($cnx);
 									&& $gestion_movimiento[0]["m_id"]!=8){
 										//este if es por si el motivo es 5 = Observacion el cual mantiene el estado
 										if($gestion_movimiento[0]["id_estado"]==9 || $gestion_movimiento[0]["id_estado"]==10 ||
-										   $gestion_movimiento[0]["id_estado"]==20){
+										   $gestion_movimiento[0]["id_estado"]==20 or $gestion_movimiento[0]["id_estado"]==27){
 						?>
 											<option value="<?php echo $mot["id"];?>"><?php echo $mot["motivo"];?></option>
 						<?php

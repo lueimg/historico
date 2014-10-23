@@ -15,7 +15,7 @@ if($_REQUEST["empresa"]){
 	$ob_empresa = new Empresa();
 	$id_empresa = $ob_empresa->getIdEmpresa($cnx,$empresa);
 	$ob_cedula = new Cedula();
-	$cedula = $ob_cedula->getCedulaAll($cnx,$id_empresa);
+	$cedula = $ob_cedula->getCedulaAll($cnx,$id_empresa,$quiebre);
 }else{
 	echo "No se pueden cargar técnicos sin el dato empresa";
 }

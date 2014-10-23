@@ -48,7 +48,7 @@ $ob_empresa = new Empresa();
 $id_empresa = $ob_empresa->getIdEmpresa($cnx,$averia["eecc_final"]);
 
 $ob_cedula = new Cedula();
-$cedula = $ob_cedula->getCedulaAll($cnx,$id_empresa);
+$cedula = $ob_cedula->getCedulaAll($cnx,$id_empresa,$averia["quiebre"]);
 }else{
 	echo "La averia seleccionada no tiene una contrata asociada.Cierre la ventana y seleccione otra averia";
 	exit();

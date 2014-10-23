@@ -33,13 +33,16 @@ class Cedula{
         
 	}
 
-    function getCedulaAll($cnx,$id_empresa){
+    function getCedulaAll($cnx,$id_empresa,$quiebre){
         $cnx->exec("set names utf8");
-        $sql = "select idcedula id,nombre
-                from webpsi_criticos.cedula
-                where estado='1'
-                and idempresa='$id_empresa'
-                order by nombre";
+        $sql = "SELECT c.idcedula id,c.nombre
+                FROM webpsi_criticos.cedula c
+                INNER JOIN webpsi_criticos.celula_quiebre cq ON (cq.id_celula=c.idcedula AND cq.estado='1')
+                INNER JOIN webpsi.tb_quiebre q ON (q.id_quiebre=cq.id_quiebre)
+                WHERE c.estado='1'
+                AND c.idempresa='$id_empresa'
+                AND q.apocope='$quiebre'
+                ORDER BY nombre";
         //echo $sql;
         $res = $cnx->query($sql);
 

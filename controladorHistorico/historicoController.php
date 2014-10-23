@@ -340,7 +340,7 @@ if(isset($_POST['cargarTecnico']) && $_POST["cargarTecnico"]=="cargarTecnico"){
 if(isset($_POST['cargarCedula']) && $_POST["cargarCedula"]=="cargarCedula"){
 	
 $ob_cedula = new Cedula();
-$cedula = $ob_cedula->getCedulaAll($cnx,$_POST['idempresa']);
+$cedula = $ob_cedula->getCedulaAll($cnx,$_POST['idempresa'],$_POST['quiebre']);
 
 	echo json_encode($cedula);
 }

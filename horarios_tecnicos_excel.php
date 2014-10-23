@@ -100,7 +100,7 @@ FROM (
                                 inner join webpsi_criticos.horarios h on h.id=gm.id_horario
                                 inner join webpsi_criticos.empresa emp on emp.id = gm.id_empresa
                                 inner join webpsi_criticos.cedula ced on ced.idcedula = t.idcedula
-                                where gm.fecha_movimiento in (select max(gm2.fecha_movimiento) from webpsi_criticos.gestion_movimientos gm2 where gm2.id_gestion=g.id_gestion and gm2.id_estado not in ('20','10','9') GROUP BY gm2.id_gestion)
+                                where gm.fecha_movimiento in (select max(gm2.fecha_movimiento) from webpsi_criticos.gestion_movimientos gm2 where gm2.id_gestion=g.id_gestion and gm2.id_estado not in ('20','10','9','27') GROUP BY gm2.id_gestion)
                                 and gm.tecnico!=''
                                 and gm.id_estado='1'
                                 and gm.fecha_agenda BETWEEN '".$finicio."' and '".$ffin."'
@@ -122,7 +122,7 @@ FROM (
                                 inner join webpsi_criticos.horarios h on h.id=gm.id_horario
                                   inner join webpsi_criticos.empresa emp on emp.id = gm.id_empresa
                                   inner join webpsi_criticos.cedula ced on ced.idcedula = t.idcedula
-                                where gm.fecha_movimiento in (select max(gm2.fecha_movimiento) from webpsi_criticos.gestion_movimientos gm2 where gm2.id_gestion=g.id_gestion and gm2.id_estado not in ('20','10','9') GROUP BY gm2.id_gestion)
+                                where gm.fecha_movimiento in (select max(gm2.fecha_movimiento) from webpsi_criticos.gestion_movimientos gm2 where gm2.id_gestion=g.id_gestion and gm2.id_estado not in ('20','10','9','27') GROUP BY gm2.id_gestion)
                                 and gm.tecnico!=''
                                 and gm.id_estado='1'
                                and gm.fecha_agenda BETWEEN '".$finicio."' and '".$ffin."'
@@ -144,7 +144,7 @@ FROM (
                                 inner join webpsi_criticos.horarios h on h.id=gm.id_horario
                                   inner join webpsi_criticos.empresa emp on emp.id = gm.id_empresa
                                   inner join webpsi_criticos.cedula ced on ced.idcedula = t.idcedula
-                                where gm.fecha_movimiento in (select max(gm2.fecha_movimiento) from webpsi_criticos.gestion_movimientos gm2 where gm2.id_gestion=g.id_gestion and gm2.id_estado not in ('20','10','9') GROUP BY gm2.id_gestion)
+                                where gm.fecha_movimiento in (select max(gm2.fecha_movimiento) from webpsi_criticos.gestion_movimientos gm2 where gm2.id_gestion=g.id_gestion and gm2.id_estado not in ('20','10','9','27') GROUP BY gm2.id_gestion)
                                 and gm.tecnico!=''
                                 and gm.id_estado='1'
                                and gm.fecha_agenda BETWEEN '".$finicio."' and '".$ffin."'
@@ -166,7 +166,7 @@ FROM (
                                 inner join webpsi_criticos.horarios h on h.id=gm.id_horario
                                   inner join webpsi_criticos.empresa emp on emp.id = gm.id_empresa
                                   inner join webpsi_criticos.cedula ced on ced.idcedula = t.idcedula
-                                where gm.fecha_movimiento in (select max(gm2.fecha_movimiento) from webpsi_criticos.gestion_movimientos gm2 where gm2.id_gestion=g.id_gestion and gm2.id_estado not in ('20','10','9') GROUP BY gm2.id_gestion)
+                                where gm.fecha_movimiento in (select max(gm2.fecha_movimiento) from webpsi_criticos.gestion_movimientos gm2 where gm2.id_gestion=g.id_gestion and gm2.id_estado not in ('20','10','9','27') GROUP BY gm2.id_gestion)
                                 and gm.tecnico!=''
                                 and gm.id_estado='1'
                                and gm.fecha_agenda BETWEEN '".$finicio."' and '".$ffin."'
@@ -198,7 +198,7 @@ FROM (
                                                                 select max(gm2_2.fecha_movimiento)
                                                                 from webpsi_criticos.gestion_movimientos gm2_2
                                                                 where gm_2.id_gestion=gm2_2.id_gestion
-                                                                and gm2_2.id_estado not in ('9','10','20','3','19')
+                                                                and gm2_2.id_estado not in ('9','10','20','3','19','27')
                                                                 GROUP BY gm2_2.id_gestion
                                                             )
                                             and gm_2.tecnico!=''
@@ -241,7 +241,7 @@ FROM (
                                                                 select max(gm2_2.fecha_movimiento)
                                                                 from webpsi_criticos.gestion_movimientos gm2_2
                                                                 where gm_2.id_gestion=gm2_2.id_gestion
-                                                                and gm2_2.id_estado not in ('9','10','20','3','19')
+                                                                and gm2_2.id_estado not in ('9','10','20','3','19','27')
                                                                 GROUP BY gm2_2.id_gestion
                                                             )
                                             and gm_2.tecnico!=''
@@ -286,7 +286,7 @@ FROM (
                                                                 select max(gm2_2.fecha_movimiento)
                                                                 from webpsi_criticos.gestion_movimientos gm2_2
                                                                 where gm_2.id_gestion=gm2_2.id_gestion
-                                                                and gm2_2.id_estado not in ('9','10','20','3','19')
+                                                                and gm2_2.id_estado not in ('9','10','20','3','19','27')
                                                                 GROUP BY gm2_2.id_gestion
                                                             )
                                             and gm_2.tecnico!=''
@@ -329,7 +329,7 @@ FROM (
                                                                 select max(gm2_2.fecha_movimiento)
                                                                 from webpsi_criticos.gestion_movimientos gm2_2
                                                                 where gm_2.id_gestion=gm2_2.id_gestion
-                                                                and gm2_2.id_estado not in ('9','10','20','3','19')
+                                                                and gm2_2.id_estado not in ('9','10','20','3','19','27')
                                                                 GROUP BY gm2_2.id_gestion
                                                             )
                                             and gm_2.tecnico!=''
