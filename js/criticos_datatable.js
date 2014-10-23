@@ -978,7 +978,7 @@ $("#filtro_general").click(function(){
 					 autoOpen: false,
 					 closeOnScape: true,
 		             modal: true,
-		             height: 150,
+		             height: 190,
 		             width: 500,
 				});
 				$("#dialog-asignar-empresa").dialog( "open" );
@@ -1016,7 +1016,7 @@ $("#filtro_general").click(function(){
 					}
 					else{
 						
-						if(quiebre!='R9-REIT-CATV'){
+						//if(quiebre!='R9-REIT-CATV'){
 							var atc = $("#seleccion_criticos"+i).attr("data-atc");
 							if((atc.indexOf("ATC_")!="-1" || atc.indexOf("RTC_")!="-1") && ($("#seleccion_criticos"+i).attr("data-estado")=="1" 
 								|| $("#seleccion_criticos"+i).attr("data-estado")=="8" || $("#seleccion_criticos"+i).attr("data-estado")=="2")){
@@ -1037,12 +1037,12 @@ $("#filtro_general").click(function(){
 								alert("Solo se puede asignar técnicos a las ATC/RTC que esten agendadas o Pendientes");
 								return -1
 							}
-						}
+						/*}
 						else{
 							qui="si";
 							alert('Lo sentimos para gestionar quiebre:R9-REIT-CATV; Debe realizarse en el modulo de gestion.');
 							break;
-						}
+						}*/
 					}
 				}
 			}

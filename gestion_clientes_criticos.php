@@ -67,7 +67,7 @@ $idtecnico_movimiento=$tecult['id'];
 
 
 $ob_cedula = new Cedula();
-$cedula = $ob_cedula->getCedulaAll($cnx,$id_empresa);
+$cedula = $ob_cedula->getCedulaAll($cnx,$id_empresa,$cliente_critico["quiebre"]);
 
 //Lista de soluciones comerciales
 $ob_solcom = new SolucionesComerciales();
