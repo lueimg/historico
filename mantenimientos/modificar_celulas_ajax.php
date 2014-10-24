@@ -8,8 +8,8 @@ header("Pragma: no-cache");
 
 
 require_once("../../../cabecera.php");
-require_once("../clases/class.TecnicosCriticos.php");
-require_once("../clases/class.CelulasCriticos.php");
+require("../clases/class.TecnicosCriticos.php");
+require("../clases/class.CelulasCriticos.php");
 
 $action = $_POST["action"];
 
@@ -31,7 +31,6 @@ if (isset($_POST["habilitar_tecnico"])) {
 	else
 		echo "error";
 }
-
 
 if($action == "CrearCelula")
 {

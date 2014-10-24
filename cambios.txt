@@ -1,3 +1,12 @@
+
+::LUIS MORI 2014/10/24
+Se actualizo el modulo de usuario
+Se actualizo algunas clases de webpsi/clases
+** Actualizar de las carpetas nuevas fuera_del_git
+
+
+//////////////////////////////////////////////////////////////
+
 ::Jorge 2/10/14
 ALTER TABLE webpsi_criticos.usuarios_contratas_criticos
 ADD COLUMN visible int(1) NULL DEFAULT 1 AFTER `id_empresa`;
@@ -166,3 +175,5 @@ INSERT INTO webpsi_criticos.`celula_quiebre` VALUES ('6', '10', '1');
 INSERT INTO webpsi_criticos.`celula_quiebre` VALUES ('6', '11', '1');
 INSERT INTO webpsi_criticos.`celula_quiebre` VALUES ('6', '12', '1');
 INSERT INTO webpsi_criticos.`celula_quiebre` VALUES ('6', '13', '1');
+
+
