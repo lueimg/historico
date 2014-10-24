@@ -98,14 +98,21 @@ input[type="text"], select {
 	});
 
 listarResultado=function(datos){
-	var htm="";
+	var htm="";var img='';
 	$("#div_listado").css("display","");
 	$("#tabla_listado .elimina").remove();
 	if(datos.length>0){
 		$.each(datos,function(index,data){
+			img='';
+			if(data.estado=='Pendiente'){
+				img='<img title="Gestionar" alt="Gestionar" src="img/gestionar.png">';
+			}
 			htm='';
 			htm='<tr class="elimina">'+
-					'<td class="celda2" onClick="cargarDetalle('+data.id+');"><img title="Mostrar Detalle" alt="Mostrar Detalle" src="img/mov.jpg"></td>'+
+					'<td class="celda2" onClick="cargarDetalle('+data.id+');" style="text-align:center"><img title="Mostrar Detalle" alt="Mostrar Detalle" src="img/mov.jpg"></td>'+
+					'<td class="celda2" style="text-align:center" data-id="'+data.id+'" data-actividad="'+data.tipo_actividad+'">'+
+						img+
+					'</td>'+
 			    	'<td class="celda2">'+data.averia+'</td>'+
 			    	'<td class="celda2">'+data.id_atc+'</td>'+
 			    	'<td class="celda2">'+data.tipo_actividad+'</td>'+
@@ -239,10 +246,11 @@ validaAlfanumerico=function(e) { // 1
 <div id="div_listado" class="divBusqueda" style="width: 1000px">
 	<table id="tabla_listado" class="tablaBusqueda" cellpadding="1" cellspacing="0" border="1">
 		<thead>
-			<th colspan='10'>RESULTADOS DE LA BUSQUEDA</th>
+			<th colspan='11'>RESULTADOS DE LA BUSQUEDA</th>
 		</thead>
 		<tr class="tr_busqueda">
-			<th style='text-align:center' width="50px">[ ]</th >
+			<th style='text-align:center' width="50px">Detalle</th >
+			<th style='text-align:center' width="50px">Gestion</th >
 			<th style='text-align:center' width="80px">Averia</th >
 			<th style='text-align:center' width="80px">Cod Atencion</th >
 			<th style='text-align:center' width="80px">Tipo Actividad</th >

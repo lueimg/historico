@@ -23,6 +23,7 @@ $cnx = $db->conectarPDO();
 $id = $_GET['id'];
 $indice = $_GET['indice'];
 $actividad = $_GET['actividad'];
+$consultahistorico=trim($_GET['consultaHistorico']);
 
 if($actividad=='Provision'){
 	$ob_provision = new gestionCriticos($cnx);
@@ -148,38 +149,48 @@ $solcomArray = $ob_solcom->getSolucionesAll($cnx);
 						<option value="">Seleccione motivo</option>
 						<?php
 							foreach ($motivos as $mot):
-								if($gestion_movimiento[0]["m_id"]==3){
-									if($mot["id"]==2){
-						?>
-										<option value="<?php echo $mot["id"];?>"><?php echo $mot["motivo"];?></option>
-						<?php
-									}else{
-										//
-									}
-								}else{
-									if($gestion_movimiento[0]["m_id"]!=7 && $gestion_movimiento[0]["m_id"]!=2
-									&& $gestion_movimiento[0]["m_id"]!=4 && $gestion_movimiento[0]["m_id"]!=6
-									&& $gestion_movimiento[0]["m_id"]!=8){
-										//este if es por si el motivo es 5 = Observacion el cual mantiene el estado
-										if($gestion_movimiento[0]["id_estado"]==9 || $gestion_movimiento[0]["id_estado"]==10 ||
-										   $gestion_movimiento[0]["id_estado"]==20 or $gestion_movimiento[0]["id_estado"]==27){
-						?>
-											<option value="<?php echo $mot["id"];?>"><?php echo $mot["motivo"];?></option>
-						<?php
-										}else{
-											if($mot["id"]==3){
-												//
-											}else{
-						?>
-											<option value="<?php echo $mot["id"];?>"><?php echo $mot["motivo"];?></option>
-						<?php
-											}
-										}
+								if($consultahistorico!='Activo'){
 
+									if($gestion_movimiento[0]["m_id"]==3){
+										if($mot["id"]==2){
+							?>
+											<option value="<?php echo $mot["id"];?>"><?php echo $mot["motivo"];?></option>
+							<?php
+										}else{
+											//
+										}
 									}else{
-						?>
-									<option value="<?php echo $mot["id"];?>"><?php echo $mot["motivo"];?></option>
-						<?php
+										if($gestion_movimiento[0]["m_id"]!=7 && $gestion_movimiento[0]["m_id"]!=2
+										&& $gestion_movimiento[0]["m_id"]!=4 && $gestion_movimiento[0]["m_id"]!=6
+										&& $gestion_movimiento[0]["m_id"]!=8){
+											//este if es por si el motivo es 5 = Observacion el cual mantiene el estado
+											if($gestion_movimiento[0]["id_estado"]==9 || $gestion_movimiento[0]["id_estado"]==10 ||
+											   $gestion_movimiento[0]["id_estado"]==20 or $gestion_movimiento[0]["id_estado"]==27){
+							?>
+												<option value="<?php echo $mot["id"];?>"><?php echo $mot["motivo"];?></option>
+							<?php
+											}else{
+												if($mot["id"]==3){
+													//
+												}else{
+							?>
+												<option value="<?php echo $mot["id"];?>"><?php echo $mot["motivo"];?></option>
+							<?php
+												}
+											}
+
+										}else{
+							?>
+										<option value="<?php echo $mot["id"];?>"><?php echo $mot["motivo"];?></option>
+							<?php
+										}
+									}
+								}// fin del if
+								else{
+									if($mot["id"]==1){
+							?>
+										<option value="<?php echo $mot["id"];?>"><?php echo $mot["motivo"];?></option>
+							<?php
 									}
 								}
 							endforeach;
