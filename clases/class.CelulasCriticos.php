@@ -223,7 +223,7 @@ class CelulasCriticos{
             $cnx->exec($del);
 
             $quiebres = explode(",",$quiebres);
-            if(count($quiebres)> 0){
+            if(count($quiebres)> 0 && $quiebres != 0){
                 foreach($quiebres as $quiebre ){
                     $sql = "INSERT into webpsi_criticos.celula_quiebre set
                    id_celula = :id_celula , id_quiebre = :id_quiebre, estado = 1";

@@ -57,9 +57,9 @@ $quiebres_options = $quiebres->comboQuiebres();
 <script type="text/javascript" src="../js/js.js"></script>
 <link rel="stylesheet" type="text/css" href="../../../css/estiloAdmin.css">
 <link rel="stylesheet" type="text/css" href="../../../css/buttons.css">
-<script src="//cdnjs.cloudflare.com/ajax/libs/json2/20121008/json2.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js"></script>
+<script src="../js/json2.js"></script>
+<script src="../js/underscore-min.js"></script>
+<script src="../js/backbone-min.js"></script>
 <!-- Latest compiled and minified CSS -->
 <!--        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">-->
 <script type="text/javascript">
@@ -120,7 +120,8 @@ $quiebres_options = $quiebres->comboQuiebres();
                 idcelula: celula.idcedula,
                 idempresa: celula.idempresa,
                 estado: nuevo_estado,
-                nombre: celula.nombre
+                nombre: celula.nombre,
+                quiebres:celula.quiebres
             },
             success: function (response) {
                 location.reload();
@@ -190,7 +191,10 @@ $quiebres_options = $quiebres->comboQuiebres();
             width: '45%',
             hide: 'slide',
             title: 'Editar Celula',
-            position: 'top'
+            position: 'top',
+            close: function( event, ui ) {
+                $("#childModal").html("");
+            }
         });
 
     }
@@ -237,7 +241,10 @@ $quiebres_options = $quiebres->comboQuiebres();
             width: '45%',
             hide: 'slide',
             title: 'Nueva Celula',
-            position: 'top'
+            position: 'top',
+            close: function( event, ui ) {
+                $("#childModal_nuevo").html("");
+            }
         });
 
     }
@@ -268,7 +275,6 @@ validarFormulario  = function(idparent){
     if(error > 0 ){
         return false;
     }
-
 
     if($("#quiebres").val() == null ){
         alert("Debe seleccionar al menos un quiebre");
