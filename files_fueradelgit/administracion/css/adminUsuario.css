@@ -1,0 +1,75 @@
+.numContact-row,
+.submodulo-row{
+    transition: background-color 1s ease;
+    background-color: yellow;
+}
+
+
+.cabecera {
+    padding: 5px;
+}
+.cabecera .opciones {
+    padding: 10px 10px 10px 0;
+    font-weight: bold;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+.cabecera fieldset legend {
+    font-weight: bold;
+    padding: 5px;
+}
+
+#generarPass {
+    font-size: 10px ;
+    border-radius: 5px;
+}
+#generarPass:hover {
+    background: black;
+    color: #fff;
+}
+
+#modalFormCrearUsuario td {
+    padding: 3px 0;
+}
+
+.td-cabecera {
+    background: #6e9cc8;
+    color: #fff;
+}
+.td-cabecera strong {
+    padding-left: 10px;
+}
+
+#agregarModulo {
+    background: #6a7cc8;
+    color: #fff;
+    padding: 4px;
+    font-weight: bold;
+    border-radius: 2px;
+    font-size: 12px;
+}
+.remove-row {
+    cursor: pointer;
+}
+.remove-row:hover {
+    font-weight: bold;
+    color: red;
+}
+
+#paginacion {
+    text-align: center;
+    margin-bottom: 50px;
+}
+#paginacion a {
+    display: inline-block;
+    padding: 0 2px;
+}
+
+
+#paginacion a:hover {
+    font-weight: bold;
+}
+
+.espacio-1 {
+    padding: 11px;
+}
