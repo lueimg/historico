@@ -94,12 +94,15 @@
             </tr>
 
             <tr>
-                <td colspan="6"  class="td-cabecera">
+                <td colspan="4"  class="td-cabecera">
                     <strong>Empresas Criticos</strong>
+                </td>
+                <td colspan="3"  class="td-cabecera">
+                    <strong>Proyectos Asignados</strong>
                 </td>
             </tr>
             <tr>
-                <td colspan="6">
+                <td colspan="4">
                     <table class="table-empresas-criticas">
                         <tr class="row-cabecera">
                             <th>Empresa Critica</th>
@@ -107,6 +110,26 @@
                             <th class="espacio-1">Visible</th>
                         </tr>
                         <?= $empresas_criticas_trs; ?>
+                    </table>
+                </td>
+                <td colspan="3">
+                    <table class="table-proyectos" width="100%">
+
+                        <tr class="row-cabecera">
+                            <th>Proyectos</th>
+                            <th class="espacio-1">Asignar</th>
+                            <th class="espacio-1">Editable</th>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3">
+                               <div style="overflow-y: scroll; height: 115px;">
+                                   <table class="table-row-proy-selected" width="100%">
+                                       <?= $proyectos_trs; ?>
+                                   </table>
+                               </div>
+                            </td>
+                        </tr>
                     </table>
                 </td>
             </tr>
@@ -119,36 +142,45 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="6">
+                <td colspan="4">
                     <select name="modulos" id="modulos">
                         <?= $modulos_options_html;?>
                     </select>
                     <a href="#" id="agregarModulo">Agregar Modulo</a>
                 </td>
+                <td class="celda_res"  align="center">
+
+                    <button id="btn_guardar" class="action blue" title="Generar Password" >
+                        <span class="label">:: Guardar Usuario :: </span>
+                    </button>
+                    <button id="btn_salir" class="action red" title="Cancelar">
+                        <span class="label"> :: Cancelar :: </span>
+                    </button>
+
+                </td>
             </tr>
             <tr>
                 <td colspan="6" style="text-align: center">
                     <table id="listModulosSeleccionados" width="100%">
+                        <thead>
                         <tr>
+
                             <th>Modulo</th>
                             <th>Submodulos</th>
                             <th>Acciones</th>
                         </tr>
+                        </thead>
+                        <tr>
+                          <td colspan="3">
+                              <table width="100%" id="newrowsadded"></table>
+                          </td>
+                      </tr>
                     </table>
                 </td>
             </tr>
 
             <tr>
-                <td class="celda_res" colspan="6" align="center">
 
-                    <button id="btn_guardar" class="action blue" title="Generar Password" >
-                        <span class="label">Guardar Usuario</span>
-                    </button>
-                    <button id="btn_salir" class="action red" title="Cancelar">
-                        <span class="label">Salir</span>
-                    </button>
-
-                </td>
             </tr>
 
         </table>
@@ -159,11 +191,11 @@
 <script id="SubModuloTemplate" type="text/template">
 
        <tr class="submodulo-row">
-           <td>
+           <td style="width:187px">
               <%= nombre %>
                <input type="hidden" class= "modulo selected" id="modulo_<%= id %>" id="<%= id %>" value="<%= id %>"/>
            </td>
-           <td>
+           <td style="width:319px">
                <select name="submodulo_<%= id %>" class="submodulo" id="submodulo_<%= id %>" multiple>
                <% _.each(items,function(item,key,list){ %>
                  <option value="<%= item.idsubmodulo %>">  <%= item.submodulo %></option>

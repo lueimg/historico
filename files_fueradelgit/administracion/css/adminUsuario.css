@@ -73,3 +73,9 @@
 .espacio-1 {
     padding: 11px;
 }
+
+.submodulo-row td,
+.cri-empresas td,
+.row-proyecto td {
+    border-bottom: 1px solid #ccc;
+}

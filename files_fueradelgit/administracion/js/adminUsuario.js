@@ -14,40 +14,24 @@ $().ready(function(){
     //LEVANTA LA VENTANA DE CREAER USUARIO
     $("#crearUsuario").click(function(e){
         e.preventDefault();
-
-        //VALORES POR DEFAUL
-
         //todos los campos a estado inicial
         limpiarCampos("#modalFormCrearUsuario");
-
-
         //LEVANTA POPUP
-        $("#modalFormCrearUsuario").dialog({
-            modal : true,
-            width:'auto',height:'600',
-            title : 'Crear usuario'
-        });
-
+        $("#modalFormCrearUsuario").dialog({  modal : true,  width:'auto',height:'600',   title : 'Crear usuario' });
     });
-
-
     //GENERAR PASS DENTRO DEL DIALOG CREAR USUARIO
     $("#generarPass").click(function(){  $("#pass").val(randompass(6));    });
-
     //MODAL CERRAR
     $("#modalFormCrearUsuario #btn_salir").click(function(){
         $("#modalFormCrearUsuario").dialog("close");
     });
-
 
     //GUARDAR CREAR USUARIO
     $("#btn_guardar").click(function(){
         //validar inputs Y SELECTS
         var validacion = validarCampos("#modalFormCrearUsuario");
         if(validacion){  guardarUsuario();  }
-
     });
-
 
     //multiselect
     $("#empresas").multiselect({});
@@ -55,7 +39,7 @@ $().ready(function(){
     //agrega submodulos en el dialog crear usuario
     $("#agregarModulo").click(agregarSubmodulos);
 
-
+    //  VALIDACION DE CHECKBOX EMPRESAS CRITICOS  VISIBLE
     $(".cri.emp.id").click(function(){
        var checked= $(this).is(":checked") ;
         if(checked){
@@ -67,14 +51,25 @@ $().ready(function(){
             $("#cri_vis_"+$(this).attr("emp")).attr("disabled",true)
         }
     });
+    //VALIDACION CHECKBOX PROYECTOS ASIGANDOS
+    $(".proy.id").click(function(){
+        var checked= $(this).is(":checked") ;
+        if(checked){
+            $("#proy_vis_"+$(this).attr("proy"))
+                .attr("disabled",false)
+                .prop('checked', true);
 
+        }else{
+            $("#proy_vis_"+$(this).attr("proy"))
+                .attr("disabled",true)
+                .prop('checked', false);
+        }
+    });
 
     //EDITAR USUARIO
     $(".editUser").click(function(e){
         e.preventDefault();
-
         var idusuario = $(this).attr("idusuario");
-
         //CARGAR DATA
         $.ajax({
             type: "POST",
@@ -85,14 +80,11 @@ $().ready(function(){
             },
             dataType: "Json",
             success: function (obj) {
-
                 if(obj.error == 0 ){
-
                     limpiarCampos("#modalFormCrearUsuario");
                     $(".table-empresas-criticas input").prop("checked",false)
                     //CARGAR DATOS
                     //info
-
                     $("#idusuario").val(obj.data.info.id);
                     $("#nom").val(obj.data.info.nombre);
                     $("#ape").val(obj.data.info.apellido);
@@ -106,7 +98,6 @@ $().ready(function(){
                     $("#empresa_principal").val(obj.data.info.ideecc)
                     //OTRAS EMPRESAS
                     window.usuariodata = obj.data;
-
                     if(obj.data.empresas.empresas != null){
                         $("#empresas option").attr("selected",false)
 
@@ -151,10 +142,23 @@ $().ready(function(){
                         $(".table-empresas-criticas input").prop("checked",true);
                     }
 
+                    //Proyectos asigandos
+                    $(".table-proyectos input").prop("checked",false);
+                    $(".table-proyectos .proy.vis ").attr("disabled",true);
+                    if(obj.data.proy.data != null){
+                        var proy = obj.data.proy.data.split("|");
+                        $.each(proy,function(i,e){
+                            var data = e.split("-");
+                            $("#proy_id_"+data[0]).prop("checked",true);
+                            $("#proy_vis_"+data[0]).attr("disabled",false);
+                            if(data[1]== "1"){
+                                $("#proy_vis_"+data[0]).prop("checked",true);
+                            }
+                        });
+                    }
 
                     //CARGAR SUBMODULOS
                     if(obj.data.ususub.data != null){
-
                         var modulos = obj.data.ususub.data.split("|");
                         $.each(modulos, function(i,modulo){
                             //OBTENGO EL MODULO Y LOS SUBMODULOS REGISTRADOS
@@ -174,41 +178,30 @@ $().ready(function(){
                         });
 
                     }
-
-
                     //LEVANTA POPUP
                     $("#modalFormCrearUsuario").dialog({
                         modal : true,
                         width:'auto',height:'600',
                         title : 'Editar Usuario'
                     });
-
                 }else{
                     alert("Hubo un problema al cargar la data del usuario ," +
                     " por favor actualize su pagina e intente de nuevo");
                 }
-
             },
             error: function () {
                 alert("Error al cargar el usuario, " +
                 "Por favor actualize su pagina y vuelva a intentar");
             }
         });
-
-
     })
-
 
     ActivarFiltros();
     ColocarFiltrosSeccionados();
 
-
 });
 
-
-
 guardarUsuario = function(){
-
     //OBTENER DATOS
     var id              = $("#idusuario").val();
     var nombre          = $("#nom").val();
@@ -227,6 +220,7 @@ guardarUsuario = function(){
     if($("#quiebres").val() != null){
         quiebres = $("#quiebres").val().join()
     }
+
     //EMPRESA CRITICOS
     var empresas_criticos= [];
     $(".table-empresas-criticas tr.cri-empresas").each(function(i,el){
@@ -240,21 +234,32 @@ guardarUsuario = function(){
             empresas_criticos.push(  emp + "-" + vis );
         }
     })
-
     var emp_cri = empresas_criticos.join("|");
 
+    //EMPRESA CRITICOS
+    var proyectos= [];
+    $(".table-proyectos tr.row-proyecto").each(function(i,el){
+        var proy = "";
+        var vis = 0;
+        if($(el).find(".proy.id").is(':checked') == true){
+            proy = $(el).find(".proy.id").attr("proy");
+            if($(el).find(".proy.vis").is(':checked') == true){
+                vis = 1
+            }
+            proyectos.push(  proy + "-" + vis );
+        }
+    })
+    var proy = proyectos.join("|");
     //OBTENIENDO SUBMODULOS
-    var modulos = []
+    var modulos = [];
     $("#listModulosSeleccionados .modulo.selected").each(function(){
         var id = $(this).val()
         var submodulos =  $(this).parent().parent().find("#submodulo_"+id).val()
         if(submodulos != null ){
             modulos.push( id + "-" + submodulos.join(","));
         }
-
     })
     var usu_submodulos = modulos.join("|");
-
 
     $.ajax({
         type: "POST",
@@ -275,7 +280,8 @@ guardarUsuario = function(){
             quiebres:quiebres,
             empresas:empresas,
             emp_cri:emp_cri,
-            usu_sub:usu_submodulos
+            usu_sub:usu_submodulos,
+            proy:proy
         },
         dataType: "Json",
         success: function (obj) {
@@ -300,12 +306,15 @@ guardarUsuario = function(){
 
 validarCampos= function(idparent){
     var error = 0;
-    $(idparent + " input").css
+
     $(idparent + " input").each(function(i,el){
 
 
         //si no es un campo de empresa critica, si no es un checkbox
-        if($(el).hasClass("cri") == false && $(el).attr("id") != "idusuario"){
+        if($(el).hasClass("proy") == false
+            && $(el).hasClass("cri") == false
+            && $(el).attr("id") != "idusuario"
+        ){
 
             var value  = $(el).val();
             if(value == ""){
@@ -351,7 +360,11 @@ function limpiarCampos(idpadre){
 
     //TODAS LAS EMPRESAS CRITICAS ACTIVADAS POR DEFECTO
     $(".table-empresas-criticas input").prop('checked', true);
-    $(".table-empresas-criticas input").attr("disabled",false)
+    $(".table-empresas-criticas input").attr("disabled",false);
+
+    $(".table-proyectos input").prop('checked', false);
+    $(".table-proyectos .proy").attr("disabled",false);
+    $(".table-proyectos .proy.vis").attr("disabled",true);
 
 }
 
@@ -449,7 +462,7 @@ function agregarSubmoduloHTML(id , text ){
         nombre:text,
         items:items})
 
-    $("#listModulosSeleccionados").append(html);
+    $("#listModulosSeleccionados #newrowsadded").prepend(html);
     $("#submodulo_"+id).multiselect({position: { my: 'left bottom',at: 'left top'}});
     $("#submodulo_"+id).multiselect("checkAll");
 

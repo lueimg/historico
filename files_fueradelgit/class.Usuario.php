@@ -220,8 +220,6 @@ class Usuario {
         $db = new Conexion();
         $cnx = $db->conectarBD();
 
-
-
         //FILTROS
         $filtros = $this->Filtros;
         $where = "";
@@ -517,7 +515,7 @@ class Usuario {
     public function editarUsurio($data = array())
     {
         //CREAMOS EL USUARI
-        $deb = 1;
+
         $nombre         = $data["nombre"];
         $apellido       = $data["apellido"];
         $usuario        = $data["usuario"];
@@ -532,128 +530,130 @@ class Usuario {
         $empresas       = $data["empresas"];
         $empcri         = $data["emp_cri"];
         $ususub         = $data["usu_sub"];
-
         $idusuario      = $data["id"];
+        $proyectos      = $data["proy"];
 
+        $db = new Conexion();
+        $cnx = $db->conectarPDO();
 
-        $cnx = $this->cnx;
+        try {
 
-        //VALIDAR SI EXISTE LOGIN EN OTRO USUARIO
-        $sql = "select id from webpsi.tb_usuario where usuario='$usuario' and id <> $idusuario";
-        $res = mysql_query($sql, $cnx) or die(mysql_error());
-        $row = mysql_fetch_assoc($res);
-        $deb = 1;
-        if(!empty($row["id"])){
-            return json_encode(array("error"=>1,"msj"=>"El login \"$usuario\" ya existe en otro usuario",));
-        }
+            $cnx->beginTransaction();
 
-        $sql = "select id from webpsi.tb_usuario where dni='$dni' and id <> $idusuario";
-        $res = mysql_query($sql, $cnx) or die(mysql_error());
-        $row = mysql_fetch_assoc($res);
+            //VALIDAR SI EXISTE LOGIN EN OTRO USUARIO
+            $sql = "select id from webpsi.tb_usuario where usuario='$usuario' and id <> $idusuario";
+            $res = $cnx->query($sql);
+            $row = $res->fetch(PDO::FETCH_ASSOC);
 
-        if(!empty($row["id"])){
-            return json_encode(array("error"=>1,"msj"=>"El Dni \"$dni\" ya existe en otro usuario",));
-        }
+            if (!empty($row["id"])) {
+                return json_encode(array("error" => 1, "msj" => "El login \"$usuario\" ya existe en otro usuario",));
+            }
 
-        //ACTUALIZAMOS EL USUARIO
+            $sql = "select id from webpsi.tb_usuario where dni='$dni' and id <> $idusuario";
+            $res = $cnx->query($sql);
+            $row = $res->fetch(PDO::FETCH_ASSOC);
 
-        //revisamos si cambio de clave
-        if($pass == "******")
-        {
-            $insert_update_pass = "";
-        }else{
-            $claveSHA = sha1($pass);
-            $insert_update_pass = "  password = '$claveSHA' , ";
-        }
+            if (!empty($row["id"])) {
+                return json_encode(array("error" => 1, "msj" => "El Dni \"$dni\" ya existe en otro usuario",));
+            }
 
-        $sql= "
-        update webpsi.tb_usuario  SET
-            nombre = '$nombre' , apellido  ='$apellido' ,
-            usuario = '$usuario', $insert_update_pass
-            dni = '$dni', online = $online , id_perfil = $idperfil ,
-            id_area = $idarea , status = $estado , ideecc = $ideecc
-            where id = $idusuario
-        ";
-        $res = mysql_query($sql, $cnx) or die(mysql_error());
-        if(!$res){
-            return json_encode(array("error"=>1,"msj"=>"Error al insertar el nuevo usuario",));
-        }
+            //ACTUALIZAMOS EL USUARIO
+            //revisamos si cambio de clave
+            if ($pass == "******") {
+                $insert_update_pass = "";
+            } else {
+                $claveSHA = sha1($pass);
+                $insert_update_pass = "  password = '$claveSHA' , ";
+            }
 
+            $sql = "
+                    update webpsi.tb_usuario  SET
+                        nombre = '$nombre' , apellido  ='$apellido' ,
+                        usuario = '$usuario', $insert_update_pass
+                        dni = '$dni', online = $online , id_perfil = $idperfil ,
+                        id_area = $idarea , status = $estado , ideecc = $ideecc
+                        where id = $idusuario
+                    ";
+            $cnx->exec($sql);
 
-        $id_new_usuario = $idusuario;
+            $id_new_usuario = $idusuario;
 
-        $DELSQL ="delete from webpsi.usuarios_eecc where idusuario = $idusuario";
-        $res = mysql_query($DELSQL, $cnx) or die(mysql_error());
-        //insertantado otras empresas
-        $otras_empresas = explode(",",$empresas);
-        foreach($otras_empresas as  $emp){
-            $sql = "insert into  usuarios_eecc set
+            $DELSQL = "delete from webpsi.usuarios_eecc where idusuario = $idusuario";
+            $cnx->exec($DELSQL);
+            //insertantado otras empresas
+            $otras_empresas = explode(",", $empresas);
+            $deb = 1;
+            foreach ($otras_empresas as $emp) {
+                $sql = "insert into  usuarios_eecc set
                   idusuario = $id_new_usuario , ideecc = $emp , activo   = 1";
-            $res = mysql_query($sql, $cnx) or die(mysql_error());
-            if(!$res){
-                return json_encode(array("error"=>1,"msj"=>"Error al insertar otras empresas",));
+                $cnx->exec($sql);
             }
-        }
 
 
-        $DELSQL ="DELETE from webpsi.tb_usuario_quiebre where id_usuario =  $idusuario";
-        $res = mysql_query($DELSQL, $cnx) or die(mysql_error());
+            $DELSQL = "DELETE from webpsi.tb_usuario_quiebre where id_usuario =  $idusuario";
+            $cnx->exec($DELSQL);
 
-        //insertantado quiebres
-        $idquiebres = explode(",",$quiebres);
-        foreach($idquiebres as  $quiebre){
-            $sql = "insert into webpsi.tb_usuario_quiebre set
+            //insertantado quiebres
+            $idquiebres = explode(",", $quiebres);
+            foreach ($idquiebres as $quiebre) {
+                $sql = "insert into webpsi.tb_usuario_quiebre set
                     id_usuario = $id_new_usuario , id_quiebre = $quiebre , cestado = 1";
-            $res = mysql_query($sql, $cnx) or die(mysql_error());
-            if(!$res){
-                return json_encode(array("error"=>1,"msj"=>"Error al insertar otras empresas",));
+                $cnx->exec($sql);
             }
-        }
 
-        //USUARIO CONTRATAS CRITICOS
+            //USUARIO CONTRATAS CRITICOS
+            $DELSQL = "DELETE from webpsi_criticos.usuarios_contratas_criticos where id_usuario = $idusuario";
+            $cnx->exec($DELSQL);
 
-        $DELSQL ="DELETE from webpsi_criticos.usuarios_contratas_criticos where id_usuario = $idusuario";
-        $res = mysql_query($DELSQL, $cnx) or die(mysql_error());
-
-
-        $contratas = explode("|",$empcri);
-        foreach($contratas as $con){
-            list($emp , $vis) = explode("-",$con);
-            $sql  ="insert into webpsi_criticos.usuarios_contratas_criticos set
+            $contratas = explode("|", $empcri);
+            foreach ($contratas as $con) {
+                list($emp, $vis) = explode("-", $con);
+                $sql = "insert into webpsi_criticos.usuarios_contratas_criticos set
                     id_usuario = $id_new_usuario , id_empresa = $emp , visible = $vis";
-            $res = mysql_query($sql, $cnx) or die(mysql_error());
-            if(!$res){
-                return json_encode(array("error"=>1,"msj"=>"Error al insertar usuarios criticos contrata",));
+               $cnx->exec($sql);
             }
 
-        }
 
-        //SUBMODULOS
-        $DELSQL ="DELETE From webpsi.usuarios_submodulos where idusuario =  $idusuario";
-        $res = mysql_query($DELSQL, $cnx) or die(mysql_error());
+            //PROYECTOS ASIGNADOS
+            $DELSQL = "DELETE from  webpsi.geo_proyecto_usuarios where usuario_id = $idusuario";
+            $cnx->exec($DELSQL);
+            $proyectos = explode("|",$proyectos);
+            foreach($proyectos as $proyecto){
+                if(!empty($proyecto)){
+                    list($proy , $vis) = explode("-",$proyecto);
+                    $sql  ="insert into webpsi.geo_proyecto_usuarios set
+                    usuario_id = $id_new_usuario , geo_proyecto_id = $proy , editar = $vis , fec_registro = NOW()";
+                    $cnx->exec($sql);
+                }
+            }
 
-        if(!empty($ususub)){
-            $pormodulos = explode("|",$ususub);
-            foreach($pormodulos as $modulo){
-                list($modulo,$submodulos) = explode("-",$modulo);
-                $submodulos_array = explode(",",$submodulos);
-                foreach($submodulos_array as $sub){
-                    $sql = "insert into webpsi.usuarios_submodulos set
+            //SUBMODULOS
+            $DELSQL = "DELETE From webpsi.usuarios_submodulos where idusuario =  $idusuario";
+            $cnx->exec($DELSQL);
+
+            if (!empty($ususub)) {
+                $pormodulos = explode("|", $ususub);
+                foreach ($pormodulos as $modulo) {
+                    list($modulo, $submodulos) = explode("-", $modulo);
+                    $submodulos_array = explode(",", $submodulos);
+                    foreach ($submodulos_array as $sub) {
+                        $sql = "insert into webpsi.usuarios_submodulos set
                         idusuario = $id_new_usuario , idsubmodulo =$sub";
-                    $res = mysql_query($sql, $cnx) or die(mysql_error());
-                    if(!$res){
-                        return json_encode(array("error"=>1,"msj"=>"Error al registrar los modulos del usuario",));
+                        $cnx->exec($sql);
                     }
                 }
             }
+
+
+            $cnx->commit();
+            return json_encode(array("error" => 0, "msj" => "Usuario actualizado Correctamente",));
+
+        }catch (PDOException $e){
+
+            $cnx->rollBack();
+            return json_encode(array("error" => 1, "msj" => $e->getMessage()));
+
         }
-
-
-
-
-        //$res = mysql_query($cad, $cnx) or die(mysql_error());
-        mysql_close($cnx);
-        return json_encode(array("error"=>0,"msj"=>"Usuario actualizado Correctamente",));
     }
 
 
@@ -675,21 +675,30 @@ class Usuario {
         $empresas       = $data["empresas"];
         $empcri         = $data["emp_cri"];
         $ususub         = $data["usu_sub"];
+        $proyectos         = $data["proy"];
 
         $claveSHA = sha1($pass);
         $cnx = $this->cnx;
+
+        $db = new Conexion();
+        $cnx = $db->conectarPDO();
+
+        try {
+
+            $cnx->beginTransaction();
+
         //validar si existe login
         $sql = "select id from webpsi.tb_usuario where usuario='$usuario'";
-        $res = mysql_query($sql, $cnx) or die(mysql_error());
-        $row = mysql_fetch_assoc($res);
+            $res = $cnx->query($sql);
+            $row = $res->fetch(PDO::FETCH_ASSOC);
 
         if(!empty($row["id"])){
             return json_encode(array("error"=>1,"msj"=>"El login \"$usuario\" ya existe",));
         }
 
         $sql = "select id from webpsi.tb_usuario where dni='$dni'";
-        $res = mysql_query($sql, $cnx) or die(mysql_error());
-        $row = mysql_fetch_assoc($res);
+            $res = $cnx->query($sql);
+            $row = $res->fetch(PDO::FETCH_ASSOC);
 
         if(!empty($row["id"])){
             return json_encode(array("error"=>1,"msj"=>"El Dni \"$dni\" ya existe",));
@@ -703,26 +712,17 @@ class Usuario {
             dni = '$dni', online = $online , id_perfil = $idperfil ,
             id_area = $idarea , status = $estado , ideecc = $ideecc;
         ";
-        $res = mysql_query($sql, $cnx) or die(mysql_error());
-        if(!$res){
-            return json_encode(array("error"=>1,"msj"=>"Error al insertar el nuevo usuario",));
-        }
+        $res = $cnx->exec($sql);
 
-        $cad1 = "SELECT LAST_INSERT_ID()";
-        $res1 = mysql_query($cad1);
-        $r = mysql_fetch_row($res1);
-        $id_new_usuario = $r[0];
+        $id_new_usuario = $cnx->lastInsertId();
 
-        $deb = 1;
+
         //insertantado otras empresas
         $otras_empresas = explode(",",$empresas);
         foreach($otras_empresas as  $emp){
             $sql = "insert into  usuarios_eecc set
                   idusuario = $id_new_usuario , ideecc = $emp , activo   = 1";
-            $res = mysql_query($sql, $cnx) or die(mysql_error());
-            if(!$res){
-                return json_encode(array("error"=>1,"msj"=>"Error al insertar otras empresas",));
-            }
+            $cnx->exec($sql);
         }
 
         //insertantado quiebres
@@ -730,24 +730,31 @@ class Usuario {
         foreach($idquiebres as  $quiebre){
             $sql = "insert into webpsi.tb_usuario_quiebre set
                     id_usuario = $id_new_usuario , id_quiebre = $quiebre , cestado = 1";
-            $res = mysql_query($sql, $cnx) or die(mysql_error());
-            if(!$res){
-                return json_encode(array("error"=>1,"msj"=>"Error al insertar otras empresas",));
-            }
+           $cnx->exec($sql);
         }
 
         //USUARIO CONTRATAS CRITICOS
         $contratas = explode("|",$empcri);
         foreach($contratas as $con){
-            list($emp , $vis) = explode("-",$con);
-            $sql  ="insert into webpsi_criticos.usuarios_contratas_criticos set
+            if(!empty($con)){
+                list($emp , $vis) = explode("-",$con);
+                $sql  ="insert into webpsi_criticos.usuarios_contratas_criticos set
                     id_usuario = $id_new_usuario , id_empresa = $emp , visible = $vis";
-            $res = mysql_query($sql, $cnx) or die(mysql_error());
-            if(!$res){
-                return json_encode(array("error"=>1,"msj"=>"Error al insertar usuarios criticos contrata",));
+                $cnx->exec($sql);
+            }
+        }
+
+            //PROYECTOS ASIGNADOS
+            $proyectos = explode("|",$proyectos);
+            foreach($proyectos as $proyecto){
+                if(!empty($proyecto)){
+                    list($proy , $vis) = explode("-",$proyecto);
+                    $sql  ="insert into webpsi.geo_proyecto_usuarios set
+                    usuario_id = $id_new_usuario , geo_proyecto_id = $proy , editar = $vis , fec_registro = NOW()";
+                    $cnx->exec($sql);
+                }
             }
 
-        }
 
         //SUBMODULOS
         if(!empty($ususub)){
@@ -758,20 +765,19 @@ class Usuario {
                 foreach($submodulos_array as $sub){
                     $sql = "insert into webpsi.usuarios_submodulos set
                         idusuario = $id_new_usuario , idsubmodulo =$sub";
-                    $res = mysql_query($sql, $cnx) or die(mysql_error());
-                    if(!$res){
-                        return json_encode(array("error"=>1,"msj"=>"Error al registrar los modulos del usuario",));
-                    }
+                    $cnx->exec($sql);
                 }
             }
         }
+            $cnx->commit();
+            return json_encode(array("error" => 0, "msj" => "Usuario Registrado Correctamente",));
 
+        }catch (PDOException $e){
 
+            $cnx->rollBack();
+            return json_encode(array("error" => 1, "msj" => $e->getMessage()));
 
-
-        //$res = mysql_query($cad, $cnx) or die(mysql_error());
-        mysql_close($cnx);
-        return json_encode(array("error"=>0,"msj"=>"Usuario Registrado Correctamente",));
+        }
     }
 	
 	public function getSubmodulosJSON()
@@ -859,6 +865,25 @@ class Usuario {
 
     }
 
+    public function proyectos_trs(){
+        $html = "";
+        $sql = "select id, nombre from webpsi.geo_proyectos where estado = 1";
+        $cnx = $this->cnx;
+        $res = mysql_query($sql, $cnx) or die(mysql_error());
+        while ($row = mysql_fetch_assoc($res))
+        {   $deb = 1;
+            $html .= "<tr class=\"row-proyecto\">
+                        <td>".$row["nombre"]."</td>
+                        <td style=\"text-align:center\"><input type='checkbox' style='width:85px' class=\"proy id \" id=\"proy_id_".$row["id"]."\" proy='".$row["id"]."' value='1' ></td>
+                        <td style=\"text-align:center\"><input type='checkbox' style='width:85px' class=\"proy vis \" id=\"proy_vis_".$row["id"]."\" value='1'></td>
+                    </tr>";
+        }
+
+
+        return $html;
+    }
+
+
     public function getDataUsuarioAll($idusuario){
 
         if(empty($idusuario)){
@@ -896,6 +921,15 @@ class Usuario {
         $res = mysql_query($sql, $cnx);
         $data = mysql_fetch_assoc($res);
         $data_usuario["empcri"] = $data;
+
+
+        //PROYECTOS ASIGNADOS
+        $sql = "select GROUP_CONCAT(CONCAT(geo_proyecto_id,'-',editar) SEPARATOR '|')  data
+                from webpsi.geo_proyecto_usuarios pu where pu.usuario_id = $idusuario";
+        $cnx = $this->cnx;
+        $res = mysql_query($sql, $cnx);
+        $data = mysql_fetch_assoc($res);
+        $data_usuario["proy"] = $data;
 
 
         //SUBMODULOS

@@ -1,4 +1,12 @@
 
+::LUIS MORI 27/10/14
+SE ACTUALIZO LA CLASE CLASS.USUARIO Y EL MODULO ADMINISTRACION
+dentro de la carpeta archivos fuera del git
+
+///////////////////////
+
+
+
 ::LUIS MORI 2014/10/24
 Se actualizo el modulo de usuario
 Se actualizo algunas clases de webpsi/clases
