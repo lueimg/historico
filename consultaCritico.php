@@ -104,13 +104,15 @@ listarResultado=function(datos){
 	if(datos.length>0){
 		$.each(datos,function(index,data){
 			img='';
+			eventogestion='';
 			if(data.estado=='Pendiente'){
+				eventogestion='onClick="gestionar(this);"';
 				img='<img title="Gestionar" alt="Gestionar" src="img/gestionar.png">';
 			}
 			htm='';
 			htm='<tr class="elimina">'+
 					'<td class="celda2" onClick="cargarDetalle('+data.id+');" style="text-align:center"><img title="Mostrar Detalle" alt="Mostrar Detalle" src="img/mov.jpg"></td>'+
-					'<td class="celda2" style="text-align:center" data-id="'+data.id+'" data-actividad="'+data.tipo_actividad+'">'+
+					'<td class="celda2" '+eventogestion+' style="text-align:center" data-id="'+data.id+'" data-actividad="'+data.tipo_actividad+'">'+
 						img+
 					'</td>'+
 			    	'<td class="celda2">'+data.averia+'</td>'+
@@ -199,7 +201,26 @@ validaAlfanumerico=function(e) { // 1
         return patron.test(te); // 6
 }
 	
+gestionar=function(t) {
+		    id = $(t).attr("data-id")
+		    actividad = $(t).attr("data-actividad")
+		    consultaHistorico = "Activo"
+		    //alert("hola");
+		   	var url = "gestion_clientes_criticos.php?id="+id+"&actividad="+actividad+"&consultaHistorico="+consultaHistorico;
+			var pagina = '<iframe style="border: 0px; " src="' + url + '" width="100%" height="100%"></iframe>'
+			$("#dialog-gestion-criticos").html(pagina);
+			$("#dialog-gestion-criticos").dialog({
+				 autoOpen: false,
+				 closeOnScape: true,
+		         modal: true,
+		         height: 600,
+		         width: 880,
+		         close: function( event, ui ) { $("#btnBuscar").click();}
+			});
 
+			$("#dialog-gestion-criticos").dialog( "open" );
+		     
+}
 
 </script>
 
@@ -267,6 +288,10 @@ validaAlfanumerico=function(e) { // 1
 	<br>
 	<br>
 <div id="resultado1"></div>
+
+
+<div id="dialog-gestion-criticos" title="Gesti&oacute;n Clientes Cr&iacute;ticos"></div>
+
 
 </body>
 </html>
