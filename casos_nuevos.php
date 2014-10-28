@@ -85,6 +85,9 @@ require_once 'clases/gestionCriticos.php';
         $cable=trim($_POST["cable"]);
         $terminal=trim($_POST["terminal"]);
 
+        $x=trim($_POST["x"]);
+        $y=trim($_POST["y"]);
+
         if($tipo_averia=='rutina-catv-pais'){
             $fftt=$mdf."|".$troba."|".$amplificador."|".$tap;
         }
@@ -100,7 +103,7 @@ require_once 'clases/gestionCriticos.php';
                 $contrata, $zonal, $lejano, 
                 $distrito, $eecc_zona, $zona_movistar_uno, 
                 $codcliente, $eecc, $microzona, $celular,
-                $quiebre,$averia,$tipo_actividad,$fftt);
+                $quiebre,$averia,$tipo_actividad,$fftt,$x,$y);
         echo json_encode($save);
      }
      

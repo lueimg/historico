@@ -9,7 +9,7 @@ class GestionManual {
             $contrata, $zonal, $lejano, 
             $distrito, $eecc_zona, $zona_movistar_uno, 
             $codcliente, $eecc, $microzona, $celular,
-            $quiebre,$averia,$tipo_actividad,$fftt) {
+            $quiebre,$averia,$tipo_actividad,$fftt,$x,$y) {
 
         $tabla="";
         $campo="";
@@ -209,7 +209,8 @@ class GestionManual {
                     zona_movistar_uno, paquete, data_multiproducto,
                     averia_m1, fecha_data_fuente, telefono_codclientecms,
                     rango_dias, sms1, sms2,
-                    area2, eecc_final, microzona
+                    area2, eecc_final, microzona,
+                    x,y
                 ) VALUES (
                     NULL, '$id',
                     '$tipo_averia', '0', '',
@@ -229,7 +230,8 @@ class GestionManual {
                     '$zona_movistar_uno', '', '',
                     '', '$fecreg', '$codcliente',
                     '', '', '',
-                    'EN CAMPO', '$eecc', '$microzona'
+                    'EN CAMPO', '$eecc', '$microzona',
+                    '$x','$y'
                 )";
             }
             else{
@@ -243,7 +245,7 @@ class GestionManual {
                   ,tot_llam_tec,tot_llam_seg,llamadastec15d,llamadastec30d,quiebre
                   ,lejano,des_distrito,eecc_zon,zona_movuno,paquete,data_multip,aver_m1
                   ,fecha_data_fuente,telefono_codclientecms,rango_dias,sms1,sms2,area2 
-                  ,tipo_actuacion,eecc_final,microzona)
+                  ,tipo_actuacion,eecc_final,microzona,x,y)
                 VALUES (
                     NULL, '$id','$tipo_averia', '0','$fecreg'
                     , '', '$averia','$inscripcion', '$fono', '$fono'
@@ -254,7 +256,7 @@ class GestionManual {
                     ,'0', '0','0', '0', '$quiebre'
                     ,'$lejano', '$distrito', '$eecc_zona','$zona_movistar_uno', '', '',''
                     , '$fecreg', '$codcliente','', '', '','EN CAMPO'
-                    ,'RUTINA', '$eecc', '$microzona'
+                    ,'RUTINA', '$eecc', '$microzona','$x','$y'
                 )";
             }
             $dbh->exec($sql);
