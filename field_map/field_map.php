@@ -1,7 +1,7 @@
 
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <div>
-    <input type="text" maxlength="100" id="address" placeholder="Dirección" />
+    <input type="text" maxlength="100" id="address" placeholder="Dirección" style="width: 335px;" />
     <input type="button" id="search" value="Buscar" />
 </div><br/>
 <div id='map_canvas' style="width:450px; height:150px;text-align: center"></div>
@@ -66,8 +66,7 @@
 
 
             google.maps.event.addListener(map, 'click', function(evento) {
-                // 3 seconds after the center of the map has changed, pan back to the
-                // marker.
+
                 var latitud = evento.latLng.lat();
                 var longitud = evento.latLng.lng();
 
@@ -76,8 +75,6 @@
                 marker.setPosition(new_marker_position);
 
             });
-
-
 
             //mostrar
             SetXY(results[0].geometry.location.lat(), results[0].geometry.location.lng())
