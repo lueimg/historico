@@ -63,6 +63,22 @@
                 var markerLatLng = marker.getPosition();
                 SetXY(markerLatLng.lat(),markerLatLng.lng())
             });
+
+
+            google.maps.event.addListener(map, 'click', function(evento) {
+                // 3 seconds after the center of the map has changed, pan back to the
+                // marker.
+                var latitud = evento.latLng.lat();
+                var longitud = evento.latLng.lng();
+
+                SetXY(latitud,longitud);
+                var new_marker_position = new google.maps.LatLng(latitud, longitud);
+                marker.setPosition(new_marker_position);
+
+            });
+
+
+
             //mostrar
             SetXY(results[0].geometry.location.lat(), results[0].geometry.location.lng())
 
