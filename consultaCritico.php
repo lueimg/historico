@@ -103,11 +103,11 @@ listarResultado=function(datos){
 	$("#tabla_listado .elimina").remove();
 	if(datos.length>0){
 		$.each(datos,function(index,data){
-			img='';
-			eventogestion='';
-			if(data.estado=='Pendiente'){
-				eventogestion='onClick="gestionar(this);"';
+			eventogestion='onClick="gestionar(this);"';
 				img='<img title="Gestionar" alt="Gestionar" src="img/gestionar.png">';
+			if(data.estado=='Liquidado' || data.estado=='Cancelado'){
+				img='';
+				eventogestion='';
 			}
 			htm='';
 			htm='<tr class="elimina">'+

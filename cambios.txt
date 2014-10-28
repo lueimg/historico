@@ -1,4 +1,16 @@
+//////////////////////////////////////////////////////////////
+:: Jorge Salcedo
+-- Se actualizaron 2 tablas para ingresar el X,Y.
 
+ALTER TABLE webpsi_criticos.gestion_rutina_manual_provision
+ADD COLUMN `x`  varchar(50) NULL AFTER `microzona`,
+ADD COLUMN `y`  varchar(50) NULL AFTER `x`;
+
+ALTER TABLE webpsi_criticos.gestion_rutina_manual
+ADD COLUMN `x`  varchar(50) NULL AFTER `microzona`,
+ADD COLUMN `y`  varchar(50) NULL AFTER `x`;
+
+//////////////////////////////////////////////////////////////
 ::LUIS MORI 27/10/14
 SE ACTUALIZO LA CLASE CLASS.USUARIO Y EL MODULO ADMINISTRACION
 dentro de la carpeta archivos fuera del git

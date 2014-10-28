@@ -149,7 +149,7 @@ $solcomArray = $ob_solcom->getSolucionesAll($cnx);
 						<option value="">Seleccione motivo</option>
 						<?php
 							foreach ($motivos as $mot):
-								if($consultahistorico!='Activo'){
+								//if($consultahistorico!='Activo'){
 
 									if($gestion_movimiento[0]["m_id"]==3){
 										if($mot["id"]==2){
@@ -185,14 +185,14 @@ $solcomArray = $ob_solcom->getSolucionesAll($cnx);
 											}
 										}
 									}
-								}// fin del if
+								/*}// fin del if
 								else{
 									if($mot["id"]==1){
 							?>
 										<option value="<?php echo $mot["id"];?>"><?php echo $mot["motivo"];?></option>
 							<?php
 									}
-								}
+								}*/
 							endforeach;
 						?>
 					</select>

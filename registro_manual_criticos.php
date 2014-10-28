@@ -146,6 +146,11 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                         + "-Seleccione-"
                         + "</option>");
 
+                $(".catv").css("display","none");
+                $(".stb").css("display","none");
+                $(".catv input[type='text']").val("");
+                $(".stb input[type='text']").val("");
+
                 //Zonal, primera opcion selected
                 //$("#zonal option").first().attr("selected", "selected");
                 $("#zonal").val("LIM");
@@ -163,6 +168,7 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                 if ( $("#tipo_averia").val()==='rutina-catv-pais' ) {
                     //Texto de la etiqueta
                    // $(".inscod").html("Cod. Cliente CMS");
+                   $(".catv").css("display","");
                    $(".telcod").html("Cod. Cliente CMS");
                    $(".error_form .telcod").html("Ingrese Cod. Cliente CMS");
                    $("#movistar_uno").val('');
@@ -182,6 +188,7 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                 } else {
                     //Texto de la etiqueta
                     //$(".inscod").html("Inscripcion");
+                    $(".stb").css("display","");
                     $(".telcod").html("Telefono");
                     $(".error_form .telcod").html("Ingrese tel&eacute;fono");
                     $("#movistar_uno").val('NO');
@@ -338,6 +345,25 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                             formOk = false;
                         }
                     });
+
+                    if($("#tipo_averia").val()=="rutina-catv-pais"){
+                        $.each( $(".error_form2"), function (){
+                            var title = $(this).attr("title");
+                            if ( $.trim( $("#" + title).val() ) === "" ) {
+                                $(this).show().delay(4000).fadeOut(3000);
+                                formOk = false;
+                            }
+                        });
+                    }
+                    else{
+                        $.each( $(".error_form3"), function (){
+                            var title = $(this).attr("title");
+                            if ( $.trim( $("#" + title).val() ) === "" ) {
+                                $(this).show().delay(4000).fadeOut(3000);
+                                formOk = false;
+                            }
+                        });
+                    }
                     
                     if ( !formOk ) {
                         return false;
@@ -505,6 +531,39 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                             <span class="error_form" title="cr_observacion">Ingrese observaci&oacute;n</span>
                         </td>
                     </tr>
+                    <tr class="catv" style="display:none">
+                        <td colspan="4">
+                        <table><tr>
+                        <td style="text-align: left">Troba</td>
+                        <td style="text-align: left">
+                            <input class="border" type="text" size="6" value="" maxlength="4" name="troba" id="troba" />
+                            <span class="error_form2" title="troba">Ingrese Troba</span>
+                        </td>
+                        <td style="text-align: left">Amplificador</td>
+                        <td style="text-align: left">
+                            <input class="border" type="text" size="6" value="" maxlength="4" name="amplificador" id="amplificador" />
+                            <span class="error_form2" title="amplificador">Ingrese Amplificador</span>
+                        </td>
+                        <td style="text-align: left">Tap</td>
+                        <td style="text-align: left">
+                            <input class="border" type="text" size="4" value="" maxlength="2" name="tap" id="tap" />
+                            <span class="error_form2" title="tap">Ingrese Tap</span>                        
+                        </td>
+                        </tr></table>
+                        </td>
+                    </tr>
+                    <tr class="stb" style="display:none">                       
+                        <td style="text-align: left">Armario/Cable</td>
+                        <td style="text-align: left">
+                            <input class="border" type="text" size="6" value="" maxlength="4" name="cable" id="cable" />
+                            <span class="error_form3" title="cable">Ingrese Armario/Cable</span>
+                        </td>
+                        <td style="text-align: left">Terminal</td>
+                        <td style="text-align: left">
+                            <input class="border" type="text" size="6" value="" maxlength="4" name="terminal" id="terminal" />
+                            <span class="error_form3" title="terminal">Ingrese Terminal</span>
+                        </td>
+                    </tr>
                     <tr>
                         <td style="text-align: left">Segmento</td>
                         <td style="text-align: left">
@@ -531,7 +590,7 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                             </select>
                             <span class="error_form" title="zonal">Seleccione zonal</span>
                         </td>
-                    </tr>
+                    </tr>                    
                     <tr>
                         <td style="text-align: left">MDF/NODO</td>
                         <td style="text-align: left">

@@ -9,7 +9,7 @@ class GestionManual {
             $contrata, $zonal, $lejano, 
             $distrito, $eecc_zona, $zona_movistar_uno, 
             $codcliente, $eecc, $microzona, $celular,
-            $quiebre,$averia,$tipo_actividad) {
+            $quiebre,$averia,$tipo_actividad,$fftt) {
 
         $tabla="";
         $campo="";
@@ -220,7 +220,7 @@ class GestionManual {
                     '$nombre_cliente', '', '',
                     '', '', '',
                     '', '',
-                    '', '', '',
+                    '$fftt', '', '',
                     '$fonos_contacto', '$contrata', '$zonal',
                     '0', '0', '',
                     '0', '0',
@@ -249,7 +249,7 @@ class GestionManual {
                     , '', '$averia','$inscripcion', '$fono', '$fono'
                     ,'$mdf', '$observacion', '$segmento','', '$direccion', ''
                     ,'$nombre_cliente', '', '','','',''
-                    , '','', '','', '','$fonos_contacto'
+                    , '','', '$fftt','', '','$fonos_contacto'
                     , '$contrata', '$zonal','0', '0', '0'
                     ,'0', '0','0', '0', '$quiebre'
                     ,'$lejano', '$distrito', '$eecc_zona','$zona_movistar_uno', '', '',''

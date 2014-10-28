@@ -77,6 +77,20 @@ require_once 'clases/gestionCriticos.php';
             $rm_averia = trim($_POST['rm_averia']);
         }
         $quiebre = trim( $_POST['quiebre'] );
+
+        $troba=trim($_POST["troba"]);
+        $amplificador=trim($_POST["amplificador"]);
+        $tap=trim($_POST["tap"]);
+
+        $cable=trim($_POST["cable"]);
+        $terminal=trim($_POST["terminal"]);
+
+        if($tipo_averia=='rutina-catv-pais'){
+            $fftt=$mdf."|".$troba."|".$amplificador."|".$tap;
+        }
+        else{
+            $fftt=$mdf."|".$cable."|".$terminal;
+        }
         
         $save = $GestionManual->addGestionManual(
                 $cnx, $id_usuario, $rm_averia,
@@ -86,7 +100,7 @@ require_once 'clases/gestionCriticos.php';
                 $contrata, $zonal, $lejano, 
                 $distrito, $eecc_zona, $zona_movistar_uno, 
                 $codcliente, $eecc, $microzona, $celular,
-                $quiebre,$averia,$tipo_actividad);
+                $quiebre,$averia,$tipo_actividad,$fftt);
         echo json_encode($save);
      }
      
