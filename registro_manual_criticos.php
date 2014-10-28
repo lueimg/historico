@@ -641,7 +641,7 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                     <tr>
                         <td style="text-align: left">Lan (x)</td>
                         <td style="text-align: left">
-                            <input class="border" type="text" size="6" value="" maxlength="4" name="x" id="x" disabled />
+                            <input class="border" type="text" size="6" value="" maxlength="4" name="x" id="x" readonly />
                             <span class="error_form" title="x">Seleccione X</span>
                         </td>
                         <td rowspan="2" colspan="2">
@@ -653,7 +653,7 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
 
                         <td style="text-align: left">Len (y)</td>
                         <td style="text-align: left">
-                            <input class="border" type="text" size="6" value="" maxlength="4" name="y" id="y" disabled />
+                            <input class="border" type="text" size="6" value="" maxlength="4" name="y" id="y" readonly />
                             <span class="error_form" title="y">Seleccione Y</span>
                         </td>
                     </tr>
