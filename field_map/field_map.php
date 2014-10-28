@@ -3,10 +3,8 @@
 <div>
     <input type="text" maxlength="100" id="address" placeholder="Dirección" />
     <input type="button" id="search" value="Buscar" />
-    <input type="text" maxlength="100" id="lat"  />
-    <input type="text" maxlength="100" id="lng"  />
 </div><br/>
-<div id='map_canvas' style="width:600px; height:400px;"></div>
+<div id='map_canvas' style="width:450px; height:150px;text-align: center"></div>
 
 
 <script type="text/javascript">
@@ -59,25 +57,25 @@
 
             google.maps.event.addListener(marker, 'click', function(){
                 var markerLatLng = marker.getPosition();
-                $("#lat").val(markerLatLng.lat());
-                $("#lng").val(markerLatLng.lng());
+                SetXY(markerLatLng.lat(),markerLatLng.lng())
             });
             google.maps.event.addListener(marker, 'dragend', function(){
                 var markerLatLng = marker.getPosition();
-                $("#lat").val(markerLatLng.lat());
-                $("#lng").val(markerLatLng.lng());
+                SetXY(markerLatLng.lat(),markerLatLng.lng())
             });
-
             //mostrar
-            $("#lat").val(results[0].geometry.location.lat());
-            $("#lng").val(results[0].geometry.location.lng());
-
+            SetXY(results[0].geometry.location.lat(), results[0].geometry.location.lng())
 
         } else {
             // En caso de no haber resultados o que haya ocurrido un error
             // lanzamos un mensaje con el error
             alert("Geocoding no tuvo éxito debido a: " + status);
         }
+    }
+
+    function SetXY(x,y){
+        $("#x").val(x);
+        $("#y").val(y);
     }
 
 

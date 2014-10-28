@@ -638,13 +638,20 @@ $arrQuiebre = $Quiebre->getQuiebre($cnx, $_SESSION["exp_user"]["id"]);
                             <input class="border" type="text" size="12" value="" maxlength="11" name="microzona" id="microzona" readonly="true" />
                         </td>
                     </tr>
-                    <tr>                       
-                        <td style="text-align: left">X</td>
+                    <tr>
+                        <td style="text-align: left">Lan (x)</td>
                         <td style="text-align: left">
                             <input class="border" type="text" size="6" value="" maxlength="4" name="x" id="x" disabled />
                             <span class="error_form" title="x">Seleccione X</span>
                         </td>
-                        <td style="text-align: left">Y</td>
+                        <td rowspan="2" colspan="2">
+                            <a href="#" id="mapaSearch">Buscar en el Mapa de Google</a>
+                            <?php      include("field_map/field_map.php");  ?>
+                        </td>
+                    </tr>
+                    <tr>                       
+
+                        <td style="text-align: left">Len (y)</td>
                         <td style="text-align: left">
                             <input class="border" type="text" size="6" value="" maxlength="4" name="y" id="y" disabled />
                             <span class="error_form" title="y">Seleccione Y</span>

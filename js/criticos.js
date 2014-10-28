@@ -1327,3 +1327,4 @@ function cargarTecnico(slct,tec,cedu,idemp,quie){
       });
   }
 }
+
