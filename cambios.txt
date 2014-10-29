@@ -1,5 +1,12 @@
 //////////////////////////////////////////////////////////////
 :: Jorge Salcedo
+-- Se genero ruta para el modulo de visor GPS
+
+INSERT INTO webpsi.submodulos (idmodulo,submodulo,path)
+VALUES (12,'Visor GPS','modulos/officetrack/ruta.geo.web.php');
+
+//////////////////////////////////////////////////////////////
+:: Jorge Salcedo
 -- Se actualizaron 2 tablas para ingresar el X,Y.
 
 ALTER TABLE webpsi_criticos.gestion_rutina_manual_provision
