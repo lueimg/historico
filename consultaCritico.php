@@ -9,7 +9,7 @@ require_once("../../cabecera.php");
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-<title>WEBPSI - Criticos - Consulta de Seguimiento</title>
+<title>WEBPSI - Criticos - Visor GSP</title>
 
 <?php include ("../../includes.php") ?>    
 
